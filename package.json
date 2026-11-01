@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "@fontsource/barlow-condensed": "^5.1.0",
+    "@fontsource/manrope": "^5.1.0",
+    "three": "^0.170.0"
+  },
+  "name": "rainbow-park-collection",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node build.cjs",
+    "start": "node server.cjs"
+  }
+}

@@ -1,0 +1,252 @@
+{
+  "sourcePackage": "Paquete Rainbow Park del 31/10/2026; información recopilada al 13/10/2026",
+  "notes": "Fotografías regionales: fuentes y condiciones pendientes de revisión antes de publicar. Capturas vistas/: render del prototipo local, no diseños previos. Licencias de dependencias dentro de node_modules.",
+  "assets": [
+    {
+      "file": "recursos/bell/bell-finished-v4.glb",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\bell\\bell-finished-v4.glb",
+      "unchangedCopy": true,
+      "sha256": "5610b64654f30bc2fea6074464d782626423d75cb265473ac62fc671a5a84e67"
+    },
+    {
+      "file": "recursos/bell/bell-model.pdf",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\bell\\bell-model.pdf",
+      "unchangedCopy": true,
+      "sha256": "cc1caf667779241899ac4fe34ea31329acfe9650820e7b6ee642a738a248c158"
+    },
+    {
+      "file": "recursos/bell/floorplan.png",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\bell\\floorplan.png",
+      "unchangedCopy": true,
+      "sha256": "ba5479801a421272b1c8eadfac8942663fabc45573f462be3d9f3645ce7bae51"
+    },
+    {
+      "file": "recursos/bell/floorplan.svg",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\bell\\floorplan.svg",
+      "unchangedCopy": true,
+      "sha256": "51a3fecd993fb1b12dc757e6c8a56a32aa4ec350b79a77502a368da311fe7e5f"
+    },
+    {
+      "file": "recursos/bell/metadata.json",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\bell\\metadata.json",
+      "unchangedCopy": true,
+      "sha256": "95a8cf38b03d6192eb709eb342c9dffde0055cc7eba31afda8ab6cad462f1f9a"
+    },
+    {
+      "file": "recursos/bell/poster.png",
+      "origin": "Captura WebGL local de recursos/bell/bell-finished-v4.glb; Three.js 0.170.0; sin generación de imagen",
+      "unchangedCopy": null,
+      "sha256": "d1a94d5c2b2250be3aacd1a487e3d53cacecb7797eb71926efff6fea0950fda5"
+    },
+    {
+      "file": "recursos/entorno/territory-downtown.jpg",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\entorno\\territory-downtown.jpg",
+      "unchangedCopy": true,
+      "sha256": "b06afeebb2cda9ed05ff8f3fb634a3f8286a79e28d7f147c3eaa73445e1ed1f3"
+    },
+    {
+      "file": "recursos/entorno/territory-nature.jpg",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\entorno\\territory-nature.jpg",
+      "unchangedCopy": true,
+      "sha256": "abdb73a1370bf9140b1493565a86d3ade73ef759d4b36a8a82bc7027641b980f"
+    },
+    {
+      "file": "recursos/entorno/territory-sources.json",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\entorno\\territory-sources.json",
+      "unchangedCopy": true,
+      "sha256": "cc938195d91fd8e6dd9467ad8a41cb614646ee5d4491ac572a165d34d071a596"
+    },
+    {
+      "file": "recursos/entorno/territory-wec.jpg",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\entorno\\territory-wec.jpg",
+      "unchangedCopy": true,
+      "sha256": "347aa38603f515b97e5baa217b91358e34c6e7ac19459c96b29c12cb3ce5836d"
+    },
+    {
+      "file": "recursos/geografia/collection-aerial.jpg",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\geografia\\collection-aerial.jpg",
+      "unchangedCopy": true,
+      "sha256": "d76c008acd9a03d049c6e9339458567f861035ba3d7751db484ed6b9a66dba0c"
+    },
+    {
+      "file": "recursos/geografia/collection-context.json",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\geografia\\collection-context.json",
+      "unchangedCopy": true,
+      "sha256": "a751f080dcd6445e14ea6a2752912d021a722ca89c939a021b34f53b335a4eb0"
+    },
+    {
+      "file": "recursos/geografia/collection-elevation.json",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\geografia\\collection-elevation.json",
+      "unchangedCopy": true,
+      "sha256": "0897b3691ba421b38374ca107ebf3cff4d851ed260970b1b1a646f56936227ce"
+    },
+    {
+      "file": "recursos/geografia/collection-lots.json",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\geografia\\collection-lots.json",
+      "unchangedCopy": true,
+      "sha256": "dbdf60df371db684a47cd371a1637c0c8553ab6f17c287542e0d7fcf19e2ef46"
+    },
+    {
+      "file": "recursos/geografia/rainbow-aerial.jpg",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\geografia\\rainbow-aerial.jpg",
+      "unchangedCopy": true,
+      "sha256": "39a34e127e3e92945ed69f593c7e40d0296c5e052ce225ff64d951989eb90416"
+    },
+    {
+      "file": "recursos/geografia/rainbow-context.json",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\geografia\\rainbow-context.json",
+      "unchangedCopy": true,
+      "sha256": "c03803fe9fca5f13465771b7718a26e96c462dc5a55c79c58b2c23f263bd724b"
+    },
+    {
+      "file": "recursos/geografia/rainbow-elevation.json",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\geografia\\rainbow-elevation.json",
+      "unchangedCopy": true,
+      "sha256": "d56f47429fdb1de18e2970827e0cde4540c9903173e8fbba4985512b4439122b"
+    },
+    {
+      "file": "recursos/inversion/evidencia-ocala.json",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\inversion\\evidencia-ocala.json",
+      "unchangedCopy": true,
+      "sha256": "3e87314b0c436592d78b67c9f00c68966178dbee35aa84ff1c7fd2d0f6e7762b"
+    },
+    {
+      "file": "recursos/inversion/fuentes-ocala.csv",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\inversion\\fuentes-ocala.csv",
+      "unchangedCopy": true,
+      "sha256": "592455b79808e4b0cbe44ae173e1b520f4c8b01cd1eee0bad8101c6a8f33e78f"
+    },
+    {
+      "file": "recursos/inversion/project-map.json",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\inversion\\project-map.json",
+      "unchangedCopy": true,
+      "sha256": "838fb79608aee0b212613a4fa1cdbf6f8ff1c982d51451e7e3a51bd534b54025"
+    },
+    {
+      "file": "recursos/marca/next-fraga-logo.png",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\marca\\next-fraga-logo.png",
+      "unchangedCopy": true,
+      "sha256": "40837c0316c580cb75cb4297c0a27b11770c4dee7ebb168ad16e1adcfb457ef4"
+    },
+    {
+      "file": "recursos/marca/next-fraga-transparent.png",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\marca\\next-fraga-transparent.png",
+      "unchangedCopy": true,
+      "sha256": "bf257d00130822b24dd3f41cbbdd86f8f4ea7fe1e56aed845a2916c1905efea0"
+    },
+    {
+      "file": "recursos/marca/nombres.txt",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\marca\\nombres.txt",
+      "unchangedCopy": true,
+      "sha256": "fc3ebb7723a26dc940c58a86108b470e6b3be494fa58a41061b8a26da70fea4b"
+    },
+    {
+      "file": "recursos/marca/rainbow-simbolo.svg",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\marca\\rainbow-simbolo.svg",
+      "unchangedCopy": true,
+      "sha256": "c06251b55a451f1ba3237565ae1fe3fcda9905d8ce5ecbc8731a1af2ca496037"
+    },
+    {
+      "file": "recursos/utah/acabados-concepto.png",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\utah\\acabados-concepto.png",
+      "unchangedCopy": true,
+      "sha256": "6ffb33b797a834f4701cab7bb19c3eda398b5f28b32438a42bf79000dfb4c8a7"
+    },
+    {
+      "file": "recursos/utah/cocina-concepto.png",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\utah\\cocina-concepto.png",
+      "unchangedCopy": true,
+      "sha256": "d144f58cfe5aaec26560491d53460c1333d82eb44d83a3971e6cd82d52b9d93f"
+    },
+    {
+      "file": "recursos/utah/elevations-v3.png",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\utah\\elevations-v3.png",
+      "unchangedCopy": true,
+      "sha256": "3ee7881ab521172ca8d4c2ca23576b444911386479553e23a9bec12e30f9a900"
+    },
+    {
+      "file": "recursos/utah/floorplan-v3.png",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\utah\\floorplan-v3.png",
+      "unchangedCopy": true,
+      "sha256": "028c14702e1b14c49ff0ee1766aa511dbcfd9428096bd7e347ec86ef4727125f"
+    },
+    {
+      "file": "recursos/utah/furnishings.json",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\utah\\furnishings.json",
+      "unchangedCopy": true,
+      "sha256": "42be3b1a98103462df02f47e380799ef20b494d8132a728bdf17d7970addb61b"
+    },
+    {
+      "file": "recursos/utah/metadata-plan-v3.json",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\utah\\metadata-plan-v3.json",
+      "unchangedCopy": true,
+      "sha256": "3d70e003952455ee4e7465843b93887cd8c65b845fc2b9db3fb85ba35ba5fd09"
+    },
+    {
+      "file": "recursos/utah/poster.png",
+      "origin": "Captura WebGL local de recursos/utah/utah-finished-v4.glb; Three.js 0.170.0; sin generación de imagen",
+      "unchangedCopy": null,
+      "sha256": "052593cb6f39fc08b5b6f63ec08c451088917dba2b454745b533fb5384468199"
+    },
+    {
+      "file": "recursos/utah/utah-elevations.pdf",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\utah\\utah-elevations.pdf",
+      "unchangedCopy": true,
+      "sha256": "135f545c9f8775a01e9edd7ebf6cd1cfed2cf27074036cc62f4de62d24c4a2d9"
+    },
+    {
+      "file": "recursos/utah/utah-finished-v4.glb",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\utah\\utah-finished-v4.glb",
+      "unchangedCopy": true,
+      "sha256": "421f87627a8a61e6fb007dde623dea8f5caee7145e7985b8b4d1735e3ad316e3"
+    },
+    {
+      "file": "recursos/utah/utah-floor-plan.pdf",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\utah\\utah-floor-plan.pdf",
+      "unchangedCopy": true,
+      "sha256": "35474d3326f5dead6d1cfb5009db37600c13506f78fcfd7ee7bffbda1e943006"
+    },
+    {
+      "file": "recursos/video/ocala-concept.png",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\video\\ocala-concept.png",
+      "unchangedCopy": true,
+      "sha256": "37c7c5389e4f368a51b4d6ffb4ccff472c0d79390ec55d5cb90bb6e7f3c60598"
+    },
+    {
+      "file": "recursos/video/ocala-intro.mp4",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\video\\ocala-intro.mp4",
+      "unchangedCopy": true,
+      "sha256": "36bf96d088f2270ba762d123dc9bd90be83e0d9a604248295c575b278e9f6184"
+    },
+    {
+      "file": "recursos/inversion/assets/wec-propuesta-campos.jpg",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\inversion\\assets\\wec-propuesta-campos.jpg",
+      "unchangedCopy": true,
+      "sha256": "1bd65a91dd7c228f97cde6262a9ea317326fffb5af83f32d3d51e66d4062e4c1"
+    },
+    {
+      "file": "recursos/inversion/assets/wec-propuesta-diurna.jpg",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\inversion\\assets\\wec-propuesta-diurna.jpg",
+      "unchangedCopy": true,
+      "sha256": "5525459472c676aacd73e69da3f383043954db1b34cf918f1e424a1ea38d7bf9"
+    },
+    {
+      "file": "recursos/inversion/assets/wec-propuesta-nocturna.jpg",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\recursos\\inversion\\assets\\wec-propuesta-nocturna.jpg",
+      "unchangedCopy": true,
+      "sha256": "945ded6197444e2599040bda815ca72979d283cec8dc135d21937df389df563c"
+    },
+    {
+      "file": "datos/lotes-resumen.csv",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\datos\\lotes-resumen.csv",
+      "unchangedCopy": true,
+      "sha256": "718631ae5a93913d053f1087b445ec9c46bb9c7e42a09a9079df12ee39e1fe8f"
+    },
+    {
+      "file": "datos/viviendas.json",
+      "origin": "C:\\Users\\Abraham\\Documents\\Codex\\2026-10-26\\c-users-abraham-documents-rainbow-park-2\\outputs\\datos\\viviendas.json",
+      "unchangedCopy": true,
+      "sha256": "ec923d595aa1b25fc23e687d427921f2fad17ebd0b374437e9876c836237ff71"
+    }
+  ]
+}

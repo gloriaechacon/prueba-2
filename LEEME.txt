@@ -1,0 +1,63 @@
+RAINBOW PARK COLLECTION — RECORRIDO VISUAL
+
+ABRIR
+Ejecutar iniciar.cmd (Windows con Node.js), o ejecutar node server.cjs.
+Abrir http://127.0.0.1:4173/#inicio. Dependencias incluidas.
+No abrir index.html mediante file://: los módulos y datos requieren el servidor.
+Esta entrega es local; no se ha publicado ni sustituido el sitio anterior.
+
+RECORRIDO
+Inicio visible en todas las secciones. Flechas anterior/siguiente y progreso
+conectan el lugar, terrenos, viviendas, dossier y consulta.
+Portada fotográfica, escenas del entorno, inventario de parcelas y estudio
+Utah/Bell tienen composiciones distintas. Los cambios de sección y de ficha son directos, sin animaciones de entrada,
+desplazamientos ni desvanecidos.
+Tipografía Barlow Condensed/Manrope y paleta grafito, blanco y verde grisáceo.
+
+CONTENIDO
+- 13 ubicaciones, filtro por calle, mapa, fuentes y selección para consulta.
+- RP-02 distingue 0.24 acres ofrecidos de 0.70 acres catastrales.
+- Utah/Bell: modelos GLB reales cargados automáticamente en la primera vista,
+  instrucciones para girar/acercar, cámaras y cubierta. Planos y comparación aparte.
+- Implantación ilustrativa con giro; RP-02 excluido por límites pendientes.
+- Video conceptual con controles, sin reproducción automática.
+- Dossier en seis capítulos: 13 proyectos, ubicación regional, cinco indicadores,
+  horizontes publicados, 31 fuentes y criterios para evaluar un lote.
+- Fichas completas, programa WEC, galería y explicaciones recuperadas del dossier
+  anterior. Navegación por proyecto, tema o capítulo; búsqueda de fuentes.
+- Descarga del dossier textual completo; imágenes y trazados quedan en recursos.
+- Preguntas del dossier se añaden al borrador local. Selecciones persistentes,
+  opciones para quitar/cambiar y descarga de consulta. No hay envío conectado.
+
+FECHAS Y ALCANCE
+El archivo regional recibido tiene corte 13/10/2026. Se contrastaron parcialmente
+fuentes el 31/10/2026: Manor, Shoppes, tres obras FDOT, FHFA, Census y BLS.
+Las fichas señalan qué se contrastó y qué conserva verificación pendiente.
+No se ofrece promesa de rendimiento ni se confunden anuncios con obras terminadas.
+
+VERIFICACIÓN
+Edge automatizado con Playwright: navegación en 390, 768 y 1440 px, sin
+desbordamiento horizontal. Flechas, Inicio, filtros, búsqueda, descarga completa,
+preguntas persistentes, planos, comparación y visor Bell probados en la revisión.
+La primera ronda también comprobó Utah, video, giro y recuperación del visor.
+Capturas y resultado de la revisión actual en vistas-v2/; vistas/ es histórico.
+No equivale a auditoría WCAG completa ni a pruebas en dispositivos físicos.
+Impeccable se aplicó manualmente porque su motor no está instalado. Se realizó
+revisión independiente. DESIGN.md y .impeccable/design.json documentan lo construido.
+
+PENDIENTES
+- Canal comercial, CRM, reservas y pagos no conectados.
+- Precios, permisos, servicios y titularidad requieren documentación verificable.
+- Imágenes conceptuales no prueban obra construida. Revisar derechos del entorno
+  antes de publicar. Contornos catastrales no son levantamientos topográficos.
+- Modelos de presentación, no BIM; implantación no confirma retiros ni viabilidad.
+- Español operativo. locales.js prepara es/en/pt; traducción completa pendiente.
+- Video sin subtítulos propios; planos y lotes ofrecen acceso alternativo.
+- Servidor enlazado exclusivamente a 127.0.0.1.
+
+ARCHIVOS
+index.html, styles.css, experience.css: estructura y diseño.
+app.js, scenes.js, dossier.js: navegación, recorrido y dossier.
+viewer.js: Three.js. server.cjs: servidor y video por rangos.
+recursos/ y datos/: fuentes recibidas. Posters de casas: capturas de GLB reales.
+PROVENANCE.json: trazabilidad. DESIGN.md: sistema visual.

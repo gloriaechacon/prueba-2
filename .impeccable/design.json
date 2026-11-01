@@ -1,0 +1,385 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-01T03:04:46.014017+00:00",
+  "title": "Design System: Rainbow Park Collection",
+  "extensions": {
+    "colorMeta": {
+      "ink": {
+        "role": "primary",
+        "displayName": "Graphite ink",
+        "tonalRamp": [
+          "oklch(15% 0.006 145)",
+          "oklch(27% 0.012 145)",
+          "oklch(39% 0.017 145)",
+          "oklch(51% 0.02 145)",
+          "oklch(63% 0.02 145)",
+          "oklch(75% 0.017 145)",
+          "oklch(87% 0.011 145)",
+          "oklch(95% 0.004 145)"
+        ]
+      },
+      "blue": {
+        "role": "secondary",
+        "displayName": "Warm focus accent",
+        "tonalRamp": [
+          "oklch(15% 0.024 85)",
+          "oklch(27% 0.048 85)",
+          "oklch(39% 0.068 85)",
+          "oklch(51% 0.08 85)",
+          "oklch(63% 0.08 85)",
+          "oklch(75% 0.068 85)",
+          "oklch(87% 0.044 85)",
+          "oklch(95% 0.016 85)"
+        ]
+      },
+      "water": {
+        "role": "neutral",
+        "displayName": "Gray-green ground",
+        "tonalRamp": [
+          "oklch(15% 0.0075 125)",
+          "oklch(27% 0.015 125)",
+          "oklch(39% 0.0213 125)",
+          "oklch(51% 0.025 125)",
+          "oklch(63% 0.025 125)",
+          "oklch(75% 0.0213 125)",
+          "oklch(87% 0.0138 125)",
+          "oklch(95% 0.005 125)"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Natural paper",
+        "tonalRamp": [
+          "oklch(15% 0.0024 100)",
+          "oklch(27% 0.0048 100)",
+          "oklch(39% 0.0068 100)",
+          "oklch(51% 0.008 100)",
+          "oklch(63% 0.008 100)",
+          "oklch(75% 0.0068 100)",
+          "oklch(87% 0.0044 100)",
+          "oklch(95% 0.0016 100)"
+        ]
+      },
+      "soft": {
+        "role": "neutral",
+        "displayName": "Soft gray-green",
+        "tonalRamp": [
+          "oklch(15% 0.0045 120)",
+          "oklch(27% 0.009 120)",
+          "oklch(39% 0.0127 120)",
+          "oklch(51% 0.015 120)",
+          "oklch(63% 0.015 120)",
+          "oklch(75% 0.0127 120)",
+          "oklch(87% 0.0083 120)",
+          "oklch(95% 0.003 120)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Sage line",
+        "tonalRamp": [
+          "oklch(15% 0.0075 125)",
+          "oklch(27% 0.015 125)",
+          "oklch(39% 0.0213 125)",
+          "oklch(51% 0.025 125)",
+          "oklch(63% 0.025 125)",
+          "oklch(75% 0.0213 125)",
+          "oklch(87% 0.0138 125)",
+          "oklch(95% 0.005 125)"
+        ]
+      },
+      "sun": {
+        "role": "secondary",
+        "displayName": "Pale sand",
+        "tonalRamp": [
+          "oklch(15% 0.021 90)",
+          "oklch(27% 0.042 90)",
+          "oklch(39% 0.0595 90)",
+          "oklch(51% 0.07 90)",
+          "oklch(63% 0.07 90)",
+          "oklch(75% 0.0595 90)",
+          "oklch(87% 0.0385 90)",
+          "oklch(95% 0.014 90)"
+        ]
+      },
+      "white": {
+        "role": "neutral",
+        "displayName": "White",
+        "tonalRamp": [
+          "oklch(15% 0.0 0)",
+          "oklch(27% 0.0 0)",
+          "oklch(39% 0.0 0)",
+          "oklch(51% 0 0)",
+          "oklch(63% 0 0)",
+          "oklch(75% 0.0 0)",
+          "oklch(87% 0.0 0)",
+          "oklch(95% 0.0 0)"
+        ]
+      },
+      "ink-hover": {
+        "role": "primary",
+        "displayName": "Graphite hover",
+        "tonalRamp": [
+          "oklch(15% 0.0075 145)",
+          "oklch(27% 0.015 145)",
+          "oklch(39% 0.0213 145)",
+          "oklch(51% 0.025 145)",
+          "oklch(63% 0.025 145)",
+          "oklch(75% 0.0213 145)",
+          "oklch(87% 0.0138 145)",
+          "oklch(95% 0.005 145)"
+        ]
+      },
+      "secondary-hover": {
+        "role": "neutral",
+        "displayName": "Secondary hover",
+        "tonalRamp": [
+          "oklch(15% 0.0075 125)",
+          "oklch(27% 0.015 125)",
+          "oklch(39% 0.0213 125)",
+          "oklch(51% 0.025 125)",
+          "oklch(63% 0.025 125)",
+          "oklch(75% 0.0213 125)",
+          "oklch(87% 0.0138 125)",
+          "oklch(95% 0.005 125)"
+        ]
+      },
+      "navigation-accent": {
+        "role": "secondary",
+        "displayName": "Navigation accent",
+        "tonalRamp": [
+          "oklch(15% 0.027 85)",
+          "oklch(27% 0.054 85)",
+          "oklch(39% 0.0765 85)",
+          "oklch(51% 0.09 85)",
+          "oklch(63% 0.09 85)",
+          "oklch(75% 0.0765 85)",
+          "oklch(87% 0.0495 85)",
+          "oklch(95% 0.018 85)"
+        ]
+      },
+      "dossier-paper": {
+        "role": "neutral",
+        "displayName": "Dossier paper",
+        "tonalRamp": [
+          "oklch(15% 0.0036 110)",
+          "oklch(27% 0.0072 110)",
+          "oklch(39% 0.0102 110)",
+          "oklch(51% 0.012 110)",
+          "oklch(63% 0.012 110)",
+          "oklch(75% 0.0102 110)",
+          "oklch(87% 0.0066 110)",
+          "oklch(95% 0.0024 110)"
+        ]
+      },
+      "studio-ground": {
+        "role": "neutral",
+        "displayName": "Studio ground",
+        "tonalRamp": [
+          "oklch(15% 0.006 135)",
+          "oklch(27% 0.012 135)",
+          "oklch(39% 0.017 135)",
+          "oklch(51% 0.02 135)",
+          "oklch(63% 0.02 135)",
+          "oklch(75% 0.017 135)",
+          "oklch(87% 0.011 135)",
+          "oklch(95% 0.004 135)"
+        ]
+      },
+      "model-ground": {
+        "role": "neutral",
+        "displayName": "Model ground",
+        "tonalRamp": [
+          "oklch(15% 0.0075 165)",
+          "oklch(27% 0.015 165)",
+          "oklch(39% 0.0213 165)",
+          "oklch(51% 0.025 165)",
+          "oklch(63% 0.025 165)",
+          "oklch(75% 0.0213 165)",
+          "oklch(87% 0.0138 165)",
+          "oklch(95% 0.005 165)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted text",
+        "tonalRamp": [
+          "oklch(15% 0.0105 130)",
+          "oklch(27% 0.021 130)",
+          "oklch(39% 0.0298 130)",
+          "oklch(51% 0.035 130)",
+          "oklch(63% 0.035 130)",
+          "oklch(75% 0.0298 130)",
+          "oklch(87% 0.0193 130)",
+          "oklch(95% 0.007 130)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Barlow Condensed scene display",
+        "purpose": "Locally registered as Barlow; project title and major scene headings."
+      },
+      "reading": {
+        "displayName": "Manrope dossier reading",
+        "purpose": "Final refined body size: 14px desktop, 13px phone."
+      }
+    },
+    "shadows": [
+      {
+        "name": "tourbar",
+        "value": "0 -3px 18px #20262112",
+        "purpose": "Separate persistent tour navigation from the scrolling scene."
+      }
+    ],
+    "motion": [
+      {
+        "name": "route",
+        "value": "none — user requested removal",
+        "purpose": "Horizontal scene change; reverse for back navigation and disabled for reduced motion."
+      },
+      {
+        "name": "local-scene",
+        "value": "none — user requested removal",
+        "purpose": "Directional local content reveal; disabled for reduced motion."
+      },
+      {
+        "name": "arrival-link",
+        "value": "300ms ease",
+        "purpose": "Destination link padding and color feedback; disabled for reduced motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "wide",
+        "value": "1650px"
+      },
+      {
+        "name": "compact-desktop",
+        "value": "1000px"
+      },
+      {
+        "name": "tablet",
+        "value": "850px"
+      },
+      {
+        "name": "phone",
+        "value": "550px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Forward action",
+      "kind": "button",
+      "description": "Labelled action with shared keyboard focus.",
+      "html": "<button class=\"ds-primary\">Siguiente <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" aria-hidden=\"true\"><path d=\"M4 12h15m-6-6 6 6-6 6\"/></svg></button>",
+      "css": ".ds-primary{font:600 13px Manrope,Arial,sans-serif;min-height:48px;border:0;border-radius:3px;padding:13px 18px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:10px;background:var(--ink,#202621);color:#fff;border:0}.ds-primary svg{width:22px;height:22px}.ds-primary:hover{background:#3e493e}.ds-primary:focus-visible{outline:3px solid var(--blue,#705b2b);outline-offset:5px}.ds-primary:disabled{opacity:.6;cursor:wait}",
+      "refersTo": "button-primary"
+    },
+    {
+      "name": "Secondary action",
+      "kind": "button",
+      "description": "Labelled action with shared keyboard focus.",
+      "html": "<button class=\"ds-secondary\">Siguiente <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" aria-hidden=\"true\"><path d=\"M4 12h15m-6-6 6 6-6 6\"/></svg></button>",
+      "css": ".ds-secondary{font:600 13px Manrope,Arial,sans-serif;min-height:48px;border:0;border-radius:3px;padding:13px 18px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:10px;background:#fff;color:var(--ink,#202621);border:1px solid var(--line,#c5c9be)}.ds-secondary svg{width:22px;height:22px}.ds-secondary:hover{background:#e7e9e0}.ds-secondary:focus-visible{outline:3px solid var(--blue,#705b2b);outline-offset:5px}.ds-secondary:disabled{opacity:.6;cursor:wait}",
+      "refersTo": "button-secondary"
+    },
+    {
+      "name": "Text action",
+      "kind": "button",
+      "description": "Underlined destination or evidence action.",
+      "html": "<button class=\"ds-text\">Consultar la fuente <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" aria-hidden=\"true\"><path d=\"M4 12h15m-6-6 6 6-6 6\"/></svg></button>",
+      "css": ".ds-text{font:600 13px Manrope,Arial,sans-serif;min-height:48px;border:0;border-radius:3px;padding:13px 18px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:10px;justify-content:space-between;padding:10px 0;background:transparent;color:var(--ink,#202621);border-radius:0;border-bottom:1px solid currentColor;font-weight:400}.ds-text svg{width:22px;height:22px}.ds-text:hover{color:var(--blue,#705b2b)}.ds-text:focus-visible{outline:3px solid var(--blue,#705b2b);outline-offset:5px}",
+      "refersTo": "text-action"
+    },
+    {
+      "name": "Question field",
+      "kind": "input",
+      "description": "Square consultation field with a persistent label.",
+      "html": "<label class=\"ds-label\" for=\"ds-question\">Lo que me gustaría preguntar</label><textarea class=\"ds-field\" id=\"ds-question\"></textarea>",
+      "css": ".ds-label{display:block;font:600 12px Manrope,Arial,sans-serif;color:var(--ink,#202621);margin-bottom:8px}.ds-field{font:13px Manrope,Arial,sans-serif;width:100%;min-height:140px;resize:vertical;padding:12px;border:1px solid var(--line,#c5c9be);border-radius:0;background:white;color:var(--ink,#202621);caret-color:var(--blue,#705b2b)}.ds-field:focus-visible{outline:3px solid var(--blue,#705b2b);outline-offset:5px}",
+      "refersTo": "consultation-field"
+    },
+    {
+      "name": "Persistent tour navigation",
+      "kind": "nav",
+      "description": "Previous destination, route position, and forward destination. Preview uses normal flow; production is fixed.",
+      "html": "<nav class=\"ds-tour\" aria-label=\"Recorrido\"><a class=\"ds-prev\" href=\"#inicio\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" aria-hidden=\"true\"><path d=\"M4 12h15m-6-6 6 6-6 6\"/></svg> Inicio</a><span>2 de 6</span><a class=\"ds-next\" href=\"#lotes\">Los lotes <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" aria-hidden=\"true\"><path d=\"M4 12h15m-6-6 6 6-6 6\"/></svg></a></nav>",
+      "css": ".ds-tour{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;align-items:center;height:76px;padding:10px 3vw;background:white;color:var(--ink,#202621);border-top:1px solid #d6d9d0;box-shadow:0 -3px 18px #20262112;font:13px Manrope,Arial,sans-serif}.ds-tour a{display:flex;align-items:center;gap:14px;min-height:48px;text-decoration:none;color:inherit}.ds-tour svg{width:22px;height:22px}.ds-prev svg{transform:rotate(180deg)}.ds-tour span{text-align:center;font-size:11px}.ds-tour .ds-next{justify-self:end;background:var(--ink,#202621);color:white;padding:0 18px;border-radius:3px}.ds-tour a:focus-visible{outline:3px solid var(--blue,#705b2b);outline-offset:5px}"
+    },
+    {
+      "name": "Indicator selector",
+      "kind": "chip",
+      "description": "Pressed state identifies the visible indicator.",
+      "html": "<button class=\"ds-tab\" aria-pressed=\"true\">Precios de vivienda</button> <button class=\"ds-tab\" aria-pressed=\"false\">Empleo</button>",
+      "css": ".ds-tab{font:600 13px Manrope,Arial,sans-serif;min-height:48px;border:0;border-radius:3px;padding:13px 18px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:10px;font-size:11px;min-height:40px;padding:10px 12px;background:#e4e7dd;color:var(--ink,#202621)}.ds-tab[aria-pressed=true]{background:var(--ink,#202621);color:white}.ds-tab:focus-visible{outline:3px solid var(--blue,#705b2b);outline-offset:5px}",
+      "refersTo": "indicator-tab"
+    },
+    {
+      "name": "Consultation sheet",
+      "kind": "card",
+      "description": "Flat white sheet with a condensed heading and selected content.",
+      "html": "<section class=\"ds-sheet\"><h2>Lo que quieres explorar.</h2><p>Casa Utah</p><a href=\"#casas\">Cambiar vivienda</a></section>",
+      "css": ".ds-sheet{background:white;color:var(--ink,#202621);padding:30px;border-radius:0;font:12px/1.7 Manrope,Arial,sans-serif}.ds-sheet h2{font:500 36px/1.02 Barlow,Manrope,sans-serif;letter-spacing:-.015em;margin:0 0 24px}.ds-sheet a{color:inherit;text-underline-offset:5px}.ds-sheet a:focus-visible{outline:3px solid var(--blue,#705b2b);outline-offset:5px}",
+      "refersTo": "selection-sheet"
+    },
+    {
+      "name": "Dossier verification panel",
+      "kind": "custom",
+      "description": "Quiet evidence status adjacent to the project narrative.",
+      "html": "<aside class=\"ds-verification\"><strong>Pendiente de nueva verificación</strong><p>Se conserva la ficha completa del archivo recibido.</p></aside>",
+      "css": ".ds-verification{background:#e6e9df;color:var(--ink,#202621);padding:15px 18px;font:12px/1.8 Manrope,Arial,sans-serif}.ds-verification p{font-size:12px;margin:7px 0 0}@media(max-width:550px){.ds-verification,.ds-verification p{font-size:11px}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Recorrido visual de Rainbow Park",
+    "overview": "A clear visual tour moves from landscape to individual land parcels, house models, and a readable regional dossier. Large imagery supplies atmosphere; explicit destination names, counters, indexes, and previous/next arrows explain where the visitor is and what comes next. Copy is direct and complete rather than mysterious or exaggerated.\n\nCondensed display lettering pairs with restrained Manrope reading text. Graphite, natural off-white, and gray-green surfaces replace the previous blue-led identity. The system uses calm contrast, mostly square geometry, and direct, unanimated view changes to make a guided sequence understandable without hiding the underlying information.",
+    "keyCharacteristics": [
+      "Large scene imagery with explicit destination labels.",
+      "Condensed headings and readable, structured dossier text.",
+      "Subdued graphite, off-white, and gray-green surfaces.",
+      "Persistent route navigation and directional previous/next controls."
+    ],
+    "rules": [
+      {
+        "name": "The Subdued Palette Rule",
+        "body": "Keep brand surfaces quiet; use strong color contrast to identify controls and information, not decorative emphasis.",
+        "section": "colors"
+      },
+      {
+        "name": "The Clear Sequence Rule",
+        "body": "Every step exposes its destination or position and provides a direct, labelled way to continue or revisit information.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "Do use explicit project, destination, and chapter names with previous/next navigation.",
+      "Do preserve the final dossier reading sizes and source hierarchy.",
+      "Do keep large scene imagery, plans, and evidence captions connected.",
+      "Do respect reduced motion and retain visible keyboard focus."
+    ],
+    "donts": [
+      "Don't restore the rejected bright blue-led brand surfaces or exaggerated mystery copy.",
+      "Don't replace complete project information with teaser-only cards.",
+      "Don't bring back oversized asymmetric corners as the default image treatment.",
+      "Don't use autoplay, animation, or 3D as the only way to reach important information."
+    ]
+  },
+  "automaticHouseViewer": {
+    "loading": "automatic on house selection",
+    "models": [
+      "Utah",
+      "Bell"
+    ],
+    "instructions": "Persistent drag and zoom guidance",
+    "controls": [
+      "front",
+      "above",
+      "back",
+      "roof"
+    ],
+    "mobile": "viewer precedes facts",
+    "failure": "retry and original PDF"
+  }
+}
