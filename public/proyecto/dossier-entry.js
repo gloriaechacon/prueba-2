@@ -1,8 +1,46 @@
-import {dossier} from '/d/dossier.js?v=20261101-explore';
 const main=document.querySelector('#main');
-try {
- const [evidence,map]=await Promise.all(['/d/recursos/inversion/evidencia-ocala.json','/d/recursos/inversion/project-map.json'].map(async url=>{const response=await fetch(url);if(!response.ok)throw new Error('No se pudo cargar '+url);return response.json();}));
- dossier(main,evidence,map,question=>{try{sessionStorage.setItem('rpc-question',question);}catch{}location.href='/proyecto/contacto/';});
- document.querySelector('.dossier-head h1').textContent='Invertir en Ocala';
- document.querySelector('#download-dossier').textContent='Descargar dossier en texto';
-} catch(error){main.innerHTML='<section class="dossier-shell"><h1>No pudimos cargar el dossier.</h1><p>Recarga la página para volver a intentarlo.</p></section>';console.error(error);}
+const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const chapters=[['proyectos','Proyectos y adquisiciones'],['territorio','Ubicación regional'],['mercado','Indicadores del mercado'],['calendario','Horizontes publicados'],['fuentes','Fuentes de consulta'],['evaluacion','Evaluar tu lote']];
+const briefs={
+ 'wec-deportivo':'Plan de expansión deportiva con campos exteriores y un recinto interior. La aprobación tiene condiciones; no equivale a obra terminada.',
+ 'classic-mile':'Compra reportada en 2024 en el corredor ecuestre de Highway 40.',
+ 'sports-campos':'Primera fase anunciada: cuatro campos sintéticos y siete naturales. No se suma al programa completo de WEC.',
+ shoppes:'Ampliación comercial de 32 locales. La fecha anunciada no confirma su apertura efectiva.',
+ manor:'Espacios para eventos y cuatro propuestas gastronómicas, presentados por WEC como abiertos.',
+ eone:'Ampliación industrial con 100 empleos previstos y 80.000 ft² adicionales.',
+ 'i75-norte':'Carriles auxiliares y mejoras de conexiones con SR 40 y US 27.',
+ 'i75-sur':'Mejoras operativas y carriles auxiliares en un proyecto distinto al tramo norte.',
+ nw49:'Nuevo intercambiador con conexiones peatonales y ciclistas.',
+ heathbrook:'Centro de urgencias con laboratorio, imágenes médicas y 12 salas de examen.',
+ 'medical-office':'Edificio de especialidades médicas de tres plantas.',
+ 'jockey-club':'Adquisición anunciada en 2021 de una propiedad de casi 1.000 acres.',
+ 'smokey-willow':'Compra reportada de una finca de 77 acres en el oeste de Ocala.'
+};
+const marketNotes=[
+ 'La variación del último trimestre fue −0,38%. El dato a cinco años no es una proyección de rendimiento.',
+ 'El archivo también recoge 5.985 permisos de construcción en 2025.',
+ 'Dato preliminar: puede revisarse. No confirma demanda por una parcela concreta.',
+ 'Estimación recuperada del archivo; nueva comprobación del informe pendiente.',
+ 'Cartera potencial, no inversión comprometida. No debe sumarse a los proyectos anteriores.'
+];
+try{
+ const [evidence,indicators]=await Promise.all(['/d/recursos/inversion/evidencia-ocala.json','/proyecto/investment-indicators.json'].map(async url=>{const response=await fetch(url);if(!response.ok)throw Error('Datos no disponibles');return response.json();}));
+ const sources=new Map(evidence.sources.map(s=>[s.id,s]));
+ const sourceLinks=ids=>ids.map(id=>sources.get(id)).filter(Boolean).map(s=>`<li><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title)}</a><small>${esc(s.publisher)} · ${esc(s.date)}</small></li>`).join('');
+ const card=p=>`<article class="investment-card"><p class="investment-state">${esc(p.status)}</p><h3>${esc(p.name)}</h3><strong class="investment-metric">${esc(p.metric)}</strong><span class="investment-unit">${esc(p.unit)}</span><p>${esc(briefs[p.id]||p.fact)}</p><small class="investment-date">${esc(p.date)}</small><details><summary>Consultar fuentes y alcance</summary><p>${esc(p.caveat)}</p><ul>${sourceLinks(p.sources)}</ul></details></article>`;
+ main.innerHTML=`<div class="investment-summary"><header class="investment-intro-head"><div><h1>Invertir en Ocala</h1><p>Los datos clave del entorno, reunidos en una sola página.</p></div><button id="download-summary" class="secondary">Descargar resumen</button></header><div class="investment-summary-layout"><nav class="investment-summary-index" aria-label="Índice de inversión">${chapters.map(([id,name])=>`<a href="/proyecto/inversion/#${id}">${name}</a>`).join('')}</nav><div class="investment-sections">
+ <section id="proyectos"><h2>Proyectos y adquisiciones</h2><p class="investment-lead">Actividad industrial, infraestructura y servicios alrededor de Ocala. Son proyectos de terceros, no obras ni amenidades de Rainbow Park.</p><p class="investment-archive">Resumen del archivo del proyecto. Los estados y cifras conservan sus fechas; no se presentan como una actualización de hoy.</p>
+ ${[['empleo','Industria'],['infraestructura','Conectividad'],['wec','Actividad ecuestre y comercial'],['servicios','Salud y servicios']].map(([id,name])=>`<div class="investment-project-group"><h3 class="investment-group-title">${name}</h3><div class="investment-cards">${evidence.projects.filter(p=>p.category===id).map(card).join('')}</div></div>`).join('')}</section>
+ <section id="territorio"><h2>Ubicación regional</h2><p class="investment-lead">Rainbow Park se encuentra al oeste de Ocala. El corredor ecuestre, el centro urbano y las conexiones de I-75 ayudan a situar los proyectos.</p><div class="investment-region"><div><h3>Rainbow Park</h3><p>Lotes residenciales distribuidos en un vecindario existente. No es un conjunto cerrado.</p></div><div><h3>Corredor ecuestre</h3><p>WEC y las adquisiciones citadas aportan contexto sobre la actividad del oeste de Ocala.</p></div><div><h3>Conexiones y servicios</h3><p>Las obras viales y los centros de salud pertenecen al entorno regional.</p></div></div><a class="investment-text-link" href="/proyecto/entorno/">Ver el mapa y conocer el entorno</a></section>
+ <section id="mercado"><h2>Indicadores del mercado</h2><p class="investment-lead">Una lectura breve de los datos regionales ya incluidos en el archivo. No representan la rentabilidad de un lote.</p><div class="investment-cards">${indicators.map((m,i)=>`<article class="investment-card"><h3>${esc(m.name)}</h3><strong class="investment-metric">${esc(m.value)}</strong><span class="investment-unit">${esc(m.label)}</span><small class="investment-date">${esc(m.period)}</small><p>${marketNotes[i]}</p><details><summary>Ver procedencia del dato</summary><p>${esc(m.status)} · Registro del archivo, sin nueva verificación en esta revisión.</p><ul>${sourceLinks([m.source])}</ul></details></article>`).join('')}</div></section>
+ <section id="calendario"><h2>Horizontes publicados</h2><p class="investment-lead">Fechas previstas en el archivo, sujetas a cambios. No son fechas de entrega de Rainbow Park.</p><dl class="investment-dates">${[['2026','Shoppes Off 80th y primera fase Sports at WEC','Previsión anunciada; apertura efectiva pendiente de confirmar.'],['2027','Ampliación industrial E-ONE','Primavera de 2027 según el archivo.'],['2028','Enlace I-75 / NW 49th Street','Otoño de 2028 según la ficha recogida.'],['2029','I-75 norte y sur','Principios de 2029 según las fichas recogidas.']].map(([year,name,note])=>`<div><dt>${year}</dt><dd><strong>${name}</strong><p>${note}</p></dd></div>`).join('')}</dl></section>
+ <section id="fuentes"><h2>Fuentes de consulta</h2><p class="investment-lead">Las referencias quedan disponibles para comprobar los datos, sin interrumpir la lectura del resumen.</p><details class="investment-source-library"><summary>Ver las ${evidence.sources.length} referencias del archivo</summary><ul>${sourceLinks(evidence.sources.map(s=>s.id))}</ul></details><a class="investment-text-link" href="/d/recursos/inversion/fuentes-ocala.csv" download>Descargar listado de fuentes</a></section>
+ <section id="evaluacion"><h2>Qué revisar en tu lote</h2><div class="investment-region"><div><h3>Documentación</h3><p>Titularidad, límites, acceso, uso permitido y servicios disponibles.</p></div><div><h3>Costos completos</h3><p>Compra, cierre, preparación, construcción, permisos y mantenimiento.</p></div><div><h3>Comparables</h3><p>Precios y plazos de propiedades similares. No hay una promesa de rendimiento.</p></div></div><a class="investment-contact" href="/proyecto/contacto/">Preparar mi consulta</a><a class="investment-text-link" href="/proyecto/lotes/">Ver los lotes</a></section>
+ </div></div></div>`;
+ const navLinks=[...main.querySelectorAll('.investment-summary-index a')];
+ const sections=[...main.querySelectorAll('.investment-sections>section')];
+ let pending=false;const updateIndex=()=>{pending=false;let current=sections[0];for(const section of sections){if(section.getBoundingClientRect().top<180)current=section;}navLinks.forEach(a=>{if(a.hash==='#'+current.id)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current');});};
+ addEventListener('scroll',()=>{if(!pending){pending=true;requestAnimationFrame(updateIndex);}},{passive:true});updateIndex();
+ const target=sections.find(s=>'#'+s.id===location.hash);if(target)requestAnimationFrame(()=>target.scrollIntoView({block:'start'}));
+ document.querySelector('#download-summary').addEventListener('click',()=>{let text='RAINBOW PARK COLLECTION — RESUMEN DE INVERSIÓN\nInformación del archivo del proyecto. No constituye una actualización de sus cifras.\n\n';sections.forEach(section=>{const clone=section.cloneNode(true);clone.querySelectorAll('details,a').forEach(el=>el.remove());text+=clone.textContent.replace(/\s+/g,' ').trim()+'\n\n';});const url=URL.createObjectURL(new Blob([text],{type:'text/plain;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='Rainbow-Park-resumen-inversion.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
+}catch(error){main.innerHTML='<section class="investment-summary"><h1>No pudimos cargar la información.</h1><p>Recarga la página para volver a intentarlo.</p></section>';console.error(error);}

@@ -135,3 +135,83 @@ body:is(.final-home,.final-detail,.final-housing,.final-dossier) :is(.zone-pin,.
 .final-home .zone-expanded{border-radius:0}
 
 body:is(.final-home,.final-detail,.final-housing,.final-dossier) :is(.parcel-frame,.inline-house-stage){border-radius:var(--radius-panel);overflow:hidden}
+/* Housing preview: model and model facts form one readable unit. */
+.final-home #viviendas .showroom{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,340px);grid-template-areas:'selector details' 'viewer details';gap:20px 36px;align-items:start;margin:0;padding:28px;border-radius:16px}
+.final-home #viviendas .home-heading{grid-area:details;width:100%;min-width:0;pointer-events:auto;position:relative;z-index:2}
+.final-home #viviendas .home-heading h2{font-family:var(--serif);font-size:clamp(40px,4vw,60px);line-height:1.1;margin:10px 0 20px}
+.final-home #viviendas .home-heading p{max-width:none;font-size:16px;line-height:1.65;margin:0;color:var(--final-muted)}
+.final-home #viviendas .home-selector{grid-area:selector;display:grid;grid-template-columns:1fr 1fr;width:100%;margin:0;gap:12px;border:0}
+.final-home #viviendas .home-selector button{min-width:0;padding:16px 20px;min-height:88px}
+.final-home #viviendas .home-selector button small{font-size:12px;line-height:1.5;letter-spacing:.03em}
+.final-home #viviendas .home-selector button span{font-size:26px}
+.final-home #viviendas .home-stage{grid-area:viewer;margin:0;width:100%;min-width:0;height:540px}
+.final-home #viviendas .home-specs{display:grid;gap:16px;max-width:none;width:100%;padding:24px 0 0;margin:24px 0 0;border-top:1px solid var(--final-line);text-align:left;position:static}
+.final-home #viviendas .home-specs>div{margin:0}
+.final-home #viviendas .home-specs small{font-size:12px;line-height:1.4;margin-bottom:5px;color:var(--final-muted)}
+.final-home #viviendas .home-specs strong{font-size:18px;line-height:1.5}
+.final-home #viviendas .home-specs .circle-link{width:100%;height:auto;min-height:48px;text-align:center;padding:14px 18px;border-radius:12px}
+.final-home #viviendas .home-heading .final-section-link{display:block;min-height:44px;margin-top:16px;padding:10px 0;background:none;color:var(--final-ink);border:0;border-radius:0!important;text-decoration:underline;text-underline-offset:5px;font-size:15px;line-height:1.6;pointer-events:auto}
+.final-home #viviendas .home-heading .final-section-link:hover{color:#705b2b}
+.final-home #viviendas .home-heading .final-section-link:focus-visible{outline:2px solid #705b2b;outline-offset:5px}
+.final-home #viviendas .home-instruction{bottom:85px;right:16px;max-width:80%;font-size:10px;letter-spacing:0}
+.final-home #viviendas .view-switch{left:12px;right:12px;bottom:14px;max-width:none;width:auto;gap:3px;flex-wrap:wrap}
+.final-home #viviendas .view-switch button{font-size:12px;min-height:42px;padding:9px 11px}
+@media(max-width:1000px){.final-home #viviendas .showroom{grid-template-columns:minmax(0,1fr);grid-template-areas:'selector' 'viewer' 'details';padding:18px;gap:18px}.final-home #viviendas .home-stage{height:460px}.final-home #viviendas .home-specs{grid-template-columns:repeat(3,minmax(0,1fr))}.final-home #viviendas .home-specs .circle-link{grid-column:1/-1}.final-home #viviendas .home-heading h2{margin-top:12px}}
+@media(max-width:600px){.final-home #viviendas .showroom{padding:12px;gap:14px}.final-home #viviendas .home-stage{height:420px}.final-home #viviendas .home-selector button{padding:12px;min-height:92px}.final-home #viviendas .home-selector button small{font-size:11px}.final-home #viviendas .home-specs{grid-template-columns:1fr;gap:14px}.final-home #viviendas .view-switch{left:8px;right:8px;bottom:8px}.final-home #viviendas .view-switch button{font-size:11px;padding:8px}.final-home #viviendas .home-instruction{bottom:110px}.final-home #viviendas .home-heading{padding:8px}}
+/* Lot detail: one map with its selection and facts alongside it. */
+body.final-detail[data-page=lotes] main{max-width:1600px!important;margin:0 auto!important;padding:40px 4vw 64px!important}
+body.final-detail[data-page=lotes] .c-lot-workspace{display:grid!important;grid-template-columns:minmax(0,1fr) 320px!important;gap:24px;align-items:start}
+body.final-detail[data-page=lotes] #c-map{grid-column:1;grid-row:1;order:0;min-width:0;overflow:hidden;border-radius:16px}
+body.final-detail[data-page=lotes] .c-lot-card{grid-column:2;grid-row:1;display:flex!important;flex-direction:column;gap:16px;margin:0!important;padding:24px!important;background:#efe8d9!important;min-width:0}
+body.final-detail[data-page=lotes] .c-lot-card label{font-size:15px;line-height:1.5;margin:0}
+body.final-detail[data-page=lotes] .c-lot-card select{width:100%;min-width:0;min-height:48px;font-size:14px;padding:12px}
+body.final-detail[data-page=lotes] .c-lot-card h2{display:block;font-size:36px;margin:4px 0 0}
+body.final-detail[data-page=lotes] #c-street{display:block;font-size:14px;margin:0;color:#605b52}
+body.final-detail[data-page=lotes] .c-lot-card dl{display:grid;gap:14px;margin:0;padding:18px 0;border-top:1px solid #c4b89f;border-bottom:1px solid #c4b89f}
+body.final-detail[data-page=lotes] .c-lot-card dl>div{display:flex;justify-content:space-between;gap:12px}
+body.final-detail[data-page=lotes] .c-lot-card dt{font-size:13px;color:#605b52}
+body.final-detail[data-page=lotes] .c-lot-card dd{font-size:15px;margin:0;text-align:right}
+body.final-detail[data-page=lotes] .c-lot-card .c-note{padding:0;margin:0;font-size:13px;line-height:1.6;background:transparent}
+body.final-detail[data-page=lotes] .c-lot-card>a{font-size:14px;line-height:1.5;margin:0}
+body.final-detail[data-page=lotes] .c-lot-card .c-button{width:100%;text-align:center;justify-content:center;min-height:48px;padding:14px}
+body.final-detail[data-page=lotes] .parcel-frame{display:block;border:0;width:100%;background:#efe8d9}
+@media(max-width:1000px){body.final-detail[data-page=lotes] .c-lot-workspace{grid-template-columns:minmax(0,1fr)!important}body.final-detail[data-page=lotes] .c-lot-card{grid-column:1;grid-row:1}body.final-detail[data-page=lotes] #c-map{grid-column:1;grid-row:2}}
+/* One persistent regional map; selection changes markers, never the map document. */
+.final-home #territory-live-map{height:560px;width:100%;background:#e8e1d3;z-index:0}
+.final-home .territory-location{background:#f4efe4;border:2px solid #705b2b;border-radius:50%;display:grid;place-items:center;color:#292a2d;font:600 13px 'DM Sans',sans-serif;box-shadow:0 2px 8px #0004;transition:background .25s,color .25s,box-shadow .25s}
+.final-home .territory-location.is-selected{background:#705b2b;color:#fff;border-color:#fff;box-shadow:0 0 0 6px #d2b77e88,0 2px 8px #0004}
+.final-home .territory-location:focus-visible{outline:3px solid #292a2d;outline-offset:5px}
+.final-home .territory-place-label{font:500 14px 'DM Sans',sans-serif;background:#fffaf0;color:#292a2d;border:1px solid #c4b89f;padding:8px 12px;box-shadow:0 2px 8px #0002}
+.final-home .territory-reset{padding:10px 14px;min-height:44px;margin:8px 12px;background:#f4efe4;color:#292a2d;border:1px solid #b7aa8f;font:500 13px 'DM Sans',sans-serif}
+.final-home #territory-live-map .leaflet-control-attribution{font-size:11px}
+@media(max-width:760px){.final-home #territory-live-map{height:420px}}
+/* A clear closing invitation for the surroundings page. */
+body.final-detail[data-page=entorno] .entorno-next{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:32px;margin:48px 0 0;padding:36px 0 8px;border-top:1px solid #c4b89f66;background:transparent}
+body.final-detail[data-page=entorno] .entorno-next h2{font-family:'DM Sans',sans-serif!important;font-size:clamp(26px,2.6vw,38px)!important;font-weight:500!important;line-height:1.25!important;letter-spacing:-.025em!important;max-width:28ch;margin:0;color:inherit}
+body.final-detail[data-page=entorno] .entorno-next .c-button{display:inline-flex;align-items:center;justify-content:center;width:auto;min-width:250px;min-height:60px;padding:18px 26px;margin:0;background:#d2b77e!important;color:#292a2d!important;font:600 17px/1.4 'DM Sans',sans-serif;text-align:center;text-decoration:none;white-space:normal;border:1px solid transparent;border-radius:12px}
+body.final-detail[data-page=entorno] .entorno-next .c-button:hover{background:#e4cc98!important}
+body.final-detail[data-page=entorno] .entorno-next .c-button:focus-visible{outline:3px solid #f4efe4;outline-offset:5px}
+@media(max-width:750px){body.final-detail[data-page=entorno] .entorno-next{grid-template-columns:1fr;gap:24px;margin-top:32px;padding-top:28px}body.final-detail[data-page=entorno] .entorno-next h2{font-size:28px!important;max-width:25ch}body.final-detail[data-page=entorno] .entorno-next .c-button{width:100%;min-width:0;font-size:17px}}
+
+body.final-detail[data-page=entorno] .entorno-next{width:100%;max-width:none;box-sizing:border-box}
+/* Shared reading scale: apply it to the actual housing studio selectors. */
+:root{--type-body:16px;--type-control:16px;--type-caption:14px;--type-page-title:clamp(40px,5vw,68px);--type-section-title:clamp(32px,3.5vw,48px)}
+.final-housing .studio-heading h1{font-size:var(--type-page-title)!important;line-height:1.1!important;margin:0}
+.final-housing .studio-heading p{font:400 var(--type-body)/1.6 var(--sans)!important;max-width:34ch;margin:0}
+.final-housing .studio-caption h2{font-size:var(--type-section-title)!important;line-height:1.15!important;margin:0 0 20px}
+.final-housing .studio-caption>p,.final-housing .plan-section p,.final-housing .model-area p{font:400 var(--type-body)/1.65 var(--sans)!important}
+.final-housing .studio-caption dt,.final-housing .studio-caption dd{font:400 var(--type-body)/1.5 var(--sans)!important}
+.final-housing .studio-caption dd{text-align:right}
+.final-housing .studio-caption dl>div{padding:13px 0;gap:16px}
+.final-housing .studio-tabs>button{font:600 18px/1.4 var(--sans)!important;min-width:160px}
+.final-housing .studio-tabs>button small{font:400 var(--type-caption)/1.5 var(--sans)!important;margin-top:6px}
+.final-housing .studio-tabs .compare-trigger,.final-housing .studio-controls button,.final-housing .studio-save,.final-housing .studio-bottom button,.final-housing .studio-bottom a,.final-housing .model-area button,.final-housing .model-area .button{font:600 var(--type-control)/1.4 var(--sans)!important;min-height:48px}
+.final-housing .studio-gesture strong{font:600 var(--type-body)/1.5 var(--sans)}
+.final-housing .studio-gesture span,.final-housing .studio-disclaimer,.final-housing .studio-bottom p,.final-housing .interiors figcaption,.final-housing .small{font:400 var(--type-caption)/1.6 var(--sans)!important}
+.final-housing .studio-bottom strong{font-size:28px;line-height:1.3}
+.final-housing .studio-main{grid-template-columns:300px minmax(0,1fr);gap:0 24px}
+.final-housing .studio-object{margin-left:0}
+.final-housing .studio-compare :is(th,td){font:400 var(--type-body)/1.5 var(--sans);padding:14px}
+.final-housing .model-heading h3,.final-housing .plan-section h3{font-size:var(--type-section-title)!important;line-height:1.2}
+@media(max-width:900px){.final-housing .studio-main{grid-template-columns:250px minmax(0,1fr);gap:0 18px}.final-housing .studio-heading{align-items:flex-start}.final-housing .studio-tabs>button{min-width:120px;padding:14px 18px}}
+@media(max-width:650px){.final-housing .studio-heading{display:block}.final-housing .studio-heading p{margin-top:18px;max-width:none}.final-housing .studio-main{display:flex;flex-direction:column;gap:24px}.final-housing .studio-tabs{flex-wrap:wrap;gap:6px}.final-housing .studio-tabs>button{flex:1;min-width:0}.final-housing .studio-tabs .compare-trigger{flex-basis:100%;justify-content:center;margin-left:0}.final-housing .studio-caption{padding-bottom:0}.final-housing .studio-bottom{flex-wrap:wrap;margin-top:0}.final-housing .studio-bottom p span{display:block;margin:8px 0 0}.final-housing .studio-bottom>button{width:100%;justify-content:center}.final-housing .studio-compare{padding:18px;overflow-x:auto}}

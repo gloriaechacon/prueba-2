@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Precios de vivienda",
+    "value": "+48,14%",
+    "label": "variación acumulada en cinco años",
+    "period": "Ocala MSA · FHFA · 2026 T2",
+    "source": "fhfa",
+    "status": "Contrastado con FHFA el 31/10/2026"
+  },
+  {
+    "name": "Población y construcción",
+    "value": "442.660",
+    "label": "habitantes estimados",
+    "period": "Marion County · julio de 2025",
+    "source": "census",
+    "status": "Contrastado con Census el 31/10/2026"
+  },
+  {
+    "name": "Empleo",
+    "value": "126.300",
+    "label": "empleos no agrícolas · septiembre de 2026, preliminar",
+    "period": "Ocala MSA · BLS",
+    "source": "bls",
+    "status": "Actualizado desde BLS el 31/10/2026; conservar como dato preliminar"
+  },
+  {
+    "name": "Turismo",
+    "value": "US$956,45M",
+    "label": "impacto económico estimado en el archivo",
+    "period": "Marion County · FY2025",
+    "source": "tourism",
+    "status": "Archivo del 13/10/2026 · nueva comprobación pendiente"
+  },
+  {
+    "name": "Actividad empresarial",
+    "value": "US$417M",
+    "label": "cartera potencial comunicada, no capital comprometido",
+    "period": "Ocala Metro CEP · balance de mitad de 2026",
+    "source": "cep",
+    "status": "Archivo del 13/10/2026 · informe completo pendiente"
+  }
+]

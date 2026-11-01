@@ -24,11 +24,17 @@
  // Preserve the home's model preview, but take deeper actions to the complete studio.
  if(home){
   document.addEventListener('click',event=>{if(event.target.closest('#compare-homes,[data-open-placement],[data-open-tour]')){event.preventDefault();event.stopImmediatePropagation();location.href=linkPage('viviendas');}},true);
-  for(const [id,label] of [['lotes','Ver los lotes y sus detalles'],['entorno','Conocer el entorno de Ocala'],['viviendas','Explorar Utah y Bell en 3D'],['contacto','Preparar mi consulta']]){
+  for(const [id,label] of [['lotes','Ver los lotes y sus detalles'],['entorno','Conocer el entorno de Ocala'],['viviendas','Ver fichas y recorridos de Utah y Bell'],['contacto','Preparar mi consulta']]){
    const section=document.getElementById(id);if(!section)continue;
    const a=document.createElement('a');a.href=linkPage(id);a.className='final-section-link';a.textContent=label;
    if(id==='viviendas')section.querySelector('.home-heading')?.append(a);else section.append(a);
   }
+ }
+ if(home){
+  const heading=document.querySelector('#viviendas .home-heading');
+  const specs=document.querySelector('#viviendas .home-specs');
+  const link=heading?.querySelector('.final-section-link');
+  if(heading&&specs)heading.insertBefore(specs,link);
  }
  // Give the aerial explorer its own toolbar instead of layering controls over the terrain.
  if(home){const explorer=document.querySelector('#lot-explorer');if(explorer){

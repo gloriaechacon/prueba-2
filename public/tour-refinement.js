@@ -30,13 +30,18 @@
  }
  if(embed){
   document.body.classList.add('embedded-'+embed);
-  if(embed==='lotes'){const poster=$('.zone-poster');if(poster){poster.loading='eager';poster.fetchPriority='high';}const actions=document.createElement('div');actions.className='embedded-plot-actions';actions.innerHTML='<strong>Explora este terreno</strong>';['.zone-states','#zone-house-choice','#zone-state-note'].forEach(sel=>{const el=$(sel);if(el)actions.append(el);});zone.append(actions);new ResizeObserver(()=>parent.postMessage({type:'parcel-height',height:Math.ceil(zone.getBoundingClientRect().height)+4},location.origin)).observe(zone);}
+  if(embed==='lotes'){
+   zone.querySelectorAll('[data-zone-state="clean"]').forEach(button=>button.remove());
+   const toolbar=document.createElement('div');toolbar.className='embedded-map-toolbar';toolbar.setAttribute('aria-label','Controles del mapa');
+   ['.zone-modes','.zone-controls'].forEach(selector=>{const control=zone.querySelector(selector);if(control)toolbar.append(control);});
+   zone.querySelector('.zone-layout').before(toolbar);
+   const poster=$('.zone-poster');if(poster){poster.loading='eager';poster.fetchPriority='high';}const actions=document.createElement('div');actions.className='embedded-plot-actions';actions.innerHTML='<strong>Explora este terreno</strong>';['.zone-states','#zone-house-choice','#zone-state-note'].forEach(sel=>{const el=$(sel);if(el)actions.append(el);});zone.append(actions);new ResizeObserver(()=>parent.postMessage({type:'parcel-height',height:Math.ceil(zone.getBoundingClientRect().height)+4},location.origin)).observe(zone);}
   if(embed==='hero')document.addEventListener('click',e=>{const link=e.target.closest('a[href^="#"]');if(link){e.preventDefault();parent.postMessage({type:'rainbow-destination',section:link.hash.slice(1)},location.origin);}});
  }
  // Reuse the actual aerial/3D explorer, not a second symbolic street map.
  const map=$('#c-map');
  if(map){
-  const frame=document.createElement('iframe');frame.className='parcel-frame';frame.title='Vista aérea y exploración de los lotes de Rainbow Park';frame.loading='lazy';frame.src='/a/?embed=lotes&palette='+(document.body.dataset.palette||'champagne');map.replaceChildren(frame);
+  const frame=document.createElement('iframe');frame.className='parcel-frame';frame.title='Vista aérea y exploración de los lotes de Rainbow Park';frame.loading='lazy';frame.src='/a/?embed=lotes&revision=layout2&palette='+(document.body.dataset.palette||'champagne');map.replaceChildren(frame);
   const send=()=>{const lot=$('#c-lot')?.value;if(lot)frame.contentWindow.postMessage({type:'rainbow-lot',lot},location.origin);};frame.addEventListener('load',send);addEventListener('rpc:lots-ready',send);$('#c-lot')?.addEventListener('change',send);
   addEventListener('message',e=>{if(e.origin===location.origin&&e.source===frame.contentWindow&&e.data?.type==='parcel-height'&&Number.isFinite(e.data.height))frame.style.height=Math.max(600,Math.min(1400,e.data.height))+'px';});
   addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==frame.contentWindow||e.data?.type!=='parcel-selected')return;const select=$('#c-lot');if(select?.options.length&&select.value!==e.data.lot){select.value=e.data.lot;select.dispatchEvent(new Event('change'));}});

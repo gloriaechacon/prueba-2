@@ -23,3 +23,55 @@
 .final-dossier .indicator-tabs{flex-wrap:wrap;gap:8px}.final-dossier .indicator-tabs button{font-size:14px;padding:12px}.final-dossier .dossier-page>h2,.final-dossier .market-spread h2{font-size:42px}.final-dossier .chapter-intro{font-size:16px;line-height:1.75}.final-dossier .source-entry{padding:22px 0}.final-dossier .source-entry a{font-size:16px;line-height:1.6}.final-dossier .source-entry span,.final-dossier #source-count{font-size:13px}.final-dossier footer{background:#e4d2ad}
 @media(max-width:1050px){.final-dossier .dossier-layout{grid-template-columns:195px minmax(0,1fr);gap:26px}.final-dossier .project-spread{grid-template-columns:1fr}.final-dossier .project-picture img{max-height:360px;object-fit:cover}.final-dossier .market-spread{grid-template-columns:1fr}.final-dossier .dossier-toolbar{grid-template-columns:1fr 1fr}.final-dossier .dossier-toolbar label{grid-column:1/-1}}
 @media(max-width:750px){.final-dossier .dossier-shell{padding:0 20px 40px}.final-dossier .dossier-head{display:block;padding:30px 0 24px}.final-dossier .dossier-head button{margin-top:20px}.final-dossier .dossier-layout{display:block}.final-dossier .dossier-index{position:static;display:grid;grid-template-columns:1fr 1fr;overflow:visible;max-height:none;padding:20px 0;gap:6px}.final-dossier .dossier-index button{font-size:13px;min-height:54px;padding:10px 12px}.final-dossier .dossier-index>p{grid-column:1/-1;margin:12px 0 0;font-size:11px}.final-dossier .dossier-pagination{position:static;grid-template-columns:auto 1fr auto;gap:8px}.final-dossier .dossier-pagination button{padding:10px;font-size:13px}.final-dossier .dossier-pagination svg{display:none}.final-dossier .dossier-pagination>div{font-size:12px}.final-dossier .dossier-pagination p{display:none}.final-dossier .dossier-toolbar{grid-template-columns:1fr}.final-dossier .project-context h2{font-size:22px}.final-dossier .project-lead h2{font-size:36px}.final-dossier .project-context p,.final-dossier .project-narrative>p{font-size:16px}.final-dossier .dossier-reading{scroll-margin-top:100px}}
+/* Investment is a continuous summary, with an in-page index rather than pagination. */
+.final-dossier .investment-summary{padding:40px 4vw 72px}
+.final-dossier .investment-intro-head{display:flex;justify-content:space-between;align-items:center;gap:24px;padding-bottom:32px;border-bottom:1px solid var(--line)}
+.final-dossier .investment-intro-head h1{font:400 clamp(42px,5vw,72px)/1.08 'Italiana',Georgia,serif;margin:0 0 14px}
+.final-dossier .investment-intro-head p{font-size:17px;margin:0;line-height:1.6}
+.final-dossier .investment-intro-head button{padding:14px 20px;border:1px solid var(--line);background:transparent;color:var(--ink);white-space:nowrap}
+.final-dossier .investment-summary-layout{display:grid;grid-template-columns:210px minmax(0,1fr);gap:40px;align-items:start}
+.final-dossier .investment-summary-index{position:sticky;top:108px;display:grid;gap:6px;padding-top:24px}
+.final-dossier .investment-summary-index a{padding:14px 16px;text-decoration:none;color:var(--ink);font-size:14px;line-height:1.5;border-radius:12px}
+.final-dossier .investment-summary-index a:hover{background:#e8e1d3}
+.final-dossier .investment-summary-index a[aria-current]{background:#292a2d;color:#fff}
+.final-dossier .investment-sections{min-width:0}
+.final-dossier .investment-sections>section{padding:34px 0 40px;border-bottom:1px solid var(--line);scroll-margin-top:115px}
+.final-dossier .investment-sections h2{font:400 clamp(32px,3vw,46px)/1.15 'Italiana',Georgia,serif;margin:0 0 16px}
+.final-dossier .investment-lead{max-width:70ch;font-size:17px;line-height:1.7;margin:0 0 18px}
+.final-dossier .investment-archive{font-size:13px;line-height:1.6;color:#605b52;max-width:75ch;margin:0 0 28px}
+.final-dossier .investment-project-group{margin-top:30px}
+.final-dossier .investment-group-title{font:600 16px 'DM Sans',sans-serif;margin:0 0 16px}
+.final-dossier .investment-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.final-dossier .investment-card{min-width:0;padding:24px;background:#fffcf6;border:1px solid var(--line);border-radius:16px;display:flex;flex-direction:column;align-items:flex-start}
+.final-dossier .investment-card h3{font:500 21px/1.3 'DM Sans',sans-serif;margin:0 0 18px}
+.final-dossier .investment-state{font-size:12px!important;color:#705b2b;margin:0 0 10px!important}
+.final-dossier .investment-metric{font:500 clamp(30px,3vw,44px)/1.1 'DM Sans',sans-serif;letter-spacing:-.035em;overflow-wrap:anywhere}
+.final-dossier .investment-unit{font-size:14px;line-height:1.5;margin:8px 0 16px;color:#605b52}
+.final-dossier .investment-card p{font:400 15px/1.65 'DM Sans',sans-serif;margin:0 0 14px}
+.final-dossier .investment-date{font-size:12px;line-height:1.5;display:block;color:#605b52;margin-bottom:16px}
+.final-dossier .investment-card details{margin-top:auto;width:100%;border-top:1px solid var(--line);padding-top:14px}
+.final-dossier .investment-summary summary{font-size:14px;line-height:1.6;cursor:pointer;padding:6px 0}
+.final-dossier .investment-summary details[open] summary{margin-bottom:12px}
+.final-dossier .investment-summary details ul{padding-left:20px;margin:0}
+.final-dossier .investment-summary details li{margin:14px 0;font-size:14px;line-height:1.6;overflow-wrap:anywhere}
+.final-dossier .investment-summary details li small{display:block;color:#605b52;font-size:12px}
+.final-dossier .investment-region{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin:28px 0}
+.final-dossier .investment-region h3{font:500 19px/1.4 'DM Sans',sans-serif;margin:0 0 12px}
+.final-dossier .investment-region p{font-size:15px;line-height:1.7;margin:0}
+.final-dossier .investment-text-link{display:inline-block;margin:16px 20px 0 0;font-size:15px;text-underline-offset:4px;color:var(--ink)}
+.final-dossier .investment-dates{margin:24px 0}
+.final-dossier .investment-dates>div{display:grid;grid-template-columns:90px 1fr;gap:24px;padding:20px 0;border-top:1px solid var(--line)}
+.final-dossier .investment-dates dt{font-size:28px;color:#705b2b}
+.final-dossier .investment-dates dd{margin:0;font-size:16px;line-height:1.6}
+.final-dossier .investment-dates dd p{font-size:14px;margin:6px 0 0;color:#605b52}
+.final-dossier .investment-source-library{border:1px solid var(--line);padding:18px 24px;border-radius:16px}
+.final-dossier .investment-contact{display:inline-block;background:#705b2b;color:white;padding:16px 22px;text-decoration:none;border-radius:12px;margin-right:20px}
+.final-dossier .investment-summary a:focus-visible,.final-dossier .investment-summary summary:focus-visible{outline:3px solid #705b2b;outline-offset:4px}
+@media(max-width:900px){.final-dossier .investment-summary-layout{grid-template-columns:1fr;gap:0}.final-dossier .investment-summary-index{position:static;grid-template-columns:repeat(2,minmax(0,1fr));padding-bottom:20px;border-bottom:1px solid var(--line)}.final-dossier .investment-region{grid-template-columns:1fr;gap:22px}.final-dossier .investment-intro-head{align-items:flex-start;flex-direction:column}.final-dossier .investment-summary{padding:28px 5vw 50px}}
+@media(max-width:600px){.final-dossier .investment-cards{grid-template-columns:1fr}.final-dossier .investment-card{padding:22px}.final-dossier .investment-dates>div{grid-template-columns:64px 1fr;gap:16px}.final-dossier .investment-summary-index a{font-size:13px;padding:12px}.final-dossier .investment-sections h2{font-size:34px}}
+.final-dossier .investment-intro-head{width:auto;max-width:100%;padding:0 0 32px;background:transparent;box-shadow:none;min-height:0}
+.final-dossier .investment-sections>section{scroll-margin-top:16px}
+.final-dossier .investment-cards>.investment-card:only-child{grid-column:1/-1}
+.final-dossier .investment-summary-index{min-width:0}
+
+.final-dossier .investment-summary-index{margin:0!important;align-self:start;justify-self:stretch;width:auto;order:0}

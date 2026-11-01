@@ -7,14 +7,47 @@ const data={
  airport:{index:'05',category:'CONECTIVIDAD · AVIACIÓN GENERAL',title:'Otra forma<br>de llegar.',description:'Ocala International Airport, al oeste de la ciudad, atiende aviación general, corporativa y carga. Una referencia para quienes llegan en aeronaves privadas o por viajes de negocio.',tags:['Aviación privada','Actividad corporativa','Ocala'],image:'assets/territory-airport.svg',alt:'Ilustración editorial de aviación; no representa las instalaciones del aeropuerto',label:'AVIACIÓN / ILUSTRACIÓN EDITORIAL',credit:'Información: City of Ocala · Ilustración conceptual',source:'https://www.ocalafl.gov/government/city-departments-i-z/ocala-international-airport',link:'https://www.ocalafl.gov/government/city-departments-i-z/ocala-international-airport',linkText:'Visitar sitio oficial del aeropuerto',query:'Ocala International Airport',path:'M245 330Q400 350 535 425'}
 };
 let selected='rainbow',mode='satellite';const $=id=>document.getElementById(id);
-function mapUrl(){return 'https://www.google.com/maps?q='+encodeURIComponent(data[selected].query)+'&z=12&t='+(mode==='satellite'?'k':'m')+'&output=embed'}
-function updateMap(){const d=data[selected];$('territory-iframe').title=`Ubicación de ${d.query} en Google Maps`;$('territory-iframe').src=mapUrl();$('territory-map-fallback').href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(d.query)}
-function select(key){selected=key;const d=data[key];document.querySelectorAll('[data-destination]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.destination===key)));$('destination-image').src=d.image;$('destination-image').alt=d.alt;$('destination-photo-label').textContent=d.label;$('destination-index').textContent=d.index+' / '+String(Object.keys(data).length).padStart(2,'0');$('destination-category').textContent=d.category;$('destination-title').innerHTML=d.title;$('destination-description').textContent=d.description;$('destination-tags').innerHTML=d.tags.map(t=>`<span>${t}</span>`).join('');const link=$('destination-link');link.innerHTML=d.linkText+' <span>↗</span>';link.href=d.link;const mapLink=$('destination-map-link');mapLink.href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(d.query);mapLink.setAttribute('aria-label','Ver '+d.query+' en Google Maps (abre otra pestaña)');if(d.link.startsWith('#'))link.removeAttribute('target');else link.target='_blank';const credit=$('destination-credit');credit.textContent=d.credit;if(d.source){credit.href=d.source;credit.target='_blank'}else{credit.removeAttribute('href');credit.removeAttribute('target')}$('territory-connection').setAttribute('d',d.path);updateMap()}
+// Regional reference points; these markers are not parcel boundaries or access directions.
+const places={rainbow:{point:[29.15,-82.373],name:'Rainbow Park'},wec:{point:[29.192,-82.274],name:'Mundo ecuestre'},downtown:{point:[29.1878,-82.1367],name:'Downtown Ocala'},nature:{point:[29.1025,-82.4375],name:'Rainbow Springs'},airport:{point:[29.1717,-82.2242],name:'Aeropuerto de Ocala'}};
+let map,baseLayer;const markers={};
+const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+function updateMap(){
+ const d=data[selected];$('territory-map-fallback').href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(d.query);
+ if(!map)return;
+ Object.entries(markers).forEach(([key,marker])=>{
+  const active=key===selected,el=marker.getElement();
+  el?.classList.toggle('is-selected',active);el?.setAttribute('aria-pressed',String(active));el?.setAttribute('aria-label',places[key].name);
+  marker.setZIndexOffset(active?1000:0);
+  if(active)marker.openTooltip();else marker.closeTooltip();
+ });
+ // Preserve zoom and orientation. Pan only when a selected point is outside the current view.
+ map.panInside(places[selected].point,{padding:[50,50],animate:!reduced.matches,duration:.6});
+}
+function setBase(){if(!map)return;const next=layers[mode];if(next===baseLayer)return;if(baseLayer)map.removeLayer(baseLayer);baseLayer=next.addTo(map);}
+let layers;
+function initMap(){
+ const old=$('territory-iframe');const host=document.createElement('div');host.id='territory-live-map';host.setAttribute('aria-label','Mapa del entorno de Rainbow Park. Selecciona un lugar para ver su ficha.');old.replaceWith(host);
+ if(!window.L){host.textContent='No se pudo cargar el mapa. Puedes consultar cada ubicación en Google Maps.';return;}
+ map=L.map(host,{scrollWheelZoom:false,zoomControl:false});L.control.zoom({position:'bottomleft'}).addTo(map);
+ layers={satellite:L.tileLayer('https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}',{maxNativeZoom:16,maxZoom:18,attribution:'Imágenes: USDA / USGS The National Map'}),streets:L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'})};
+ Object.entries(places).forEach(([key,place])=>{
+  const marker=L.marker(place.point,{title:place.name,alt:place.name,keyboard:true,icon:L.divIcon({className:'territory-location',html:'<span>'+data[key].index+'</span>',iconSize:[38,38],iconAnchor:[19,19]})}).addTo(map);
+  marker.bindTooltip(place.name,{direction:'top',offset:[0,-20],className:'territory-place-label'});marker.on('click',()=>select(key));markers[key]=marker;
+ });
+ const reset=()=>map.fitBounds(Object.values(places).map(p=>p.point),{padding:[48,48],maxZoom:12,animate:false});
+ setBase();reset();updateMap();
+ const resetButton=document.createElement('button');resetButton.type='button';resetButton.className='territory-reset';resetButton.textContent='Ver todos los lugares';resetButton.addEventListener('click',reset);document.querySelector('[data-territory-map]')?.parentElement.append(resetButton);
+ if(!resetButton.isConnected)host.parentElement.insertBefore(resetButton,host);
+ new ResizeObserver(()=>map.invalidateSize({pan:false})).observe(host);
+ host.parentElement.querySelector('p').firstChild.textContent='Los puntos son referencias del entorno. Selecciona un número o ';
+}
+function select(key){selected=key;const d=data[key];document.querySelectorAll('[data-destination]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.destination===key)));$('destination-image').src=d.image;$('destination-image').alt=d.alt;$('destination-photo-label').textContent=d.label;$('destination-index').textContent=d.index+' / '+String(Object.keys(data).length).padStart(2,'0');$('destination-category').textContent=d.category;$('destination-title').innerHTML=d.title;$('destination-description').textContent=d.description;$('destination-tags').innerHTML=d.tags.map(t=>`<span>${t}</span>`).join('');const link=$('destination-link');link.textContent=d.linkText;link.href=d.link;const mapLink=$('destination-map-link');mapLink.href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(d.query);mapLink.setAttribute('aria-label','Ver '+d.query+' en Google Maps (abre otra pestaña)');if(d.link.startsWith('#')||d.link.startsWith('/'))link.removeAttribute('target');else link.target='_blank';const credit=$('destination-credit');credit.textContent=d.credit;if(d.source){credit.href=d.source;credit.target='_blank'}else{credit.removeAttribute('href');credit.removeAttribute('target')}$('territory-connection').setAttribute('d',d.path);updateMap()}
 document.querySelectorAll('[data-destination]').forEach(b=>b.addEventListener('click',()=>select(b.dataset.destination)));
-document.querySelectorAll('[data-territory-map]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.territoryMap;document.querySelectorAll('[data-territory-map]').forEach(x=>{x.classList.toggle('active',x===b);x.setAttribute('aria-pressed',String(x===b))});updateMap()}));
+document.querySelectorAll('[data-territory-map]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.territoryMap;document.querySelectorAll('[data-territory-map]').forEach(x=>{x.classList.toggle('active',x===b);x.setAttribute('aria-pressed',String(x===b))});setBase()}));
 $('territory-artboard').hidden=true;$('territory-real-map').hidden=false;
 const controls=[...document.querySelectorAll('[data-territory-map]')];controls.forEach((b,i)=>{b.dataset.territoryMap=i===0?'satellite':'streets';b.textContent=i===0?'Satélite':'Calles';b.setAttribute('aria-pressed',String(i===0));b.classList.toggle('active',i===0);});
 select('rainbow');
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initMap,{once:true});else initMap();
 
 document.querySelectorAll('.outlook-list details').forEach(d=>d.addEventListener('toggle',()=>{if(d.open)document.querySelectorAll('.outlook-list details').forEach(x=>{if(x!==d)x.open=false})}));
 })();
