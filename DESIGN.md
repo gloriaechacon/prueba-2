@@ -202,3 +202,7 @@ Route and local scene changes are immediate, without View Transitions or entry a
 
 ## Automatic house viewer
 The first house view displays the actual GLB, loaded automatically for Utah or Bell. A persistent instruction strip explains dragging and zooming. Camera and roof controls provide an alternative to gestures. Mobile puts the viewer before the house facts. The loading state occupies the same reserved space; failure offers retry and the original PDF. Changing models or leaving the route disposes the renderer and guards against stale loads. The detail button opens plans only; there is no load-model gate.
+
+
+## Exploration refinements
+Arrival destinations use a dark bottom-to-top fading hover and keyboard-focus surface, with soft side edges and no text displacement. The place visit centers its image and text, with destination tabs in a shared row below. Its final action leads to the collection overview. Parcels begin with the supplied aerial georeferenced to all 13 locations, separated labels for clustered pins, a regional map link and explicit lot selection. Dossier projects are introduced as third-party regional context. Typography remains unchanged pending the user reference.
