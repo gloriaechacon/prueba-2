@@ -1,0 +1,32 @@
+{
+  "basis": "Datos y planos locales; no verificación comercial independiente",
+  "houses": [
+    {
+      "id": "utah",
+      "name": "Casa Utah",
+      "floors": 1,
+      "bedrooms": 3,
+      "studioAnnex": 1,
+      "bathrooms": 3,
+      "garage": 1,
+      "livingFt2": 1490,
+      "totalFt2": 1766,
+      "model": "../recursos/utah/utah-finished-v4.glb",
+      "plan": "../recursos/utah/utah-floor-plan.pdf",
+      "metadata": "../recursos/utah/metadata-plan-v3.json"
+    },
+    {
+      "id": "bell",
+      "name": "Casa Bell",
+      "floors": 1,
+      "bedrooms": 3,
+      "bathrooms": 2,
+      "garage": 1,
+      "livingFt2": 1157,
+      "totalFt2": 1534,
+      "model": "../recursos/bell/bell-finished-v4.glb",
+      "plan": "../recursos/bell/bell-model.pdf",
+      "metadata": "../recursos/bell/metadata.json"
+    }
+  ]
+}

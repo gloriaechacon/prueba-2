@@ -1,0 +1,4 @@
+/* Preserve the imported experience; the comparison palette is optional. */
+:root[data-palette="navy"]{--ink:#142b49;--blue:#334f70;--water:#e5eaf0;--paper:#f6f7f8;--soft:#edf0f4;--line:#b6c0cc;--sun:#c7b58d}
+:root[data-palette="navy"] header,:root[data-palette="navy"] .tourbar{color:var(--ink);background:var(--paper)}
+:root[data-palette="navy"] button:not(.secondary),:root[data-palette="navy"] .button{background-color:var(--ink);color:white}

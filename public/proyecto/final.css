@@ -1,0 +1,137 @@
+:root{--final-paper:#f4efe4;--final-ink:#292a2d;--final-gold:#d2b77e;--final-muted:#605b52;--final-line:#c4b89f;--sans:'DM Sans',sans-serif;--serif:'Italiana',Georgia,serif}
+html{scroll-padding-top:100px}body{font-family:var(--sans);background:var(--final-paper);color:var(--final-ink)}
+.final-home>.topbar{display:none!important}
+.final-nav{box-sizing:border-box;position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:24px;width:100%;padding:17px 4vw;background:#f4efe4f5;color:#292a2d;border-bottom:1px solid #c4b89f;backdrop-filter:blur(16px);font-family:var(--sans);min-height:86px}
+.final-home>.final-nav{position:fixed;transition:background .5s,color .5s,border-color .5s;--header-progress:0;background:rgb(244 239 228 / var(--header-progress));color:white;border-color:transparent;backdrop-filter:blur(var(--header-blur,0px))}
+.final-home>.final-nav.is-solid{color:#292a2d;border-color:#c4b89f}
+.final-brand{display:flex!important;align-items:center;gap:12px;color:inherit!important;text-decoration:none!important;flex-shrink:0}
+.final-brand svg{width:33px;height:39px;fill:none;stroke:currentColor;stroke-width:1.1}.final-brand span{font-family:var(--serif);font-size:27px;line-height:1.05;white-space:nowrap}.final-brand small{display:block;font-family:var(--sans);font-size:9px;letter-spacing:.3em;margin-top:8px;text-transform:uppercase}
+.final-nav .final-fraga{width:110px;height:42px;object-fit:contain;padding:4px 8px;background:#f4efe4;border-left:1px solid #bfb29a;flex-shrink:0}
+#final-links{display:flex;align-items:center;justify-content:flex-end;gap:4px;margin-left:auto;width:auto;order:initial}
+#final-links a{display:block;color:inherit;text-decoration:none;padding:12px 15px;border-radius:30px;font-size:14px;font-weight:500;border:1px solid transparent;white-space:nowrap;transition:background .25s,color .25s}
+#final-links a:hover,#final-links a[aria-current=page]{background:#d2b77e;color:#292a2d;border-color:transparent}
+.final-menu{display:none}
+.final-nav a:focus-visible,.final-menu:focus-visible{outline:3px solid #9b742b;outline-offset:4px}
+.final-home.proposal-a .hero-shade{background:linear-gradient(90deg,#17181988,#17181911),linear-gradient(0deg,#17181988,transparent 65%)}
+.final-home.proposal-a .project-introduction{background:#e4d2ad;color:#292a2d;padding:90px 6vw}
+.final-home.proposal-a #lotes{background:#faf7ef;color:#292a2d}
+.final-home.proposal-a #entorno{background:#d8c49d;color:#292a2d}
+.final-home.proposal-a #inversion{background:#292a2d;color:#f4efe4}
+.final-home.proposal-a #viviendas{background:#e8e1d3;color:#292a2d}
+.final-home.proposal-a #contacto{background:#292a2d;color:#f4efe4}
+.final-home.proposal-a .bridge{background:#bb9f69;color:#242629}
+.final-home .final-section-link{display:inline-flex;align-items:center;margin-top:26px;padding:16px 24px;min-height:52px;background:#292a2d;color:#fff;text-decoration:none;border-radius:4px;font:500 16px var(--sans);border:1px solid transparent}
+.final-home #inversion .final-section-link,.final-home #contacto .final-section-link{background:#d2b77e;color:#292a2d}
+.final-home .final-section-link:hover{background:#705b2b;color:white}
+.final-home #viviendas .home-experience-links,.final-home #viviendas .home-comparison{display:none}
+.final-detail{--c-paper:#f4efe4;--c-ink:#292a2d;--c-accent:#705b2b;--c-line:#c4b89f;--c-surface:#e8e1d3;background:#f4efe4!important;color:#292a2d!important;padding-left:0!important}
+.final-detail main{margin:0 auto!important;padding:50px 5vw 80px!important;max-width:1500px!important}
+.final-detail h1,.final-detail h2{font-family:var(--serif)!important;font-weight:400!important;letter-spacing:-.025em!important}
+.final-detail h1{font-size:clamp(42px,5.5vw,78px)!important;line-height:1.05!important}
+.final-detail p,.final-detail button,.final-detail select{font-family:var(--sans)!important}
+.final-detail .c-kicker,.final-detail .c-nav{display:none!important}
+.final-detail .c-lead{background:transparent!important;border:0!important;padding:0 0 40px!important}
+.final-detail .c-lot-card{background:#e4d2ad!important;color:#292a2d!important;border-color:#c4b89f!important}
+.final-detail .destination-choices button{background:#292a2d!important;color:#f4efe4!important}
+.final-detail .c-destination{background:#e4d2ad!important;color:#292a2d!important}
+.final-detail .c-destination-copy{background:transparent!important}
+.final-housing{--ink:#292a2d;--blue:#705b2b;--water:#e8e1d3;--paper:#f4efe4;--soft:#e4d2ad;--line:#c4b89f;--sun:#d2b77e;font-family:var(--sans)!important;background:var(--paper)}
+.final-housing #main{padding-bottom:55px}
+.final-housing h1,.final-housing h2,.final-housing h3{font-family:var(--serif)!important;font-weight:400!important;letter-spacing:-.025em!important}
+.final-housing h1{font-size:clamp(42px,5.5vw,76px)!important;line-height:1.05}.final-housing .studio-copy h2{font-size:clamp(48px,6vw,82px)}
+.final-housing button,.final-housing input,.final-housing select{font-family:var(--sans)!important;font-size:15px!important;min-height:44px}
+.final-housing .studio{background:#e8e1d3!important}.final-housing .studio-models button{background:transparent;color:#292a2d;border-radius:4px}.final-housing .studio-models button[aria-pressed=true]{background:#292a2d;color:#f4efe4}
+.final-housing #tourbar{display:none!important}.final-housing footer{background:#e4d2ad}
+[data-final-detail=investment] .dossier-main{max-width:1400px;margin:auto;padding-top:45px}
+[data-final-detail=investment] .tour-heading-bar h1{font-family:var(--serif);font-size:clamp(42px,5.5vw,76px);font-weight:400}
+[data-final-detail=investment] .final-nav{position:sticky}
+.scroll-reveal{transition:opacity .85s cubic-bezier(.16,1,.3,1),filter 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1)}
+.scroll-reveal.reveal-out{opacity:.08;filter:blur(9px);transform:translateY(18px)}
+.scroll-reveal.reveal-in{opacity:1;filter:blur(0);transform:translateY(0)}
+.scroll-reveal:focus-within{opacity:1!important;filter:none!important;transform:none!important}
+@media(max-width:1100px){.final-nav{gap:14px;padding:15px 24px}.final-brand span{font-size:24px}.final-nav .final-fraga{width:90px}#final-links a{padding:11px 10px;font-size:13px}}
+@media(max-width:850px){.final-nav{flex-wrap:wrap;min-height:80px;padding:15px 20px;gap:12px}.final-brand span{font-size:22px}.final-brand svg{width:26px}.final-nav .final-fraga{width:88px;height:36px}.final-menu{display:block;margin-left:auto;background:transparent;color:inherit;border:1px solid currentColor;border-radius:24px;padding:10px 14px;font:500 14px var(--sans)}#final-links{display:none;width:100%;flex-wrap:wrap;justify-content:flex-start;margin:0} .final-nav.menu-open #final-links{display:flex}.final-home>.final-nav.menu-open{background:#f4efe4;color:#292a2d}.final-nav nav a{flex:1;text-align:center}.final-detail main{padding:32px 20px 60px!important}.final-home.proposal-a .project-introduction{padding:64px 24px}.final-home .final-section-link{font-size:15px}.scroll-reveal.reveal-out{filter:blur(6px);transform:translateY(12px)}}
+@media(prefers-reduced-motion:reduce){.scroll-reveal,.scroll-reveal.reveal-out,.scroll-reveal.reveal-in{opacity:1!important;filter:none!important;transform:none!important;transition:none!important}.final-nav{transition:none!important}}
+@media print{.scroll-reveal.reveal-out{opacity:1;filter:none;transform:none}.final-nav{position:static}.final-menu{display:none}}
+.final-housing .studio-viewer-shell,.final-housing .studio-instructions,.final-housing .studio-viewer-note{background:#e8e1d3!important}
+.final-housing .studio-models button[aria-pressed=true]{background:#292a2d!important;color:#f4efe4!important}
+.final-housing .studio-copy p,.final-housing .studio-copy dt,.final-housing .studio-copy dd{font-size:16px!important;line-height:1.6}
+.final-housing .studio-intro p{font-size:16px!important}
+.final-housing .studio-object{background:#e8e1d3}.final-housing .studio-gesture{background:#ded3bd;color:#292a2d}.final-housing .studio-tabs>button[aria-pressed=true]{background:#292a2d}.final-housing .studio-controls button{border-color:#c4b89f}
+@media(max-width:440px){.final-nav{padding:14px;gap:8px}.final-brand{gap:7px}.final-brand span{font-size:19px}.final-brand svg{width:22px}.final-brand small{font-size:8px}.final-nav .final-fraga{width:67px;padding:3px 5px}.final-menu{padding:9px 12px;font-size:13px}.final-nav #final-links{gap:5px}}
+/* Match Editorial: white mark over the film, original colors on the solid header. */
+.final-nav .final-fraga{background:transparent;border-left-color:currentColor;transition:filter .3s}
+.final-home>.final-nav:not(.is-solid):not(.menu-open) .final-fraga{filter:brightness(0) invert(1)}
+.final-home>.final-nav.is-solid .final-fraga,.final-home>.final-nav.menu-open .final-fraga{filter:none}
+@media(prefers-reduced-motion:reduce){.final-nav .final-fraga{transition:none}}
+
+/* Contact: light editorial surface and a real aerial image. */
+.final-detail[data-page=contacto] main{background:#f4efe4;color:#292a2d;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:5vw}
+.final-detail[data-page=contacto] .c-heading>p:last-of-type{color:#605b52;max-width:42ch;opacity:1}
+.final-detail[data-page=contacto] .c-heading h1{font-size:clamp(42px,5vw,70px)}
+.contact-image{margin:32px 0 0}.contact-image img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:4px}.contact-image figcaption{font-size:13px;color:#605b52;margin-top:10px}
+.final-detail[data-page=contacto] .c-form{background:#fffcf6;border:1px solid #c4b89f;border-radius:4px;padding:32px}
+.final-detail[data-page=contacto] .c-form label{font-size:16px;min-width:0;color:#292a2d}
+.final-detail[data-page=contacto] .c-form :is(input,select,textarea){box-sizing:border-box;width:100%;min-width:0;background:#fffdf8;border:1px solid #a99b81;border-radius:4px;padding:13px;font:16px/1.5 var(--sans);color:#292a2d}
+.final-detail[data-page=contacto] .c-form :is(input,select,textarea):focus-visible{outline:2px solid #705b2b;outline-offset:3px}
+.final-detail[data-page=contacto] .c-form .c-button{background:#d2b77e;color:#292a2d;border-radius:4px;font-weight:600}.final-detail[data-page=contacto] .c-button:disabled{opacity:.65;cursor:wait}
+.final-detail[data-page=contacto] #c-form-status{font-size:14px;line-height:1.6;color:#605b52}
+.contact-trap{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+@media(max-width:850px){.final-detail[data-page=contacto] main{grid-template-columns:1fr;gap:28px}.contact-image img{aspect-ratio:16/7}.final-detail[data-page=contacto] .c-form{padding:22px}.final-detail[data-page=contacto] .c-fields{grid-template-columns:1fr}}
+
+/* A clear map workspace: tools above, roomy information beside it. */
+.final-home #lot-explorer .zone-layout{display:grid;grid-template-columns:minmax(0,1fr) 360px;min-height:560px;align-items:start}
+.final-home #lot-explorer .zone-world{height:640px;min-height:560px}
+.final-home #lot-explorer .zone-panel{box-sizing:border-box;min-width:0;width:auto;max-height:none;height:auto;overflow:visible;padding:26px;background:#efe8d9;color:#292a2d}
+.final-home #lot-explorer .zone-panel-title{display:block}.final-home #lot-explorer .zone-panel-title h3{font-size:36px;line-height:1.15;margin:16px 0}.final-home #lot-explorer .zone-panel-title>span{display:block;font-size:13px}
+.final-home #lot-explorer #zone-description{font-size:15px;line-height:1.65;margin:18px 0}
+.final-home #lot-explorer .zone-lot-list{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;width:100%;padding:0 0 22px}
+.final-home #lot-explorer .zone-lot-list button{width:100%;min-width:0;height:46px;font-size:15px;margin:0}
+.final-home #lot-explorer .zone-initial-note{padding:16px 0;border:0}.final-home #lot-explorer .zone-initial-note p{font-size:15px;line-height:1.65;margin:0}
+.final-home #lot-explorer .zone-truth{font-size:13px;line-height:1.6;padding-top:20px}.final-home #lot-explorer .zone-truth p{font-size:13px}
+.final-home #lot-explorer .zone-states{display:flex;flex-wrap:wrap;gap:6px}.final-home #lot-explorer .zone-states button{flex:1;min-width:75px;font-size:13px;padding:10px 6px}
+.final-map-toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:16px;padding:12px 20px;background:#efe8d9;color:#292a2d;border-bottom:1px solid #c4b89f}
+.final-home #lot-explorer .final-map-toolbar .zone-modes,.final-home #lot-explorer .final-map-toolbar .zone-controls{position:static;display:flex;flex-direction:row;max-width:none;gap:6px;background:transparent;border:0;padding:0}
+.final-home #lot-explorer .final-map-toolbar button{background:#fffcf6;color:#292a2d;border:1px solid #b7aa8f;box-shadow:none;min-height:44px}
+.final-home #lot-explorer .final-map-toolbar button[aria-pressed=true]{background:#d2b77e}.final-home #lot-explorer .final-map-toolbar #zone-north{height:44px;display:flex;gap:4px}
+.final-home #lot-explorer .final-map-toolbar .zone-landscape{position:relative;inset:auto;width:auto;max-width:100%;margin-left:auto;padding:10px 14px;background:#fffcf6;color:#292a2d;border:1px solid #b7aa8f}
+.final-home #lot-explorer .zone-landscape summary{font-size:14px}.final-home #lot-explorer #zone-photoreal-note{display:none}
+.final-home #lot-explorer .zone-landscape[open]{flex-basis:100%;margin:0}.final-home #lot-explorer .zone-instruction{font-size:12px!important;max-width:calc(100% - 40px);white-space:normal}
+.final-home #lot-explorer.zone-expanded{overflow:auto}.final-home #lot-explorer.zone-expanded .zone-layout{flex:1;overflow:auto}.final-home #lot-explorer.zone-expanded .zone-world{height:65svh}
+@media(max-width:1000px){.final-home #lot-explorer .zone-layout{grid-template-columns:1fr}.final-home #lot-explorer .zone-world{height:480px;min-height:400px}.final-home #lot-explorer .zone-panel{padding:24px}.final-home #lot-explorer .zone-lot-list{grid-template-columns:repeat(7,minmax(0,1fr))}.final-home #lot-explorer .zone-panel-title h3{font-size:32px}}
+@media(max-width:600px){.final-map-toolbar{padding:12px;gap:10px}.final-home #lot-explorer .final-map-toolbar .zone-landscape{margin-left:0}.final-home #lot-explorer .zone-world{height:420px;min-height:420px}.final-home #lot-explorer .zone-lot-list{grid-template-columns:repeat(5,minmax(0,1fr))}.final-home #lot-explorer .zone-top{flex-wrap:wrap;padding:12px}.final-home #lot-explorer .zone-panel{padding:20px}.final-home #lot-explorer .zone-measures{flex-wrap:wrap}.final-home #lot-explorer .zone-bottom{flex-wrap:wrap;gap:8px}}
+
+.final-home .zone-pin::after{height:var(--pin-stem,14px);pointer-events:none}
+
+.final-home #lot-explorer .zone-layout{height:auto;max-height:none;background:#efe8d9}.final-home #lot-explorer .zone-world{position:sticky;top:100px}.final-home #lot-explorer .zone-bottom{background:#efe8d9;color:#605b52}.final-home #lot-explorer .zone-panel a,.final-home #lot-explorer .zone-parcel-meta,.final-home #lot-explorer #zone-parcel-note{overflow-wrap:anywhere}@media(max-width:1000px){.final-home #lot-explorer .zone-world{position:relative;top:auto}}
+
+
+/* Geographic context uses a real satellite view, not the illustrative atlas. */
+.final-home #territory-artboard{display:none!important}
+.final-home #territory-real-map{display:block!important;height:auto;min-height:0;background:#e8e1d3}
+.final-home #territory-iframe{display:block;width:100%;height:560px;min-height:0;border:0;background:#e8e1d3}
+.final-home #territory-real-map>p{padding:14px 18px;margin:0;font-size:14px;line-height:1.5;color:#292a2d}
+.final-home .territory-atlas{min-height:0;height:auto}
+@media(max-width:760px){.final-home #territory-iframe{height:420px}.final-home #territory-real-map>p{font-size:13px;padding:12px}}
+
+/* Shared shape language for the final proposal. */
+:root{--radius-control:12px;--radius-panel:16px}
+body:is(.final-home,.final-detail,.final-housing,.final-dossier) :is(button,input:not([type=checkbox]):not([type=radio]),select,textarea,.c-button,.final-section-link,.btn,.btn-primary,.zone-primary,.zone-tour-link,.explicit-action){border-radius:var(--radius-control)!important}
+body:is(.final-home,.final-detail,.final-housing,.final-dossier) #final-links a{border-radius:var(--radius-control)!important}
+body:is(.final-home,.final-detail,.final-housing,.final-dossier) :is(.parcel-guide,.c-form,.contact-panel,.c-lot-card,.c-destination,.destination-choices>button,.home-stage,.studio-viewer-shell,.studio-object,.project-number,.project-note,.market-value,.contact-image img,dialog){border-radius:var(--radius-panel)!important}
+body:is(.final-home,.final-detail,.final-housing,.final-dossier) :is(.c-destination,.destination-choices>button,.home-stage,.studio-viewer-shell,.studio-object){overflow:hidden}
+.final-home .zone-explorer{border-radius:var(--radius-panel)}
+.final-home .zone-top{border-radius:var(--radius-panel) var(--radius-panel) 0 0}
+.final-home .zone-bottom{border-radius:0 0 var(--radius-panel) var(--radius-panel)}
+.final-home .zone-world{border-radius:var(--radius-panel);overflow:hidden}
+.final-home .zone-panel{border-radius:var(--radius-panel)}
+.final-home .territory-stage,.final-home .territory-atlas,.final-home #destination-story{border-radius:var(--radius-panel);overflow:hidden}
+.final-home .destination-tabs{gap:8px;background:transparent;border:0;margin-bottom:12px}
+.final-home .destination-tabs button{border:1px solid #b7aa8f!important}
+.final-home .home-selector{gap:10px;background:transparent}
+.final-home .home-selector button{border:1px solid #b7aa8f!important}
+/* Round map markers communicate locations, not rectangular actions. */
+body:is(.final-home,.final-detail,.final-housing,.final-dossier) :is(.zone-pin,.destination-pin,.c-lot-marker){border-radius:50%!important}
+.final-home .zone-expanded{border-radius:0}
+
+body:is(.final-home,.final-detail,.final-housing,.final-dossier) :is(.parcel-frame,.inline-house-stage){border-radius:var(--radius-panel);overflow:hidden}

@@ -1,5 +1,140 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "framework": null
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "buildCommand": null,
+  "installCommand": null,
+  "outputDirectory": "public",
+  "routes": [
+    {
+      "src": "^/comparar/?$",
+      "dest": "/comparar/index.html"
+    },
+    {
+      "src": "^/proyecto/lotes/?$",
+      "dest": "/proyecto/lotes/index.html"
+    },
+    {
+      "src": "^/proyecto/entorno/?$",
+      "dest": "/proyecto/entorno/index.html"
+    },
+    {
+      "src": "^/proyecto/inversion/?$",
+      "dest": "/proyecto/inversion/index.html"
+    },
+    {
+      "src": "^/proyecto/viviendas/?$",
+      "dest": "/proyecto/viviendas/index.html"
+    },
+    {
+      "src": "^/proyecto/contacto/?$",
+      "dest": "/proyecto/contacto/index.html"
+    },
+    {
+      "src": "^/d/?$",
+      "dest": "/d/index.html"
+    },
+    {
+      "src": "^/a/?$",
+      "dest": "/a/index.html"
+    },
+    {
+      "src": "^/a/inversion/?$",
+      "dest": "/a/inversion/index.html"
+    },
+    {
+      "src": "^/b/?$",
+      "dest": "/b/index.html"
+    },
+    {
+      "src": "^/b/inversion/?$",
+      "dest": "/b/inversion/index.html"
+    },
+    {
+      "src": "^/c/contacto/?$",
+      "dest": "/c/contacto/index.html"
+    },
+    {
+      "src": "^/c/entorno/?$",
+      "dest": "/c/entorno/index.html"
+    },
+    {
+      "src": "^/c/?$",
+      "dest": "/c/index.html"
+    },
+    {
+      "src": "^/c/inversion/?$",
+      "dest": "/c/inversion/index.html"
+    },
+    {
+      "src": "^/c/lotes/?$",
+      "dest": "/c/lotes/index.html"
+    },
+    {
+      "src": "^/c/viviendas/?$",
+      "dest": "/c/viviendas/index.html"
+    },
+    {
+      "src": "^/experiencia\\-demo/?$",
+      "dest": "/experiencia-demo/index.html"
+    },
+    {
+      "src": "^/?$",
+      "dest": "/index.html"
+    },
+    {
+      "src": "^/inversion/?$",
+      "dest": "/inversion/index.html"
+    },
+    {
+      "src": "^/original/?$",
+      "dest": "/original/index.html"
+    },
+    {
+      "src": "^/utah/?$",
+      "dest": "/utah/index.html"
+    },
+    {
+      "src": "^/a/experiencia\\-demo/?$",
+      "dest": "/experiencia-demo/index.html"
+    },
+    {
+      "src": "^/a/utah/?$",
+      "dest": "/utah/index.html"
+    },
+    {
+      "src": "^/b/experiencia\\-demo/?$",
+      "dest": "/experiencia-demo/index.html"
+    },
+    {
+      "src": "^/b/utah/?$",
+      "dest": "/utah/index.html"
+    },
+    {
+      "src": "^/c/experiencia\\-demo/?$",
+      "dest": "/experiencia-demo/index.html"
+    },
+    {
+      "src": "^/c/utah/?$",
+      "dest": "/utah/index.html"
+    },
+    {
+      "src": "^/original/experiencia\\-demo/?$",
+      "dest": "/experiencia-demo/index.html"
+    },
+    {
+      "src": "^/original/inversion/?$",
+      "dest": "/inversion/index.html"
+    },
+    {
+      "src": "^/original/utah/?$",
+      "dest": "/utah/index.html"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "^/(?:a|b|c|original)/(.*)$",
+      "dest": "/$1"
+    }
+  ]
 }

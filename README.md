@@ -1,13 +1,21 @@
-# Rainbow Park Collection
+# Rainbow Park — propuesta unificada
 
-Sitio con modelos 3D Utah y Bell, terrenos, dossier regional y Contacto.
+La entrada `/` es ahora una sola propuesta: home Editorial, separación cromática inspirada en Salón, navegación a páginas independientes y estudio de viviendas de Experiencia con estilo editorial.
+
+## Páginas
+- `/`: portada con video y recorrido completo con scroll.
+- `/proyecto/lotes/`: explorador aéreo y datos por lote.
+- `/proyecto/entorno/`: destinos y contexto regional.
+- `/proyecto/inversion/`: información ampliada, proyectos, datos y fuentes.
+- `/proyecto/viviendas/`: Utah y Bell en 3D, comparación y planos.
+- `/proyecto/contacto/`: formulario de consulta en modo demostración; correo destinatario pendiente, sin envío real.
+
+Las cuatro propuestas anteriores permanecen en `/comparar/` como archivo de revisión.
 
 ## Vercel
-Importar este repositorio. vercel.json configura Framework: Other, Build command: npm run build, Output directory: dist.
-No requiere variables de entorno. El build incluye modelos, recursos, fuentes y Three.js.
+Preset Other, directorio raíz del repositorio. `vercel.json` configura `public` como salida, sin instalación ni compilación.
 
-## Local
-Ejecutar npm ci y npm start. Abrir http://127.0.0.1:4173.
-Para generar la version publicable: npm run build.
+## Implementación
+`public/proyecto/final.css` unifica tipografía, color y navegación. `final.js` controla el menú y las apariciones repetibles con desenfoque al entrar/salir del encuadre. Respeta movimiento reducido y foco de teclado. Los mapas y modelos no dependen de las animaciones para usarse. Las páginas detalladas reutilizan los archivos existentes de geografía, fuentes, fotografías, video y modelos GLB.
 
-Contacto permite preparar y descargar una consulta; todavia no envia mensajes a correo o CRM. Ver LEEME.txt para alcance y verificaciones.
+Esta revisión no ejecuta una publicación de Vercel.

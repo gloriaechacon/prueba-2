@@ -1,0 +1,125 @@
+/* B: a residential gallery. Structure, controls and motion differ from A. */
+.proposal-b[data-palette]{--b-radius:24px;--b-ease:cubic-bezier(.22,1,.36,1)}
+.proposal-b[data-palette] :is(button,.investment-button,.intro-link,.enter-orbit){transition:background-color .2s,color .2s,box-shadow .2s,transform .25s var(--b-ease)}
+.proposal-b[data-palette] :is(.menu-toggle,.investment-button,.intro-link,.enter-orbit,.brief-button,#compare-homes,.zone-primary){border-radius:100px;min-height:52px;padding:15px 26px;font-weight:600}
+.proposal-b[data-palette] :is(.investment-button,.intro-link,.brief-button,#compare-homes):hover{transform:translateY(-3px);box-shadow:0 8px 0 color-mix(in srgb,var(--accent) 14%,transparent)}
+.proposal-b[data-palette] .chapter-dock a{border-radius:100px;padding:10px 14px!important}
+.proposal-b[data-palette] .chapter-dock a.active{background:var(--accent);color:white;text-decoration:none}
+.proposal-b[data-palette] .project-introduction{display:block;text-align:center;padding:110px 8vw 96px;background:var(--tint);border:0}
+.proposal-b[data-palette] .project-introduction h2{font-size:clamp(38px,4.5vw,62px);max-width:22ch;margin:0 auto 28px;line-height:1.1}
+.proposal-b[data-palette] .project-introduction>div{max-width:700px;margin:auto}
+.proposal-b[data-palette] .project-introduction p{max-width:60ch;margin:0 auto 20px}
+.proposal-b[data-palette] .intro-link{background:var(--accent);color:white;text-decoration:none;margin-top:10px}
+.proposal-b[data-palette] :is(#lotes,#entorno,#viviendas){padding:88px 4vw;border:0}
+.proposal-b[data-palette] .zone-intro{display:block;max-width:750px;margin-bottom:32px}
+.proposal-b[data-palette] .zone-intro h2{font-size:clamp(34px,4vw,54px)}
+.proposal-b[data-palette] .zone-intro h2 br{display:none}
+.proposal-b[data-palette] .zone-intro h2 em:before{content:' '}
+.proposal-b[data-palette] .zone-intro>p{margin-top:18px;max-width:60ch}
+.proposal-b[data-palette] .zone-explorer{border-radius:var(--b-radius);overflow:hidden;border:0;background:var(--tint)}
+.proposal-b[data-palette] .zone-top{background:var(--tint);color:var(--text);padding:18px 24px}
+.proposal-b[data-palette] .zone-top-sub{color:var(--muted)}
+.proposal-b[data-palette] .zone-top-actions button{border-radius:100px;color:var(--text);border-color:var(--border)}
+.proposal-b[data-palette] .zone-layout{display:grid;grid-template-columns:310px minmax(0,1fr)}
+.proposal-b[data-palette] .zone-panel{grid-column:1;grid-row:1;background:var(--tint);border:0;padding:24px;max-height:660px}
+.proposal-b[data-palette] .zone-world{grid-column:2;grid-row:1;min-height:0;height:100%}
+.proposal-b[data-palette] .zone-panel>.eyebrow,.proposal-b[data-palette] .zone-initial-note>span{display:none}
+.proposal-b[data-palette] .zone-lot-list{gap:7px;grid-template-columns:repeat(auto-fit,minmax(44px,1fr))}
+.proposal-b[data-palette] .zone-lot-list button{border-radius:50%;min-width:44px;min-height:44px}
+.proposal-b[data-palette] .zone-bottom{background:var(--tint);color:var(--muted)}
+.proposal-b[data-palette] .zone-modes{border-radius:100px;overflow:hidden}
+.proposal-b[data-palette] #entorno{background:var(--tint);border-radius:40px 40px 0 0}
+.proposal-b[data-palette] .territory-opening{display:grid;grid-template-columns:1.2fr 1fr;align-items:center;gap:5vw}
+.proposal-b[data-palette] .territory-intro-note{border:0;padding:0}
+.proposal-b[data-palette] .destination-tabs{display:flex;gap:10px;overflow-x:auto;background:transparent;border:0;padding:5px 0 24px}
+.proposal-b[data-palette] .destination-tabs button{flex:0 0 auto;border:1px solid var(--border);border-radius:100px;padding:14px 22px;background:transparent}
+.proposal-b[data-palette] .destination-tabs button :is(span,b){display:none}
+.proposal-b[data-palette] .destination-tabs button strong{font-size:16px;white-space:nowrap}
+.proposal-b[data-palette] .territory-explorer{display:flex;flex-direction:column;gap:32px;border:0;background:transparent}
+.proposal-b[data-palette] .destination-story{order:-1;display:grid;grid-template-columns:1.35fr 1fr;border:0;border-radius:var(--b-radius);overflow:hidden}
+.proposal-b[data-palette] .destination-photo{height:470px;min-height:0}
+.proposal-b[data-palette] .destination-photo img{height:100%;width:100%;object-fit:cover}
+.proposal-b[data-palette] .destination-copy{padding:40px;display:flex;flex-direction:column;justify-content:center}
+.proposal-b[data-palette] .destination-copy h3{font-family:var(--sans);font-size:36px;line-height:1.15}
+.proposal-b[data-palette] .destination-copy>.eyebrow{display:none}
+.proposal-b[data-palette] .territory-map-wrap{border-radius:var(--b-radius);overflow:hidden}
+.proposal-b[data-palette] .territory-artboard{height:410px;min-height:0}
+.proposal-b[data-palette] .territory-footnote>span{display:none}
+.proposal-b[data-palette] #inversion{margin:64px 4vw;padding:64px;background:var(--accent);color:white;border-radius:32px;border:0}
+.proposal-b[data-palette] .investment-intro{grid-template-columns:1.15fr 1fr;gap:5vw}
+.proposal-b[data-palette] .investment-intro h2{font-size:clamp(36px,4vw,56px)}
+.proposal-b[data-palette] .investment-intro>div>p:nth-child(2){color:white}
+.proposal-b[data-palette] .investment-opening .investment-button{background:var(--surface);color:var(--text)}
+.proposal-b[data-palette] .investment-detail{border-color:#ffffff66}
+.proposal-b[data-palette] .investment-detail-body{border-radius:20px}
+.proposal-b[data-palette] .showroom{display:grid;grid-template-columns:1fr 1fr;gap:28px;padding:0;border:0;background:transparent}
+.proposal-b[data-palette] .home-selector{grid-column:1/-1;grid-row:1;display:flex;justify-self:center;border:0;gap:8px;background:var(--tint);padding:8px;border-radius:100px;width:auto}
+.proposal-b[data-palette] .home-selector button{min-width:180px;padding:15px 28px;border:0;border-radius:100px}
+.proposal-b[data-palette] .home-selector button small{display:none}
+.proposal-b[data-palette] .home-selector button span{font-size:22px}
+.proposal-b[data-palette] .home-heading{grid-row:2;grid-column:1;align-self:center}
+.proposal-b[data-palette] .home-heading h2{font-family:var(--sans);font-weight:500}
+.proposal-b[data-palette] .home-specs{grid-row:2;grid-column:2;display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:24px;margin:0;border:0;text-align:left}
+.proposal-b[data-palette] .home-specs>div{border:0;padding:0}
+.proposal-b[data-palette] .home-specs strong{font-size:23px}
+.proposal-b[data-palette] .home-stage{grid-row:3;grid-column:1/-1;height:580px;min-height:0;margin:0;border-radius:var(--b-radius);overflow:hidden;background:var(--tint)}
+.proposal-b[data-palette] .view-switch{border-radius:100px;overflow:hidden;background:var(--surface);padding:6px}
+.proposal-b[data-palette] .view-switch button{border-radius:100px;font-size:14px;min-height:44px}
+.proposal-b[data-palette] .view-switch button.active{background:var(--accent);color:white}
+.proposal-b[data-palette] .home-comparison{padding:28px 0}
+.proposal-b[data-palette] #compare-homes{background:var(--accent);color:white;border:0}
+.proposal-b[data-palette] .home-experience-links{gap:18px}
+.proposal-b[data-palette] .home-experience-links>button{border:0;border-radius:20px;background:var(--tint);padding:28px;text-align:left}
+.proposal-b[data-palette] .home-experience-links>button:hover{background:var(--accent);color:white}
+.proposal-b[data-palette] .home-experience-links>button:hover :is(span,strong){color:white}
+.proposal-b[data-palette] #contacto{padding:80px 6vw 28px;border-radius:40px 40px 0 0;background:var(--tint)}
+.proposal-b[data-palette] .contact-layout{display:block;max-width:850px;margin:auto;padding-bottom:64px}
+.proposal-b[data-palette] .contact-layout>div:first-child{text-align:center;margin-bottom:40px}
+.proposal-b[data-palette] .contact-layout>div:first-child h2{font-size:clamp(36px,4vw,54px);max-width:23ch;margin:0 auto 22px}
+.proposal-b[data-palette] .contact-layout>div:first-child h2 br{display:none}
+.proposal-b[data-palette] .contact-layout>div:first-child p{margin:0 auto;max-width:55ch}
+.proposal-b[data-palette] .consultation{border-radius:28px;padding:40px}
+.proposal-b[data-palette] .interest-picker{display:flex;gap:10px;margin-bottom:28px}
+.proposal-b[data-palette] .interest-picker button{flex:1;border-radius:100px;min-height:52px}
+.proposal-b[data-palette] .consultation :is(select,textarea){border-radius:12px;padding:15px}
+.proposal-b[data-palette] .brief-button{width:100%;margin-top:24px}
+@media(max-width:900px){
+ .proposal-b[data-palette] .zone-layout{grid-template-columns:260px minmax(0,1fr)}
+ .proposal-b[data-palette] .destination-story{grid-template-columns:1fr 1fr}
+ .proposal-b[data-palette] .destination-copy{padding:28px}
+ .proposal-b[data-palette] #inversion{padding:40px}
+}
+@media(max-width:700px){
+ .proposal-b[data-palette] .project-introduction{padding:64px 24px}
+ .proposal-b[data-palette] :is(#lotes,#entorno,#viviendas){padding:56px 20px}
+ .proposal-b[data-palette] .zone-layout{display:flex;flex-direction:column}
+ .proposal-b[data-palette] .zone-world{min-height:470px;height:470px;order:0}
+ .proposal-b[data-palette] .zone-panel{order:1;max-height:none;padding:24px}
+ .proposal-b[data-palette] .zone-top{padding:16px;gap:14px;flex-wrap:wrap}
+ .proposal-b[data-palette] .zone-top-sub{display:none}
+ .proposal-b[data-palette] .territory-opening{grid-template-columns:1fr;gap:24px}
+ .proposal-b[data-palette] .destination-story{display:block}
+ .proposal-b[data-palette] .destination-photo{height:260px}
+ .proposal-b[data-palette] .destination-copy{padding:24px}
+ .proposal-b[data-palette] .destination-copy h3{font-size:30px}
+ .proposal-b[data-palette] #inversion{margin:32px 16px;padding:36px 24px}
+ .proposal-b[data-palette] .investment-intro{grid-template-columns:1fr;gap:24px}
+ .proposal-b[data-palette] .showroom{grid-template-columns:1fr;gap:24px}
+ .proposal-b[data-palette] .home-selector{grid-column:1;max-width:100%;width:100%;padding:6px}
+ .proposal-b[data-palette] .home-selector button{min-width:0;flex:1;padding:14px 20px}
+ .proposal-b[data-palette] .home-heading{grid-column:1;grid-row:2}
+ .proposal-b[data-palette] .home-stage{grid-column:1;grid-row:3;height:480px}
+ .proposal-b[data-palette] .home-specs{grid-column:1;grid-row:4;justify-content:flex-start;gap:20px}
+ .proposal-b[data-palette] .view-switch{border-radius:18px;max-width:calc(100% - 20px);bottom:20px}
+ .proposal-b[data-palette] .view-switch button{font-size:12px;padding:9px}
+ .proposal-b[data-palette] .home-comparison{display:block}
+ .proposal-b[data-palette] #compare-homes{margin-top:18px}
+ .proposal-b[data-palette] #contacto{padding:56px 20px 24px}
+ .proposal-b[data-palette] .consultation{padding:24px 20px}
+ .proposal-b[data-palette] .interest-picker{flex-direction:column}
+}
+.proposal-b[data-palette] .zone-expanded{border-radius:0}
+.proposal-b[data-palette] .zone-expanded .zone-world{min-height:0;height:100%}
+.proposal-b[data-palette] .zone-expanded .zone-panel{max-height:none;min-height:0}
+@media(max-width:700px){.proposal-b[data-palette] .zone-expanded .zone-world{height:58svh;min-height:360px;flex-shrink:0}.proposal-b[data-palette] .zone-expanded .zone-panel{overflow:visible}}
+@media(prefers-reduced-motion:reduce){.proposal-b[data-palette] *{transition:none!important;scroll-behavior:auto!important}}
