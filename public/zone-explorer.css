@@ -10,3 +10,8 @@
 #zone-cesium{position:absolute;inset:0;width:100%;height:100%}#zone-loading{z-index:2}.zone-credit{z-index:3;min-height:31px;justify-content:flex-start;padding:5px 10px}.zone-credit .cesium-widget-credits{position:static;display:block;white-space:normal;font-size:9px;line-height:1.4;color:#e6eddb}.zone-credit .cesium-credit-logoContainer{display:inline}.zone-credit .cesium-credit-logoContainer img{max-height:22px;vertical-align:middle}.zone-credit .cesium-credit-textContainer{display:inline}.zone-credit a{color:#e6eddb}.zone-credit .cesium-credit-expand-link{color:#e6eddb}.zone-landscape small{max-width:205px;line-height:1.5}#zone-engine-status{color:#ddebaf}.zone-landscape>span+span{font-size:7px;color:#c3d1b6}.zone-credit .cesium-credit-lightbox{color:#222}.zone-credit .cesium-credit-lightbox a{color:#246}.zone-credit .cesium-credit-lightbox-overlay{z-index:1100}
 /* Keep the map stable while a selected lot's information grows. */
 @media(min-width:761px){.zone-layout{height:740px;min-height:620px;max-height:calc(100dvh - 130px)}.zone-world{height:100%;min-height:0}.zone-panel{overflow-y:auto;min-height:0}.zone-expanded .zone-layout{height:auto;max-height:none}.zone-expanded .zone-panel{max-height:none}}
+
+.zone-explorer .zone-pin.zone-pin-cluster{width:104px;height:44px;min-height:44px!important;border-radius:22px!important;font-size:13px!important;font-weight:600;padding:0 10px;white-space:nowrap;background:#695534!important;color:#fff!important;border:2px solid #f1e5c7;box-shadow:0 3px 12px #0004}
+.zone-pin.zone-pin-cluster::after{display:none!important}
+.zone-pin-cluster.contains-selection{outline:3px solid #d2b77e;outline-offset:3px}
+.zone-pin-cluster:focus-visible{outline:3px solid white;outline-offset:4px}

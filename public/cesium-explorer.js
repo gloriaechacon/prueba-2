@@ -1,3 +1,4 @@
+import {clusterPins} from './pin-clusters.js?v=1';
 import {houses} from './house-data.js?v=finishes6';
 let libraryPromise;
 function loadCesium(){if(libraryPromise)return libraryPromise;window.CESIUM_BASE_URL=new URL('./vendor/cesium/',import.meta.url).href;libraryPromise=new Promise((resolve,reject)=>{const script=document.createElement('script');script.src=new URL('./vendor/cesium/Cesium.js',import.meta.url).href;script.onload=()=>resolve(window.Cesium);script.onerror=()=>reject(Error('Cesium unavailable'));document.head.append(script)});return libraryPromise}
@@ -25,7 +26,45 @@ const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
 function anchor(){const ray=camera.getPickRay(new C.Cartesian2(scene.canvas.clientWidth/2,scene.canvas.clientHeight/2));return scene.globe.show?scene.globe.pick(ray,scene):scene.pickPosition(new C.Cartesian2(scene.canvas.clientWidth/2,scene.canvas.clientHeight/2))}
 function flyToPoint(target,range,heading=0,pitch=-.68,duration){camera.cancelFlight();camera.flyToBoundingSphere(new C.BoundingSphere(target,1),{offset:new C.HeadingPitchRange(heading,pitch,range),duration:duration??(reduced?0:1.35),complete:()=>scene.requestRender()});scene.requestRender()}
 function overview(duration){flyToPoint(collectionSphere.center,Math.max(1800,collectionSphere.radius*2.8)*(scene.canvas.clientWidth<600?1.35:1),0,-.78,duration)}
-function renderPins(){const placed=[];const separate=document.body.classList.contains("final-home");for(const lot of lots){const cart=C.Cartographic.fromDegrees(...lot.coordinates);let h=heightLocal(lot.x,lot.z)*factor;if(photoMode){try{h=scene.sampleHeight(cart)||h}catch{}}const pos=C.Cartesian3.fromDegrees(...lot.coordinates,h+2);const p=C.SceneTransforms.worldToWindowCoordinates(scene,pos);const front=C.Cartesian3.dot(C.Cartesian3.subtract(pos,camera.positionWC,new C.Cartesian3()),camera.directionWC)>0;lot.pin.hidden=(currentState==='house'&&activeLot===lot)||!p||!front||p.x< -20||p.x>scene.canvas.clientWidth+20||p.y< -20||p.y>scene.canvas.clientHeight+20;if(p){let y=p.y-14;if(separate&&!lot.pin.hidden){let tries=0;while(placed.some(q=>Math.abs(q.x-p.x)<44&&Math.abs(q.y-y)<44)&&tries++<13)y-=46;placed.push({x:p.x,y});lot.pin.style.setProperty('--pin-stem',(p.y-y)+'px');}lot.pin.style.left=p.x+'px';lot.pin.style.top=y+'px'}}document.querySelector('#zone-compass').style.transform=`rotate(${-camera.heading}rad)`;document.querySelector('#zone-topdown').setAttribute('aria-pressed',String(camera.pitch< -1.45))}
+const clusterButtons=new Map();
+function renderPins(){
+ const visible=[];
+ for(const lot of lots){
+  const cart=C.Cartographic.fromDegrees(...lot.coordinates);let h=heightLocal(lot.x,lot.z)*factor;
+  if(photoMode){try{h=scene.sampleHeight(cart)||h}catch{}}
+  const pos=C.Cartesian3.fromDegrees(...lot.coordinates,h+2);
+  const p=C.SceneTransforms.worldToWindowCoordinates(scene,pos);
+  const front=C.Cartesian3.dot(C.Cartesian3.subtract(pos,camera.positionWC,new C.Cartesian3()),camera.directionWC)>0;
+  lot.pin.hidden=true;
+  // Always keep individual leaders short; never stack numbers up the screen.
+  lot.pin.style.setProperty('--pin-stem','14px');
+  if((currentState==='house'&&activeLot===lot)||!p||!front||p.x<22||p.x>scene.canvas.clientWidth-22||p.y<52||p.y>scene.canvas.clientHeight-14)continue;
+  visible.push({x:p.x,y:p.y-14,lot,pos});
+ }
+ const used=new Set();
+ for(const group of clusterPins(visible)){
+  if(group.points.length===1){const {lot}=group.points[0];lot.pin.hidden=false;lot.pin.style.left=group.x+'px';lot.pin.style.top=group.y+'px';continue;}
+  const key=group.points.map(p=>p.lot.id).sort((a,b)=>a-b).join('-');used.add(key);
+  let button=clusterButtons.get(key);
+  if(!button){
+   button=document.createElement('button');button.type='button';button.className='zone-pin zone-pin-cluster';
+   button.addEventListener('click',()=>{
+    const sphere=C.BoundingSphere.fromPoints(button.clusterPoints.map(p=>p.pos));
+    flyToPoint(sphere.center,Math.max(120,sphere.radius*3),camera.heading,-.9);
+   });
+   document.querySelector('#zone-pins').append(button);clusterButtons.set(key,button);
+  }
+  button.clusterPoints=group.points;button.hidden=false;
+  const text=group.points.length+' '+tr('lotes');
+  if(button.textContent!==text)button.textContent=text;
+  button.setAttribute('aria-label',tr('Acercar para ver los lotes')+': '+group.points.map(p=>String(p.lot.id).padStart(2,'0')).join(', '));
+  button.classList.toggle('contains-selection',group.points.some(p=>p.lot===activeLot));
+  button.style.left=Math.max(56,Math.min(scene.canvas.clientWidth-56,group.x))+'px';button.style.top=group.y+'px';
+ }
+ for(const [key,button]of clusterButtons)if(!used.has(key)){button.remove();clusterButtons.delete(key)}
+ document.querySelector('#zone-compass').style.transform=`rotate(${-camera.heading}rad)`;
+ document.querySelector('#zone-topdown').setAttribute('aria-pressed',String(camera.pitch< -1.45));
+}
 scene.postRender.addEventListener(renderPins);
 const clicks=new C.ScreenSpaceEventHandler(scene.canvas);clicks.setInputAction(e=>{const hit=scene.pick(e.position);if(hit?.id?.sampleLot)onSelect(hit.id.sampleLot)},C.ScreenSpaceEventType.LEFT_CLICK);
 function setMode(mode){const ctrl=scene.screenSpaceCameraController;ctrl.rotateEventTypes=mode==='orbit'?[]:[C.CameraEventType.LEFT_DRAG];ctrl.tiltEventTypes=mode==='orbit'?[C.CameraEventType.LEFT_DRAG,C.CameraEventType.MIDDLE_DRAG,C.CameraEventType.PINCH]:[C.CameraEventType.MIDDLE_DRAG,C.CameraEventType.PINCH,{eventType:C.CameraEventType.LEFT_DRAG,modifier:C.KeyboardEventModifier.CTRL}];scene.requestRender()}
@@ -62,7 +101,7 @@ function setColor(value){for(const layer of [imagery,detailImagery])if(layer){la
 async function connectPhotorealistic(){if(!config.ionAccessToken)return false;C.Ion.defaultAccessToken=config.ionAccessToken;onStatus('Conectando la capa fotorrealista…');try{tileset=await C.createGooglePhotorealistic3DTileset({onlyUsingWithGoogleGeocoder:true},{maximumScreenSpaceError:scene.canvas.clientWidth<600?24:16,cacheBytes:256*1024*1024,maximumCacheOverflowBytes:128*1024*1024});scene.primitives.add(tileset);photoMode=true;scene.globe.show=false;factor=1;scene.verticalExaggeration=1;viewer.imageryLayers.removeAll();imagery=null;detailImagery=null;document.querySelector('#zone-engine-status').textContent='CESIUM · 3D FOTORREALISTA';document.querySelector('#zone-photoreal-note').textContent='Capa fotorrealista conectada. El detalle depende de la cobertura de la zona.';document.querySelector('#zone-vivid').hidden=true;onStatus('Cesium · 3D fotorrealista');try{worldTerrain=await C.createWorldTerrainAsync()}catch{}overview();return true}catch{onStatus('Cesium activo · La capa fotorrealista no está disponible con esta conexión');return false}}
 try{const r=await fetch('config/cesium.json',{cache:'no-store'});if(r.ok)config=await r.json()}catch{}
 const controller={setHouse(key){houseKey=key;setState(currentState)},resize(){viewer.resize();scene.requestRender()},setMode,select,focus,setState,setColor,overview(){overview()},zoom(scale){reframe({scale})},north(){reframe({heading:0,duration:0})},tilt(){reframe({pitch:camera.pitch>-.5?-.9:-.4})},top(){reframe({pitch:camera.pitch< -1.45?-.75:-Math.PI/2})}};
-document.addEventListener('rpc:language',()=>{if(activeLot)showRoadFront(activeLot);setState(currentState)});
+document.addEventListener('rpc:language',()=>{if(activeLot)showRoadFront(activeLot);setState(currentState);scene.requestRender()});
 container.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','a','d','+','=','-'].includes(e.key))return;e.preventDefault();camera.cancelFlight();if(e.key==='a')reframe({heading:camera.heading-.18});else if(e.key==='d')reframe({heading:camera.heading+.18});else if(['+','='].includes(e.key))controller.zoom(.8);else if(e.key==='-')controller.zoom(1.25);else{const step=Math.max(5,camera.positionCartographic.height*.06);if(e.key==='ArrowLeft')camera.moveLeft(step);if(e.key==='ArrowRight')camera.moveRight(step);if(e.key==='ArrowUp')camera.moveForward(step);if(e.key==='ArrowDown')camera.moveBackward(step);scene.requestRender()}});
 scene.canvas.addEventListener('pointerdown',()=>container.focus({preventScroll:true}));new ResizeObserver(()=>controller.resize()).observe(container);setMode('pan');overview(0);if(config.ionAccessToken&&config.photorealistic)await connectPhotorealistic();return controller;
 }
