@@ -1,12 +1,13 @@
 // Local, reviewed language catalog. No translation service or visitor data transfer.
-const catalog=await fetch(new URL('./locales/catalog.json?v=sections2',import.meta.url)).then(r=>r.json());
+const [base,finalCopy]=await Promise.all(['./locales/catalog.json?v=sections2','./locales/final.json?v=20261101'].map(path=>fetch(new URL(path,import.meta.url)).then(r=>{if(!r.ok)throw Error('Language catalog unavailable');return r.json()})));
+const catalog={...base,...finalCopy};
 const normalize=s=>s.replace(/\s+/g,' ').trim();
 const byKey=new Map(Object.entries(catalog).map(([k,v])=>[normalize(k).toLowerCase(),v]));
 const escape=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
 const phrases=Object.keys(catalog).filter(s=>s.length>2&&catalog[s].some(t=>t!==s)).sort((a,b)=>b.length-a.length);
 const fragments=new RegExp('(?<![\\p{L}\\p{N}])(?:'+phrases.map(escape).join('|')+')(?![\\p{L}\\p{N}])','giu');
-let lang='es';try{lang=new URLSearchParams(location.search).get('lang')||localStorage.getItem('rpc-language')||'es'}catch{}
-if(!['es','en','pt'].includes(lang))lang='es';
+let lang='en';try{lang=new URLSearchParams(location.search).get('lang')||localStorage.getItem('rpc-language')||'en'}catch{}
+if(!['es','en','pt'].includes(lang))lang='en';
 const original=new WeakMap(),attributes=new WeakMap();let observer;
 function translated(source){
  if(lang==='es')return source;
@@ -15,7 +16,7 @@ function translated(source){
  if(hit)return source.replace(source.trim(),pick(sourceKey,hit[idx]));
  return source.replace(fragments,s=>pick(s,byKey.get(normalize(s).toLowerCase())[idx]));
 }
-function blocked(el){return !el||Boolean(el.closest('script,style,textarea,input,option,[data-no-translate],.rpc-language-control,canvas,svg defs'))}
+function blocked(el){return !el||Boolean(el.closest('script,style,textarea,input,[data-no-translate],.rpc-language-control,canvas,svg defs'))}
 function textNode(node){
  if(blocked(node.parentElement)||!node.textContent.trim())return;
  let state=original.get(node);if(!state||node.data!==state.rendered)state={source:node.data,rendered:node.data};
@@ -31,8 +32,9 @@ function attrs(el){
 }
 function walk(root){
  if(root.nodeType===3){textNode(root);return}if(root.nodeType!==1||blocked(root))return;
+ if(root.matches('option')&&!root.hasAttribute('value'))root.value=root.textContent;
  attrs(root);const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT|NodeFilter.SHOW_ELEMENT);
- while(walker.nextNode()){if(walker.currentNode.nodeType===3)textNode(walker.currentNode);else attrs(walker.currentNode)}
+ while(walker.nextNode()){if(walker.currentNode.nodeType===3)textNode(walker.currentNode);else {const el=walker.currentNode;if(el.matches('option')&&!el.hasAttribute('value'))el.value=el.textContent;attrs(el)}}
 }
 function observe(){observer.observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['aria-label','title','alt','placeholder']})}
 observer=new MutationObserver(records=>{
@@ -42,18 +44,20 @@ observer=new MutationObserver(records=>{
 });
 const controls=[];const names={es:'Español',pt:'Português',en:'English'};
 function control(host,before=null){
- if(!host)return;const label=document.createElement('label');label.className='rpc-language-control';label.dataset.noTranslate='';label.innerHTML='<span aria-hidden="true">◎</span><select aria-label="Idioma / Language / Idioma"><option value="es">Español</option><option value="pt">Português</option><option value="en">English</option></select>';
+ if(!host)return;const label=document.createElement('label');label.className='rpc-language-control';label.dataset.noTranslate='';label.innerHTML='<span aria-hidden="true">◎</span><select aria-label="Idioma / Language / Idioma"><option value="en">English</option><option value="pt">Português</option><option value="es">Español</option></select>';
  const select=label.querySelector('select');select.value=lang;select.addEventListener('change',()=>setLanguage(select.value));controls.push(select);host.insertBefore(label,before);
 }
-control(document.querySelector('.topbar'),document.querySelector('.menu-toggle'));
+if(document.querySelector('.final-nav'))control(document.querySelector('.final-nav'),document.querySelector('.final-menu'));
+else control(document.querySelector('.topbar'),document.querySelector('.menu-toggle'));
 if(!document.querySelector('.unified-header'))control(document.querySelector('.chapter-dock'));
-if(!document.querySelector('.topbar')){const header=document.querySelector('body>header');control(header,header?.lastElementChild)}
+if(!document.querySelector('.topbar')&&!document.querySelector('.final-nav')){const header=document.querySelector('body>header');control(header,header?.lastElementChild)}
 function setLanguage(next){
  lang=next;try{localStorage.setItem('rpc-language',lang)}catch{}
  const u=new URL(location.href);u.searchParams.set('lang',lang);history.replaceState(history.state,'',u);
  document.documentElement.lang=lang==='pt'?'pt-BR':lang;
  observer.disconnect();walk(document.body);walk(document.querySelector('title'));controls.forEach(c=>c.value=lang);observe();
  const meta=document.querySelector('meta[name="description"]');if(meta){meta.dataset.originalDescription??=meta.content;meta.content=translated(meta.dataset.originalDescription)}
+ document.querySelectorAll('iframe').forEach(frame=>{try{if(new URL(frame.src,location.href).origin===location.origin)frame.contentWindow?.postMessage({type:'rpc-language',language:lang},location.origin)}catch{}});
  document.dispatchEvent(new CustomEvent('rpc:language',{detail:{language:lang,name:names[lang]}}));
 }
 // Preserve the chosen language in links and shared viewer URLs, while leaving original PDFs intact.
@@ -64,3 +68,5 @@ document.addEventListener('click',event=>{
 },true);
 window.rpcI18n={t:translated,get language(){return lang},setLanguage};
 setLanguage(lang);
+
+addEventListener('message',event=>{if(event.origin===location.origin&&event.source===parent&&event.data?.type==='rpc-language'&&['en','es','pt'].includes(event.data.language))setLanguage(event.data.language)});

@@ -41,7 +41,7 @@
  // Reuse the actual aerial/3D explorer, not a second symbolic street map.
  const map=$('#c-map');
  if(map){
-  const frame=document.createElement('iframe');frame.className='parcel-frame';frame.title='Vista aérea y exploración de los lotes de Rainbow Park';frame.loading='lazy';frame.src='/a/?embed=lotes&revision=layout2&palette='+(document.body.dataset.palette||'champagne');map.replaceChildren(frame);
+  const frame=document.createElement('iframe');frame.className='parcel-frame';frame.title='Vista aérea y exploración de los lotes de Rainbow Park';frame.loading='lazy';frame.src='/a/?embed=lotes&lang='+(new URLSearchParams(location.search).get('lang')||localStorage.getItem('rpc-language')||'en')+'&revision=layout2&palette='+(document.body.dataset.palette||'champagne');map.replaceChildren(frame);
   const send=()=>{const lot=$('#c-lot')?.value;if(lot)frame.contentWindow.postMessage({type:'rainbow-lot',lot},location.origin);};frame.addEventListener('load',send);addEventListener('rpc:lots-ready',send);$('#c-lot')?.addEventListener('change',send);
   addEventListener('message',e=>{if(e.origin===location.origin&&e.source===frame.contentWindow&&e.data?.type==='parcel-height'&&Number.isFinite(e.data.height))frame.style.height=Math.max(600,Math.min(1400,e.data.height))+'px';});
   addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==frame.contentWindow||e.data?.type!=='parcel-selected')return;const select=$('#c-lot');if(select?.options.length&&select.value!==e.data.lot){select.value=e.data.lot;select.dispatchEvent(new Event('change'));}});
@@ -52,7 +52,7 @@
  const houses=$('.c-house-grid');
  if(houses){
   const stage=document.createElement('div');stage.className='inline-house-stage';stage.innerHTML='<iframe title="Vivienda del proyecto en 3D" loading="lazy" allow="fullscreen"></iframe><p>Modelo conceptual del proyecto. Arrastra para girar; utiliza los controles para cambiar de vista.</p>';houses.before(stage);
-  let current='';const render=house=>{if(current===house)return;current=house;stage.querySelector('iframe').src='/utah/?house='+house+'&view=exterior&lang=es&embed=vivienda';};
+  let current='';const render=house=>{if(current===house)return;current=house;stage.querySelector('iframe').src='/utah/?house='+house+'&view=exterior&embed=vivienda&lang='+(window.rpcI18n?.language||localStorage.getItem('rpc-language')||'en');};
   const visible=()=>{const article=[...houses.children].find(el=>!el.hidden);return article?.querySelector('[data-house]')?.dataset.house||'utah';};
   render(visible());
   $('.atlas-models')?.addEventListener('click',()=>render(visible()));
