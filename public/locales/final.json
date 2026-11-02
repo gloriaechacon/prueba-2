@@ -1094,5 +1094,237 @@
   "Zonas de referencia · El sombreado no representa límites de propiedad.": [
     "Reference areas · Shading does not represent property boundaries.",
     "Áreas de referência · O sombreado não representa limites de propriedade."
+  ],
+  "Disponible": [
+    "Available",
+    "Disponível"
+  ],
+  "Reservado": [
+    "Reserved",
+    "Reservado"
+  ],
+  "Vendido": [
+    "Sold",
+    "Vendido"
+  ],
+  "Ejemplo": [
+    "Demo",
+    "Exemplo"
+  ],
+  "Norte": [
+    "North",
+    "Norte"
+  ],
+  "Lotes Rainbow Park": [
+    "Rainbow Park lots",
+    "Lotes Rainbow Park"
+  ],
+  "Estados de ejemplo · Pendientes de confirmación": [
+    "Demo statuses · Awaiting confirmation",
+    "Estados de exemplo · Aguardando confirmação"
+  ],
+  "Límites: Rainbow Springs (FDEP), aeropuerto (EPA) · Otras áreas pendientes de verificar.": [
+    "Boundaries: Rainbow Springs (FDEP), airport (EPA) · Other areas awaiting verification.",
+    "Limites: Rainbow Springs (FDEP), aeroporto (EPA) · Outras áreas a verificar."
+  ],
+  "Los lotes · Rainbow Park": [
+    "Lots · Rainbow Park",
+    "Lotes · Rainbow Park"
+  ],
+  "Explora este terreno": [
+    "Explore this lot",
+    "Explore este terreno"
+  ],
+  "Vista aérea y exploración de los lotes de Rainbow Park": [
+    "Aerial view and exploration of Rainbow Park lots",
+    "Vista aérea e exploração dos lotes de Rainbow Park"
+  ],
+  "Ubica cada lugar.": [
+    "Locate each place.",
+    "Localize cada lugar."
+  ],
+  "Croquis": [
+    "Area map",
+    "Mapa da região"
+  ],
+  "Vista satelital": [
+    "Satellite view",
+    "Vista de satélite"
+  ],
+  "Vista del mapa": [
+    "Map view",
+    "Vista do mapa"
+  ],
+  "Selecciona un lugar en el mapa para conocerlo.": [
+    "Select a place on the map to discover it.",
+    "Selecione um lugar no mapa para conhecê-lo."
+  ],
+  "Croquis orientativo. Las conexiones no representan rutas ni límites de propiedad.": [
+    "Orientation map. Markers identify places, not property boundaries.",
+    "Mapa de orientação. Os marcadores indicam locais, não limites de propriedade."
+  ],
+  "Ver todo el entorno": [
+    "View the whole area",
+    "Ver toda a região"
+  ],
+  "Fotografía aérea: USDA / USGS The National Map": [
+    "Aerial photography: USDA / USGS The National Map",
+    "Fotografia aérea: USDA / USGS The National Map"
+  ],
+  "Mapa de orientación. Los marcadores indican lugares, no límites de propiedad.": [
+    "Orientation map. Markers identify places, not property boundaries.",
+    "Mapa de orientação. Os marcadores indicam locais, não limites de propriedade."
+  ],
+  "Lugares del entorno": [
+    "Nearby places",
+    "Lugares próximos"
+  ],
+  "Comunidad": [
+    "Community",
+    "Comunidade"
+  ],
+  "Aeropuerto": [
+    "Airport",
+    "Aeroporto"
+  ],
+  "Centro ecuestre": [
+    "Equestrian venue",
+    "Centro equestre"
+  ],
+  "Entrenamiento ecuestre": [
+    "Horse training center",
+    "Centro de treinamento equestre"
+  ],
+  "Centro histórico": [
+    "Historic town center",
+    "Centro histórico"
+  ],
+  "Consultar fuente": [
+    "View source",
+    "Consultar fonte"
+  ],
+  "Área de la comunidad Rainbow Park. El pin de los lotes es una referencia independiente.": [
+    "Rainbow Park community boundary. The collection lots have a separate location marker.",
+    "Área da comunidade Rainbow Park. Os lotes da coleção têm um marcador separado."
+  ],
+  "Área de la comunidad Rainbow Springs. No equivale al límite del parque estatal Rainbow Springs State Park.": [
+    "Rainbow Springs community boundary. This is different from the Rainbow Springs State Park boundary.",
+    "Área da comunidade Rainbow Springs. Não equivale ao limite do parque estadual Rainbow Springs State Park."
+  ],
+  "Aeropuerto de aviación general, corporativa y carga. El sombreado identifica el recinto aeroportuario de referencia.": [
+    "General aviation, corporate and cargo airport. Shading identifies the mapped airport grounds.",
+    "Aeroporto de aviação geral, corporativa e de carga. O sombreado identifica a área cartográfica do aeroporto."
+  ],
+  "Centro de competencias ecuestres, hoteles y eventos en Ocala.": [
+    "Equestrian competitions, hotels and events in Ocala.",
+    "Competições equestres, hotéis e eventos em Ocala."
+  ],
+  "Centro de entrenamiento de caballos en 13750 W Highway 40. El pin corresponde a la referencia de la dirección; el límite del predio sigue pendiente de verificar.": [
+    "Horse training center at 13750 W Highway 40. The pin marks the address reference; the property boundary still needs verification.",
+    "Centro de treinamento de cavalos em 13750 W Highway 40. O marcador indica a referência do endereço; o limite da propriedade ainda precisa ser verificado."
+  ],
+  "Centro histórico alrededor de Downtown Square. El pin identifica la plaza; no delimita un distrito administrativo.": [
+    "Historic town center around Downtown Square. The pin identifies the square, not an administrative district boundary.",
+    "Centro histórico ao redor da Downtown Square. O marcador identifica a praça, não o limite de um distrito administrativo."
+  ],
+  "Áreas: comunidades Rainbow Park y Rainbow Springs (US Census), aeropuerto (EPA). Selecciona un pin para saber más.": [
+    "Areas: Rainbow Park and Rainbow Springs communities (US Census), airport (EPA). Select a pin to learn more.",
+    "Áreas: comunidades Rainbow Park e Rainbow Springs (US Census), aeroporto (EPA). Selecione um marcador para saber mais."
+  ],
+  "Selecciona un lugar para conocerlo. Acerca con la rueda o dos dedos; el croquis muestra las calles.": [
+    "Select a place to explore. Zoom with the wheel or two fingers; the area map shows street names.",
+    "Selecione um lugar para conhecê-lo. Aproxime com a roda ou dois dedos; o mapa mostra as ruas."
+  ],
+  "Un vecindario residencial al oeste de Ocala. Los lotes de la colección están distribuidos en distintas calles de esta zona.": [
+    "A residential neighborhood west of Ocala. The collection lots are located along different streets in this area.",
+    "Um bairro residencial a oeste de Ocala. Os lotes da coleção estão distribuídos em diferentes ruas desta região."
+  ],
+  "Rainbow Springs": [
+    "Rainbow Springs",
+    "Rainbow Springs"
+  ],
+  "Rainbow Park": [
+    "Rainbow Park",
+    "Rainbow Park"
+  ],
+  "Rainbow Park Collection": [
+    "Rainbow Park Collection",
+    "Rainbow Park Collection"
+  ],
+  "World Equestrian Center": [
+    "World Equestrian Center",
+    "World Equestrian Center"
+  ],
+  "Classic Mile Training Center": [
+    "Classic Mile Training Center",
+    "Classic Mile Training Center"
+  ],
+  "Historic Downtown Ocala": [
+    "Historic Downtown Ocala",
+    "Historic Downtown Ocala"
+  ],
+  "Ocala International Airport": [
+    "Ocala International Airport",
+    "Ocala International Airport"
+  ],
+  "Next Fraga Real Capital": [
+    "Next Fraga Real Capital",
+    "Next Fraga Real Capital"
+  ],
+  "Mapa interactivo del entorno": [
+    "Interactive surroundings map",
+    "Mapa interativo do entorno"
+  ],
+  "Acercar": [
+    "Zoom in",
+    "Aproximar"
+  ],
+  "Alejar": [
+    "Zoom out",
+    "Afastar"
+  ],
+  "Inversión en Ocala · Rainbow Park Collection": [
+    "Investment in Ocala · Rainbow Park Collection",
+    "Investimento em Ocala · Rainbow Park Collection"
+  ],
+  "¿Dónde lo imaginas?": [
+    "Where do you imagine it?",
+    "Onde você imagina?"
+  ],
+  "World Equestrian Center · Un destino regional, no una amenidad del proyecto.": [
+    "World Equestrian Center · A regional destination, not a project amenity.",
+    "World Equestrian Center · Um destino regional, não uma comodidade do projeto."
+  ],
+  "Conoce lo que está tomando forma alrededor de Ocala.": [
+    "See what is taking shape around Ocala.",
+    "Conheça o que está tomando forma ao redor de Ocala."
+  ],
+  "Industria · US$23,5M": [
+    "Industry · $23.5M",
+    "Indústria · US$23,5M"
+  ],
+  "La expansión anunciada por E-ONE incluye 100 empleos previstos.": [
+    "E-ONE's announced expansion includes 100 planned jobs.",
+    "A expansão anunciada pela E-ONE inclui 100 empregos previstos."
+  ],
+  "Conexiones · I-75": [
+    "Connections · I-75",
+    "Conexões · I-75"
+  ],
+  "Conoce los proyectos viales que conectan Ocala con la región.": [
+    "Explore the road projects connecting Ocala with the wider region.",
+    "Conheça os projetos viários que conectam Ocala à região."
+  ],
+  "Vida ecuestre y servicios": [
+    "Equestrian life & services",
+    "Vida equestre e serviços"
+  ],
+  "Descubre los proyectos, destinos y servicios que dan forma al entorno local.": [
+    "Discover the projects, destinations and services shaping the local context.",
+    "Descubra os projetos, destinos e serviços que dão forma ao contexto local."
+  ],
+  "Explora 13 proyectos y 31 fuentes, con fechas publicadas y el estado de cada anuncio. La inversión regional no garantiza rentabilidad en un lote.": [
+    "Explore 13 projects and 31 sources, with published dates and the status of each announcement. Regional investment does not guarantee a return on a lot.",
+    "Explore 13 projetos e 31 fontes, com datas publicadas e o status de cada anúncio. O investimento regional não garante retorno em um lote."
   ]
 }

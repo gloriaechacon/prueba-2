@@ -33,7 +33,7 @@
   if(embed==='lotes'){
    zone.querySelectorAll('[data-zone-state="clean"]').forEach(button=>button.remove());
    const toolbar=document.createElement('div');toolbar.className='embedded-map-toolbar';toolbar.setAttribute('aria-label','Controles del mapa');
-   ['.zone-modes','.zone-controls'].forEach(selector=>{const control=zone.querySelector(selector);if(control)toolbar.append(control);});
+   ['.zone-modes'].forEach(selector=>{const control=zone.querySelector(selector);if(control)toolbar.append(control);});
    zone.querySelector('.zone-layout').before(toolbar);
    const poster=$('.zone-poster');if(poster){poster.loading='eager';poster.fetchPriority='high';}const actions=document.createElement('div');actions.className='embedded-plot-actions';actions.innerHTML='<strong>Explora este terreno</strong>';['.zone-states','#zone-house-choice','#zone-state-note'].forEach(sel=>{const el=$(sel);if(el)actions.append(el);});zone.append(actions);new ResizeObserver(()=>parent.postMessage({type:'parcel-height',height:Math.ceil(zone.getBoundingClientRect().height)+4},location.origin)).observe(zone);}
   if(embed==='hero')document.addEventListener('click',e=>{const link=e.target.closest('a[href^="#"]');if(link){e.preventDefault();parent.postMessage({type:'rainbow-destination',section:link.hash.slice(1)},location.origin);}});
@@ -41,7 +41,7 @@
  // Reuse the actual aerial/3D explorer, not a second symbolic street map.
  const map=$('#c-map');
  if(map){
-  const frame=document.createElement('iframe');frame.className='parcel-frame';frame.title='Vista aérea y exploración de los lotes de Rainbow Park';frame.loading='lazy';frame.src='/a/?embed=lotes&lang='+(new URLSearchParams(location.search).get('lang')||localStorage.getItem('rpc-language')||'en')+'&revision=layout2&palette='+(document.body.dataset.palette||'champagne');map.replaceChildren(frame);
+  const frame=document.createElement('iframe');frame.className='parcel-frame';frame.title='Vista aérea y exploración de los lotes de Rainbow Park';frame.loading='lazy';frame.src='/a/?embed=lotes&lang='+(new URLSearchParams(location.search).get('lang')||'en')+'&revision=layout2&palette='+(document.body.dataset.palette||'champagne');map.replaceChildren(frame);
   const send=()=>{const lot=$('#c-lot')?.value;if(lot)frame.contentWindow.postMessage({type:'rainbow-lot',lot},location.origin);};frame.addEventListener('load',send);addEventListener('rpc:lots-ready',send);$('#c-lot')?.addEventListener('change',send);
   addEventListener('message',e=>{if(e.origin===location.origin&&e.source===frame.contentWindow&&e.data?.type==='parcel-height'&&Number.isFinite(e.data.height))frame.style.height=Math.max(600,Math.min(1400,e.data.height))+'px';});
   addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==frame.contentWindow||e.data?.type!=='parcel-selected')return;const select=$('#c-lot');if(select?.options.length&&select.value!==e.data.lot){select.value=e.data.lot;select.dispatchEvent(new Event('change'));}});
@@ -64,7 +64,7 @@
  if(home){const frame=document.createElement('iframe');frame.className='editorial-opening';frame.title='Rainbow Park: un lugar para imaginar';frame.src='/a/?embed=hero&palette='+(document.body.dataset.palette||'champagne');home.replaceWith(frame);addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==frame.contentWindow||e.data?.type!=='rainbow-destination')return;const section=e.data.section;if(['lotes','entorno','viviendas','inversion','contacto'].includes(section))location.href='/c/'+section+'/?palette='+(document.body.dataset.palette||'champagne');});}
  // Give surroundings a clear, photographic entry before the itinerary.
  const destinations=$('body.c-page[data-page=entorno] .c-destinations');
- if(destinations){const chooser=document.createElement('div');chooser.className='destination-choices';chooser.setAttribute('aria-label','Elige qué quieres conocer de Ocala');const items=[['wec','Mundo ecuestre','Eventos y encuentros','territory-wec.jpg'],['downtown','El centro de Ocala','Calles y vida urbana','territory-downtown.jpg'],['nature','Rainbow Springs','Agua y naturaleza','territory-nature.jpg']];items.forEach(([key,title,copy,img])=>{const b=document.createElement('button');b.innerHTML='<img src="/assets/'+img+'" alt="" loading="lazy"><span><strong>'+title+'</strong><small>'+copy+'</small><b>Conocer este lugar</b></span>';b.addEventListener('click',()=>{destinations.querySelector('[data-place="'+key+'"]').click();$('.c-destination').scrollIntoView({block:'center',behavior:reduced.matches?'instant':'smooth'});});chooser.append(b);});destinations.before(chooser);}
+ if(destinations&&!document.body.classList.contains('final-detail')){const chooser=document.createElement('div');chooser.className='destination-choices';chooser.setAttribute('aria-label','Elige qué quieres conocer de Ocala');const items=[['wec','Mundo ecuestre','Eventos y encuentros','territory-wec.jpg'],['downtown','El centro de Ocala','Calles y vida urbana','territory-downtown.jpg'],['nature','Rainbow Springs','Agua y naturaleza','territory-nature.jpg']];items.forEach(([key,title,copy,img])=>{const b=document.createElement('button');b.innerHTML='<img src="/assets/'+img+'" alt="" loading="lazy"><span><strong>'+title+'</strong><small>'+copy+'</small><b>Conocer este lugar</b></span>';b.addEventListener('click',()=>{destinations.querySelector('[data-place="'+key+'"]').click();$('.c-destination').scrollIntoView({block:'center',behavior:reduced.matches?'instant':'smooth'});});chooser.append(b);});destinations.before(chooser);}
  // A browsable guide rather than one very long investment document.
  const dossier=$('.dossier-main');
  if(dossier){
@@ -91,4 +91,30 @@
   addEventListener('DOMContentLoaded',()=>queueMicrotask(syncHash),{once:true});
   addEventListener('beforeprint',()=>entries.forEach(([el])=>el.hidden=false));addEventListener('afterprint',()=>queueMicrotask(()=>{show(active,false);$('#guided-project')?.dispatchEvent(new Event('change'));}));
  }
+})();
+
+// Demonstration inventory only; values must be replaced by confirmed commercial data.
+(()=>{
+ const status=n=>n<=5?'Disponible':n<=7?'Reservado':'Vendido';
+ const translate=s=>window.rpcI18n?.t(s)||s;
+ function refresh(){
+  document.querySelectorAll('#guided-lot,#c-lot').forEach(select=>{
+   for(const option of select.options){const n=Number(option.value.replace('RP-',''));if(!n)continue;
+    if(!option.dataset.baseLabel)option.dataset.baseLabel=option.textContent.split(' · '+translate('Disponible'))[0];
+    const street=option.dataset.baseLabel.split(' · ').slice(1).join(' · ');const text=String(n).padStart(2,'0')+' — '+translate(status(n))+' · '+street+' ('+translate('Ejemplo')+')';if(option.textContent!==text)option.textContent=text;
+   }
+   let note=select.parentElement.querySelector('.availability-note');if(!note){note=document.createElement('p');note.className='availability-note';select.after(note)}
+   const text=translate('Estados de ejemplo · Pendientes de confirmación');if(note.textContent!==text)note.textContent=text;
+  });
+  document.querySelectorAll('[data-zone-lot]').forEach(button=>{const n=Number(button.dataset.zoneLot);if(!n)return;button.dataset.availability=n<=5?'available':n<=7?'reserved':'sold';button.title=translate('Lote')+' '+n+' · '+translate(status(n))+' ('+translate('Ejemplo')+')';});
+  document.querySelectorAll('#zone-title,#c-lot-title').forEach(title=>{
+   const raw=title.id==='c-lot-title'?document.querySelector('#c-lot')?.value:document.querySelector('#lot-explorer')?.dataset.selectedLot;
+   const n=Number(String(raw||'').replace('RP-',''));let badge=title.parentElement.querySelector('.availability-badge');if(!badge){badge=document.createElement('span');badge.className='availability-badge';title.after(badge)}
+   badge.hidden=!n;if(n){badge.dataset.availability=n<=5?'available':n<=7?'reserved':'sold';const text=translate(status(n))+' · '+translate('Ejemplo');if(badge.textContent!==text)badge.textContent=text;}
+  });
+  const north=document.querySelector('#zone-north small');if(north&&north.textContent!==translate('Norte'))north.textContent=translate('Norte');
+ }
+ const observer=new MutationObserver(()=>{observer.disconnect();refresh();observer.observe(document.body,{childList:true,subtree:true})});
+ observer.observe(document.body,{childList:true,subtree:true});
+ document.addEventListener('rpc:lot',()=>queueMicrotask(refresh));addEventListener('rpc:lots-ready',refresh);document.addEventListener('change',refresh);addEventListener('rpc:language',refresh);refresh();
 })();

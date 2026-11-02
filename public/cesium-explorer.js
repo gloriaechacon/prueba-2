@@ -1,4 +1,4 @@
-import {clusterPins} from './pin-clusters.js?v=1';
+import {clusterPins} from './pin-clusters.js?v=2';
 import {houses} from './house-data.js?v=finishes6';
 let libraryPromise;
 function loadCesium(){if(libraryPromise)return libraryPromise;window.CESIUM_BASE_URL=new URL('./vendor/cesium/',import.meta.url).href;libraryPromise=new Promise((resolve,reject)=>{const script=document.createElement('script');script.src=new URL('./vendor/cesium/Cesium.js',import.meta.url).href;script.onload=()=>resolve(window.Cesium);script.onerror=()=>reject(Error('Cesium unavailable'));document.head.append(script)});return libraryPromise}
@@ -23,13 +23,20 @@ const polygons=new Map();
 for(const lot of lots){lot.coordinates=[(lot.visualCenter||lot.center).lon,(lot.visualCenter||lot.center).lat];const coord=local(lot.coordinates[0]*rad,lot.coordinates[1]*rad);lot.x=coord[0];lot.z=coord[1];const ring=(lot.visualPolygon||lot.parcelPolygon).coordinates[0];const corners=ring.map(([lon,lat])=>C.Cartesian3.fromDegrees(lon,lat));const entity=viewer.entities.add({id:'collection-lot-'+lot.id,polygon:{hierarchy:new C.PolygonHierarchy(corners),material:C.Color.fromCssColorString(lot.groupedParcel?'#f1c886':'#e0ef9d').withAlpha(.24),classificationType:C.ClassificationType.BOTH},polyline:{positions:corners,clampToGround:true,width:2,material:C.Color.fromCssColorString(lot.groupedParcel?'#e7b869':'#edf6ba')}});entity.sampleLot=lot.id;polygons.set(lot.id,entity);if(lot.provisionalBoundary)viewer.entities.add({polyline:{positions:lot.parcelPolygon.coordinates[0].map(([lon,lat])=>C.Cartesian3.fromDegrees(lon,lat)),clampToGround:true,width:1,material:C.Color.fromCssColorString('#e0ae69').withAlpha(.6)}})}
 const collectionSphere=C.BoundingSphere.fromPoints(lots.map(l=>point(l.x,l.z)));
 const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
-// Soft reference areas, deliberately distinct from verified parcel outlines.
-// Radii are visual highlights, not property boundaries or catchment estimates.
+// Only sourced geographic boundaries are shaded; never infer a boundary from a radius.
 let regionalAreas=[];
-const regionalOverlay=document.createElement('div');regionalOverlay.className='zone-regional-labels';regionalOverlay.setAttribute('aria-hidden','true');container.append(regionalOverlay);
+const regionalOverlay=document.createElement('div');regionalOverlay.className='zone-regional-labels';regionalOverlay.setAttribute('aria-label','Lugares del entorno');container.append(regionalOverlay);
 const regionalNote=document.createElement('p');regionalNote.className='zone-regional-note';regionalNote.hidden=true;
-regionalNote.textContent='Zonas de referencia · El sombreado no representa límites de propiedad.';
+regionalNote.textContent='Áreas: comunidades Rainbow Park y Rainbow Springs (US Census), aeropuerto (EPA). Selecciona un pin para saber más.';
 root.querySelector('.zone-world').append(regionalNote);
+const regionalInfo=document.createElement('section');regionalInfo.className='zone-place-info';regionalInfo.hidden=true;regionalInfo.setAttribute('aria-live','polite');root.append(regionalInfo);
+const regionalKey=document.createElement('div');regionalKey.className='zone-poi-key';regionalKey.setAttribute('aria-label','Lugares del entorno');regionalInfo.before(regionalKey);
+const poiIcons={airport:'<path d="m12 3 2 7 6 4v2l-6-2v5l2 2v1l-4-1-4 1v-1l2-2v-5l-6 2v-2l6-4 2-7Z"/>',community:'<path d="m3 11 9-8 9 8M5 10v11h14V10M10 21v-7h4v7"/>',city:'<path d="M3 21h18M5 21V8h6v13M13 21V3h6v18M7 11h2m-2 4h2m6-8h2m-2 4h2m-2 4h2"/>',horse:'<path class="poi-horse-silhouette" transform="scale(.375)" d="M5 22C1 23 0 30 2 36L5 34C4 29 6 27 9 27L10 37 7 54H13L17 40 21 54H27L23 35C29 38 35 38 40 35L42 43 40 54H46L48 41 46 32 51 23 58 25 63 21 59 16 54 12 53 5 49 9 45 6 44 14C40 17 40 22 37 24L22 22C16 19 10 19 5 22Z"/>'};
+function describePlace(area){
+ regionalInfo.replaceChildren();const title=document.createElement('h3');title.textContent=area.name;const copy=document.createElement('p');copy.textContent=area.description;const source=document.createElement('a');source.href=area.source;source.target='_blank';source.rel='noopener';source.textContent='Consultar fuente';const maps=document.createElement('a');maps.href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(area.name+' Ocala Florida');maps.target='_blank';maps.rel='noopener';maps.textContent='Abrir ubicación en Google Maps';regionalInfo.append(title,copy,source,maps);regionalInfo.hidden=false;
+ for(const a of regionalAreas)a.label.setAttribute('aria-pressed',String(a.id===area.id));
+}
+
 const regionalButton=document.createElement('button');regionalButton.type='button';regionalButton.className='zone-region-button';regionalButton.textContent='Ver entorno';
 root.querySelector('.zone-top-actions').prepend(regionalButton);
 const overviewButton=document.querySelector('#zone-overview');overviewButton.textContent='Ver lotes';
@@ -38,47 +45,55 @@ function regionalView(){
  if(!regionalAreas.length)return;
  const sphere=C.BoundingSphere.fromPoints(regionalAreas.map(a=>a.pos));
  const aspect=scene.canvas.clientHeight/Math.max(1,scene.canvas.clientWidth);
- const fit=scene.canvas.clientWidth<600?3.4:2.4;
+ const fit=scene.canvas.clientWidth<600?2.1:2.4;
  flyToPoint(sphere.center,sphere.radius*Math.max(fit,aspect*fit),0,-Math.PI/2);
 }
 regionalButton.addEventListener('click',regionalView);
 fetch(new URL('./assets/geography/regional-context.json',import.meta.url)).then(r=>{if(!r.ok)throw Error('Regional context unavailable');return r.json()}).then(areas=>{
  regionalAreas=areas.map(area=>{
   const pos=C.Cartesian3.fromDegrees(area.lon,area.lat,10),entities=[];
-  // Three translucent bands make the reference intentionally soft rather than cadastral.
-  for(const [scale,alpha]of [[1.45,.14],[1.2,.18],[1,.28]]){
-   const ring=Array.from({length:64},(_,i)=>{
-    const angle=i*Math.PI/32,meters=area.radius*scale;
-    return C.Cartesian3.fromDegrees(area.lon+Math.cos(angle)*meters/(111320*Math.cos(area.lat*Math.PI/180)),area.lat+Math.sin(angle)*meters/111320);
-   });
-   entities.push(viewer.entities.add({show:false,polygon:{hierarchy:new C.PolygonHierarchy(ring),material:C.Color.fromCssColorString(area.color).withAlpha(alpha),classificationType:C.ClassificationType.BOTH}}));
+  const shapes=area.geometry?.type==='MultiPolygon'?area.geometry.coordinates:area.geometry?.type==='Polygon'?[area.geometry.coordinates]:[];
+  for(const rings of shapes){
+   const positions=ring=>ring.map(([lon,lat])=>C.Cartesian3.fromDegrees(lon,lat));
+   entities.push(viewer.entities.add({show:false,polygon:{hierarchy:new C.PolygonHierarchy(positions(rings[0]),rings.slice(1).map(r=>new C.PolygonHierarchy(positions(r)))),material:C.Color.fromCssColorString(area.color).withAlpha(.25),classificationType:C.ClassificationType.BOTH}}));
+   for(const ring of rings)entities.push(viewer.entities.add({show:false,polyline:{positions:positions(ring),clampToGround:true,width:3,material:new C.PolylineDashMaterialProperty({color:C.Color.fromCssColorString(area.color),dashLength:14})}}));
   }
-  const label=document.createElement('span');label.className='zone-regional-label';label.textContent=area.id==='wec'?'WEC':area.name;label.style.setProperty('--area-color',area.color);label.hidden=true;regionalOverlay.append(label);
+  const label=document.createElement('button');label.type='button';label.className='zone-regional-label zone-poi';label.dataset.place=area.id;label.setAttribute('aria-label',area.name);label.setAttribute('aria-pressed','false');
+  label.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true">'+poiIcons[area.kind||'community']+'</svg><span><strong></strong><small></small></span>';
+  label.querySelector('strong').textContent=area.name;label.querySelector('small').textContent=area.category;label.hidden=true;regionalOverlay.append(label);
+  const selectPlace=()=>{describePlace({...area,label});flyToPoint(pos,area.kind==='community'?7000:2200,0,-Math.PI/2)};label.addEventListener('click',selectPlace);
+  const keyButton=document.createElement('button');keyButton.type='button';keyButton.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true">'+poiIcons[area.kind||'community']+'</svg><span></span>';keyButton.querySelector('span').textContent=area.name;keyButton.addEventListener('click',selectPlace);regionalKey.append(keyButton);
   return {...area,pos,entities,label};
  });scene.requestRender();
 }).catch(()=>{regionalButton.hidden=true});
 function renderRegionalAreas(){
  const distance=C.Cartesian3.distance(camera.positionWC,collectionSphere.center);
- const show=distance>3500&&distance<180000;
- regionalNote.hidden=!show;
+ const show=distance<180000;
+ regionalNote.hidden=distance<3500||!show;regionalKey.hidden=!show;
  for(const entity of accessEntities)if(entity.show!==(distance<8000))entity.show=distance<8000;
  for(const area of regionalAreas){
   area.entities.forEach(entity=>{if(entity.show!==show)entity.show=show});
   const p=show&&C.SceneTransforms.worldToWindowCoordinates(scene,area.pos);
-  area.label.hidden=!p||p.x<10||p.x>scene.canvas.clientWidth-10||p.y<38||p.y>scene.canvas.clientHeight-70;
-  if(p){area.label.style.left=Math.max(48,Math.min(scene.canvas.clientWidth-48,p.x))+'px';area.label.style.top=(p.y+(area.id==='wec'?-20:area.id==='classic-mile'&&scene.canvas.clientWidth<600?-18:area.id==='airport'&&scene.canvas.clientWidth<600?55:25))+'px'}
+  const facing=C.Cartesian3.dot(C.Cartesian3.subtract(area.pos,camera.positionWC,new C.Cartesian3()),camera.directionWC)>0;
+  area.label.hidden=!p||!facing||p.x<18||p.x>scene.canvas.clientWidth-18||p.y<45||p.y>scene.canvas.clientHeight-85;
+  if(p){area.label.style.left=p.x+'px';area.label.style.top=p.y+'px'}
  }
 }
 
 function anchor(){const ray=camera.getPickRay(new C.Cartesian2(scene.canvas.clientWidth/2,scene.canvas.clientHeight/2));return scene.globe.show?scene.globe.pick(ray,scene):scene.pickPosition(new C.Cartesian2(scene.canvas.clientWidth/2,scene.canvas.clientHeight/2))}
 function flyToPoint(target,range,heading=0,pitch=-.68,duration){camera.cancelFlight();camera.flyToBoundingSphere(new C.BoundingSphere(target,1),{offset:new C.HeadingPitchRange(heading,pitch,range),duration:duration??(reduced?0:1.35),complete:()=>scene.requestRender()});scene.requestRender()}
 function overview(duration){flyToPoint(collectionSphere.center,Math.max(1800,collectionSphere.radius*2.8)*(scene.canvas.clientWidth<600?1.35:1),0,-.78,duration)}
+const collectionPin=document.createElement('button');collectionPin.type='button';collectionPin.className='zone-collection-pin';collectionPin.setAttribute('aria-label','Lotes Rainbow Park');collectionPin.innerHTML='<svg viewBox="0 0 24 32" aria-hidden="true"><path d="M12 30S2 18 2 12a10 10 0 0 1 20 0c0 6-10 18-10 18Z" fill="#6b5733" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.5" fill="#fff"/></svg><span>Lotes Rainbow Park</span>';collectionPin.hidden=true;document.querySelector('#zone-pins').append(collectionPin);collectionPin.addEventListener('click',()=>overview());
 const clusterButtons=new Map();
 function renderPins(){
  renderRegionalAreas();
  const visible=[];
  const regionalDistance=C.Cartesian3.distance(camera.positionWC,collectionSphere.center);
- const regionalScale=regionalDistance>12000&&regionalDistance<180000;
+ const regionalScale=regionalDistance>12000;
+ const cp=C.SceneTransforms.worldToWindowCoordinates(scene,collectionSphere.center);
+ const facing=C.Cartesian3.dot(C.Cartesian3.subtract(collectionSphere.center,camera.positionWC,new C.Cartesian3()),camera.directionWC)>0;
+ collectionPin.hidden=!regionalScale||!facing||!cp||cp.x<0||cp.x>scene.canvas.clientWidth||cp.y<0||cp.y>scene.canvas.clientHeight;
+ if(cp){collectionPin.style.left=cp.x+'px';collectionPin.style.top=cp.y+'px'}
  for(const lot of lots){
   const cart=C.Cartographic.fromDegrees(...lot.coordinates);let h=heightLocal(lot.x,lot.z)*factor;
   if(photoMode){try{h=scene.sampleHeight(cart)||h}catch{}}
@@ -88,7 +103,7 @@ function renderPins(){
   lot.pin.hidden=true;
   // Always keep individual leaders short; never stack numbers up the screen.
   lot.pin.style.setProperty('--pin-stem','14px');
-  if(regionalScale||(currentState==='house'&&activeLot===lot)||!p||!front||p.x<22||p.x>scene.canvas.clientWidth-22||p.y<52||p.y>scene.canvas.clientHeight-14)continue;
+  if(regionalScale||(currentState==='house'&&activeLot===lot)||!p||!front||p.x<38||p.x>scene.canvas.clientWidth-38||p.y<52||p.y>scene.canvas.clientHeight-14)continue;
   visible.push({x:p.x,y:p.y-14,lot,pos});
  }
  const used=new Set();

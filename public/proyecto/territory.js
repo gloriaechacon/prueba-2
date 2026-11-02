@@ -28,11 +28,11 @@ let layers;
 function initMap(){
  const old=$('territory-iframe');const host=document.createElement('div');host.id='territory-live-map';host.setAttribute('aria-label','Mapa del entorno de Rainbow Park. Selecciona un lugar para ver su ficha.');old.replaceWith(host);
  if(!window.L){host.textContent='No se pudo cargar el mapa. Puedes consultar cada ubicación en Google Maps.';return;}
- map=L.map(host,{scrollWheelZoom:false,zoomControl:false});L.control.zoom({position:'bottomleft'}).addTo(map);
+ map=L.map(host,{scrollWheelZoom:true,touchZoom:true,doubleClickZoom:true,zoomControl:false});L.control.zoom({position:'topright'}).addTo(map);
  layers={satellite:L.tileLayer('https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}',{maxNativeZoom:16,maxZoom:18,attribution:'Imágenes: USDA / USGS The National Map'}),streets:L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'})};
  Object.entries(places).forEach(([key,place])=>{
-  const marker=L.marker(place.point,{title:place.name,alt:place.name,keyboard:true,icon:L.divIcon({className:'territory-location',html:'<span>'+data[key].index+'</span>',iconSize:[38,38],iconAnchor:[19,19]})}).addTo(map);
-  marker.bindTooltip(place.name,{direction:'top',offset:[0,-20],className:'territory-place-label'});marker.on('click',()=>select(key));markers[key]=marker;
+  const marker=L.marker(place.point,{title:place.name,alt:place.name,keyboard:true,icon:L.divIcon({className:key==='rainbow'?'region-rainbow-pin':'territory-location',html:key==='rainbow'?'<svg viewBox="0 0 28 38" aria-hidden="true"><path d="M14 36S2 21 2 14a12 12 0 0 1 24 0c0 7-12 22-12 22Z" fill="#a33e32" stroke="white" stroke-width="2"/><circle cx="14" cy="14" r="4" fill="white"/></svg><span>Rainbow Park</span>':'<span>'+data[key].index+'</span>',iconSize:key==='rainbow'?[28,38]:[38,38],iconAnchor:key==='rainbow'?[14,36]:[19,19]})}).addTo(map);
+  if(key!=='rainbow')marker.bindTooltip(place.name,{direction:'top',offset:[0,-20],className:'territory-place-label'});marker.on('click',()=>select(key));markers[key]=marker;
  });
  const reset=()=>map.fitBounds(Object.values(places).map(p=>p.point),{padding:[48,48],maxZoom:12,animate:false});
  setBase();reset();updateMap();
