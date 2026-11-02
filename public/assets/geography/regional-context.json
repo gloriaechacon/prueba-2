@@ -1,0 +1,8 @@
+[
+ {"id":"rainbow","name":"Rainbow Park","lon":-82.373,"lat":29.15,"radius":1300,"color":"#e6c77d","basis":"Referencia regional de Rainbow Park; no delimita los lotes de la colección."},
+ {"id":"classic-mile","name":"Classic Mile","lon":-82.343067,"lat":29.163037,"radius":700,"color":"#d5ac79","basis":"Dirección interpolada del archivo project-map.json; no es el centro ni el lindero del predio."},
+ {"id":"wec","name":"World Equestrian Center","lon":-82.274,"lat":29.192,"radius":950,"color":"#d5ac79","basis":"Referencia regional del visor de entorno."},
+ {"id":"downtown","name":"Downtown Ocala","lon":-82.1367,"lat":29.1878,"radius":700,"color":"#b8c9d4","basis":"Referencia regional del centro urbano."},
+ {"id":"springs","name":"Rainbow Springs","lon":-82.4375,"lat":29.1025,"radius":850,"color":"#a7c9b3","basis":"Referencia regional de Rainbow Springs; no delimita el parque."},
+ {"id":"airport","name":"Aeropuerto de Ocala","lon":-82.2242,"lat":29.1717,"radius":900,"color":"#c9bed8","basis":"Referencia regional del aeropuerto; no delimita sus instalaciones."}
+]

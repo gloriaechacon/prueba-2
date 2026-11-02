@@ -23,12 +23,62 @@ const polygons=new Map();
 for(const lot of lots){lot.coordinates=[(lot.visualCenter||lot.center).lon,(lot.visualCenter||lot.center).lat];const coord=local(lot.coordinates[0]*rad,lot.coordinates[1]*rad);lot.x=coord[0];lot.z=coord[1];const ring=(lot.visualPolygon||lot.parcelPolygon).coordinates[0];const corners=ring.map(([lon,lat])=>C.Cartesian3.fromDegrees(lon,lat));const entity=viewer.entities.add({id:'collection-lot-'+lot.id,polygon:{hierarchy:new C.PolygonHierarchy(corners),material:C.Color.fromCssColorString(lot.groupedParcel?'#f1c886':'#e0ef9d').withAlpha(.24),classificationType:C.ClassificationType.BOTH},polyline:{positions:corners,clampToGround:true,width:2,material:C.Color.fromCssColorString(lot.groupedParcel?'#e7b869':'#edf6ba')}});entity.sampleLot=lot.id;polygons.set(lot.id,entity);if(lot.provisionalBoundary)viewer.entities.add({polyline:{positions:lot.parcelPolygon.coordinates[0].map(([lon,lat])=>C.Cartesian3.fromDegrees(lon,lat)),clampToGround:true,width:1,material:C.Color.fromCssColorString('#e0ae69').withAlpha(.6)}})}
 const collectionSphere=C.BoundingSphere.fromPoints(lots.map(l=>point(l.x,l.z)));
 const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
+// Soft reference areas, deliberately distinct from verified parcel outlines.
+// Radii are visual highlights, not property boundaries or catchment estimates.
+let regionalAreas=[];
+const regionalOverlay=document.createElement('div');regionalOverlay.className='zone-regional-labels';regionalOverlay.setAttribute('aria-hidden','true');container.append(regionalOverlay);
+const regionalNote=document.createElement('p');regionalNote.className='zone-regional-note';regionalNote.hidden=true;
+regionalNote.textContent='Zonas de referencia · El sombreado no representa límites de propiedad.';
+root.querySelector('.zone-world').append(regionalNote);
+const regionalButton=document.createElement('button');regionalButton.type='button';regionalButton.className='zone-region-button';regionalButton.textContent='Ver entorno';
+root.querySelector('.zone-top-actions').prepend(regionalButton);
+const overviewButton=document.querySelector('#zone-overview');overviewButton.textContent='Ver lotes';
+if(document.body.classList.contains('embedded-lotes')){const toolbar=document.querySelector('.embedded-map-toolbar');if(toolbar){toolbar.append(regionalButton,overviewButton)}}
+function regionalView(){
+ if(!regionalAreas.length)return;
+ const sphere=C.BoundingSphere.fromPoints(regionalAreas.map(a=>a.pos));
+ const aspect=scene.canvas.clientHeight/Math.max(1,scene.canvas.clientWidth);
+ const fit=scene.canvas.clientWidth<600?3.4:2.4;
+ flyToPoint(sphere.center,sphere.radius*Math.max(fit,aspect*fit),0,-Math.PI/2);
+}
+regionalButton.addEventListener('click',regionalView);
+fetch(new URL('./assets/geography/regional-context.json',import.meta.url)).then(r=>{if(!r.ok)throw Error('Regional context unavailable');return r.json()}).then(areas=>{
+ regionalAreas=areas.map(area=>{
+  const pos=C.Cartesian3.fromDegrees(area.lon,area.lat,10),entities=[];
+  // Three translucent bands make the reference intentionally soft rather than cadastral.
+  for(const [scale,alpha]of [[1.45,.14],[1.2,.18],[1,.28]]){
+   const ring=Array.from({length:64},(_,i)=>{
+    const angle=i*Math.PI/32,meters=area.radius*scale;
+    return C.Cartesian3.fromDegrees(area.lon+Math.cos(angle)*meters/(111320*Math.cos(area.lat*Math.PI/180)),area.lat+Math.sin(angle)*meters/111320);
+   });
+   entities.push(viewer.entities.add({show:false,polygon:{hierarchy:new C.PolygonHierarchy(ring),material:C.Color.fromCssColorString(area.color).withAlpha(alpha),classificationType:C.ClassificationType.BOTH}}));
+  }
+  const label=document.createElement('span');label.className='zone-regional-label';label.textContent=area.id==='wec'?'WEC':area.name;label.style.setProperty('--area-color',area.color);label.hidden=true;regionalOverlay.append(label);
+  return {...area,pos,entities,label};
+ });scene.requestRender();
+}).catch(()=>{regionalButton.hidden=true});
+function renderRegionalAreas(){
+ const distance=C.Cartesian3.distance(camera.positionWC,collectionSphere.center);
+ const show=distance>3500&&distance<180000;
+ regionalNote.hidden=!show;
+ for(const entity of accessEntities)if(entity.show!==(distance<8000))entity.show=distance<8000;
+ for(const area of regionalAreas){
+  area.entities.forEach(entity=>{if(entity.show!==show)entity.show=show});
+  const p=show&&C.SceneTransforms.worldToWindowCoordinates(scene,area.pos);
+  area.label.hidden=!p||p.x<10||p.x>scene.canvas.clientWidth-10||p.y<38||p.y>scene.canvas.clientHeight-70;
+  if(p){area.label.style.left=Math.max(48,Math.min(scene.canvas.clientWidth-48,p.x))+'px';area.label.style.top=(p.y+(area.id==='wec'?-20:area.id==='classic-mile'&&scene.canvas.clientWidth<600?-18:area.id==='airport'&&scene.canvas.clientWidth<600?55:25))+'px'}
+ }
+}
+
 function anchor(){const ray=camera.getPickRay(new C.Cartesian2(scene.canvas.clientWidth/2,scene.canvas.clientHeight/2));return scene.globe.show?scene.globe.pick(ray,scene):scene.pickPosition(new C.Cartesian2(scene.canvas.clientWidth/2,scene.canvas.clientHeight/2))}
 function flyToPoint(target,range,heading=0,pitch=-.68,duration){camera.cancelFlight();camera.flyToBoundingSphere(new C.BoundingSphere(target,1),{offset:new C.HeadingPitchRange(heading,pitch,range),duration:duration??(reduced?0:1.35),complete:()=>scene.requestRender()});scene.requestRender()}
 function overview(duration){flyToPoint(collectionSphere.center,Math.max(1800,collectionSphere.radius*2.8)*(scene.canvas.clientWidth<600?1.35:1),0,-.78,duration)}
 const clusterButtons=new Map();
 function renderPins(){
+ renderRegionalAreas();
  const visible=[];
+ const regionalDistance=C.Cartesian3.distance(camera.positionWC,collectionSphere.center);
+ const regionalScale=regionalDistance>12000&&regionalDistance<180000;
  for(const lot of lots){
   const cart=C.Cartographic.fromDegrees(...lot.coordinates);let h=heightLocal(lot.x,lot.z)*factor;
   if(photoMode){try{h=scene.sampleHeight(cart)||h}catch{}}
@@ -38,7 +88,7 @@ function renderPins(){
   lot.pin.hidden=true;
   // Always keep individual leaders short; never stack numbers up the screen.
   lot.pin.style.setProperty('--pin-stem','14px');
-  if((currentState==='house'&&activeLot===lot)||!p||!front||p.x<22||p.x>scene.canvas.clientWidth-22||p.y<52||p.y>scene.canvas.clientHeight-14)continue;
+  if(regionalScale||(currentState==='house'&&activeLot===lot)||!p||!front||p.x<22||p.x>scene.canvas.clientWidth-22||p.y<52||p.y>scene.canvas.clientHeight-14)continue;
   visible.push({x:p.x,y:p.y-14,lot,pos});
  }
  const used=new Set();
