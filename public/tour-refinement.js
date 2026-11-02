@@ -62,7 +62,6 @@
   const send=()=>{const lot=$('#c-lot')?.value;if(lot)frame.contentWindow.postMessage({type:'rainbow-lot',lot},location.origin);};frame.addEventListener('load',send);addEventListener('rpc:lots-ready',send);$('#c-lot')?.addEventListener('change',send);
   addEventListener('message',e=>{if(e.origin===location.origin&&e.source===frame.contentWindow&&e.data?.type==='parcel-height'&&Number.isFinite(e.data.height))frame.style.height=Math.max(600,Math.min(1400,e.data.height))+'px';});
   addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==frame.contentWindow||e.data?.type!=='parcel-selected')return;const select=$('#c-lot');if(select?.options.length&&select.value!==e.data.lot){select.value=e.data.lot;select.dispatchEvent(new Event('change'));}});
-  const heading=$('body[data-page=lotes] .c-heading h1');if(heading)heading.textContent='Explora los lotes desde el aire';
   const btitle=$('.salon-lots .section-opening h2');if(btitle)btitle.innerHTML='Conoce los lotes<br>de Rainbow Park.';
  }
  // House models are visible inline; the full-screen button remains available.

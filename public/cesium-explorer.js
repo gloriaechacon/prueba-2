@@ -85,6 +85,24 @@ function flyToPoint(target,range,heading=0,pitch=-.68,duration){camera.cancelFli
 function overview(duration){flyToPoint(collectionSphere.center,Math.max(1800,collectionSphere.radius*2.8)*(scene.canvas.clientWidth<600?1.35:1),0,-.78,duration)}
 const collectionPin=document.createElement('button');collectionPin.type='button';collectionPin.className='zone-collection-pin';collectionPin.setAttribute('aria-label','Lotes Rainbow Park');collectionPin.innerHTML='<svg viewBox="0 0 24 32" aria-hidden="true"><path d="M12 30S2 18 2 12a10 10 0 0 1 20 0c0 6-10 18-10 18Z" fill="#6b5733" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.5" fill="#fff"/></svg><span>Lotes Rainbow Park</span>';collectionPin.hidden=true;document.querySelector('#zone-pins').append(collectionPin);collectionPin.addEventListener('click',()=>overview());
 const clusterButtons=new Map();
+let openCluster=null;
+const picker=document.createElement('div');
+picker.className='zone-cluster-choices';picker.hidden=true;
+document.querySelector('#zone-pins').append(picker);
+function closeCluster(){openCluster?.setAttribute('aria-expanded','false');openCluster=null;picker.hidden=true;picker.replaceChildren()}
+function toggleCluster(button){
+ const same=openCluster===button;closeCluster();if(same)return;
+ openCluster=button;button.setAttribute('aria-expanded','true');
+ for(const {lot} of [...button.clusterPoints].sort((a,b)=>a.lot.id-b.lot.id)){
+  const choice=document.createElement('button');choice.type='button';
+  choice.textContent=tr('Lote')+' '+String(lot.id).padStart(2,'0');
+  choice.setAttribute('aria-pressed',String(lot===activeLot));
+  choice.onclick=()=>{closeCluster();onSelect(lot.id)};picker.append(choice);
+ }
+ picker.hidden=false;picker.firstElementChild.focus({preventScroll:true});
+}
+document.addEventListener('pointerdown',e=>{if(openCluster&&!picker.contains(e.target)&&!openCluster.contains(e.target))closeCluster()});
+picker.addEventListener('keydown',e=>{if(e.key==='Escape'){const trigger=openCluster;closeCluster();trigger?.focus()}});
 function renderPins(){
  renderRegionalAreas();
  const visible=[];
@@ -100,38 +118,36 @@ function renderPins(){
   const pos=C.Cartesian3.fromDegrees(...lot.coordinates,h+2);
   const p=C.SceneTransforms.worldToWindowCoordinates(scene,pos);
   const front=C.Cartesian3.dot(C.Cartesian3.subtract(pos,camera.positionWC,new C.Cartesian3()),camera.directionWC)>0;
-  lot.pin.hidden=true;
   // Always keep individual leaders short; never stack numbers up the screen.
   lot.pin.style.setProperty('--pin-stem','14px');
   if(regionalScale||(currentState==='house'&&activeLot===lot)||!p||!front||p.x<38||p.x>scene.canvas.clientWidth-38||p.y<52||p.y>scene.canvas.clientHeight-14)continue;
   visible.push({x:p.x,y:p.y-14,lot,pos});
  }
- const used=new Set();
+ const used=new Set(),singles=new Set();
  for(const group of clusterPins(visible)){
-  if(group.points.length===1){const {lot}=group.points[0];lot.pin.hidden=false;lot.pin.style.left=group.x+'px';lot.pin.style.top=group.y+'px';continue;}
+  if(group.points.length===1){const {lot}=group.points[0];singles.add(lot);lot.pin.style.left=group.x+'px';lot.pin.style.top=group.y+'px';continue;}
   const key=group.points.map(p=>p.lot.id).sort((a,b)=>a-b).join('-');used.add(key);
   let button=clusterButtons.get(key);
   if(!button){
    button=document.createElement('button');button.type='button';button.className='zone-pin zone-pin-cluster';
-   button.addEventListener('click',()=>{
-    const sphere=C.BoundingSphere.fromPoints(button.clusterPoints.map(p=>p.pos));
-    flyToPoint(sphere.center,Math.max(120,sphere.radius*3),camera.heading,-.9);
-   });
+   button.setAttribute('aria-expanded','false');
+   button.addEventListener('click',()=>toggleCluster(button));
    document.querySelector('#zone-pins').append(button);clusterButtons.set(key,button);
   }
   button.clusterPoints=group.points;button.hidden=false;
   const text=group.points.length+' '+tr('lotes');
   if(button.textContent!==text)button.textContent=text;
-  button.setAttribute('aria-label',tr('Acercar para ver los lotes')+': '+group.points.map(p=>String(p.lot.id).padStart(2,'0')).join(', '));
+  button.setAttribute('aria-label',text+': '+group.points.map(p=>String(p.lot.id).padStart(2,'0')).join(', '));
   button.classList.toggle('contains-selection',group.points.some(p=>p.lot===activeLot));
   button.style.left=Math.max(56,Math.min(scene.canvas.clientWidth-56,group.x))+'px';button.style.top=group.y+'px';
  }
- for(const [key,button]of clusterButtons)if(!used.has(key)){button.remove();clusterButtons.delete(key)}
+ for(const lot of lots)lot.pin.hidden=!singles.has(lot);
+ for(const [key,button]of clusterButtons)if(!used.has(key)){if(openCluster===button)closeCluster();button.remove();clusterButtons.delete(key)}
  document.querySelector('#zone-compass').style.transform=`rotate(${-camera.heading}rad)`;
  document.querySelector('#zone-topdown').setAttribute('aria-pressed',String(camera.pitch< -1.45));
 }
 scene.postRender.addEventListener(renderPins);
-const clicks=new C.ScreenSpaceEventHandler(scene.canvas);clicks.setInputAction(e=>{const hit=scene.pick(e.position);if(hit?.id?.sampleLot)onSelect(hit.id.sampleLot)},C.ScreenSpaceEventType.LEFT_CLICK);
+const clicks=new C.ScreenSpaceEventHandler(scene.canvas);clicks.setInputAction(e=>{const hit=scene.drillPick(e.position).find(hit=>hit.id?.sampleLot!=null);if(hit)onSelect(hit.id.sampleLot)},C.ScreenSpaceEventType.LEFT_CLICK);
 function setMode(mode){const ctrl=scene.screenSpaceCameraController;ctrl.rotateEventTypes=mode==='orbit'?[]:[C.CameraEventType.LEFT_DRAG];ctrl.tiltEventTypes=mode==='orbit'?[C.CameraEventType.LEFT_DRAG,C.CameraEventType.MIDDLE_DRAG,C.CameraEventType.PINCH]:[C.CameraEventType.MIDDLE_DRAG,C.CameraEventType.PINCH,{eventType:C.CameraEventType.LEFT_DRAG,modifier:C.KeyboardEventModifier.CTRL}];scene.requestRender()}
 function clearProposal(){for(const entity of proposal)viewer.entities.remove(entity);proposal=[];if(tileset?.clippingPolygons)tileset.clippingPolygons.removeAll()}
 let stateTicket=0;

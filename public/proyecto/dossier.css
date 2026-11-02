@@ -75,3 +75,5 @@
 .final-dossier .investment-summary-index{min-width:0}
 
 .final-dossier .investment-summary-index{margin:0!important;align-self:start;justify-self:stretch;width:auto;order:0}
+html:has(.final-dossier){scroll-padding-top:var(--nav-height,90px)}
+.final-dossier .investment-sections>section{scroll-margin-top:0;padding-top:18px}

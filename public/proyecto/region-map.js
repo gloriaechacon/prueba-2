@@ -15,3 +15,8 @@ new ResizeObserver(()=>map.invalidateSize({pan:false})).observe(host);
 fetch('/assets/geography/regional-context.json').then(r=>r.json()).then(areas=>{for(const a of areas.filter(a=>a.geometry))L.geoJSON(a.geometry,{style:{color:a.color,fillColor:a.color,fillOpacity:.22,weight:2,dashArray:'5 5'},interactive:false}).addTo(map)}).catch(()=>{});
 choose('wec');
 })();
+(()=>{const map=document.querySelector('#region-map'),title=document.querySelector('#c-place-title');if(!map||!title)return;
+ const jump=document.createElement('a');jump.className='region-detail-jump';jump.href='#c-place-title';map.after(jump);
+ const update=()=>{const lang=document.documentElement.lang.slice(0,2);jump.textContent=(({en:'View details',es:'Ver detalles',pt:'Ver detalhes'})[lang]||'View details')+' · '+title.textContent;};
+ jump.dataset.noTranslate='';new MutationObserver(update).observe(title,{childList:true,subtree:true,characterData:true});document.addEventListener('rpc:language',update);update();
+})();

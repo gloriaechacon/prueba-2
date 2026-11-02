@@ -5,8 +5,16 @@
  const housing=document.body.classList.contains('final-housing');
  const routes={lotes:'lotes',entorno:'entorno',inversion:'inversion',dossier:'inversion',viviendas:'viviendas',casas:'viviendas',contacto:'contacto',consulta:'contacto'};
  const nav=document.querySelector('.final-nav'),menu=nav?.querySelector('.final-menu');
- menu?.addEventListener('click',()=>{const open=nav.classList.toggle('menu-open');menu.setAttribute('aria-expanded',String(open));});
- document.addEventListener('keydown',event=>{if(event.key==='Escape'&&nav?.classList.contains('menu-open')){nav.classList.remove('menu-open');menu.setAttribute('aria-expanded','false');menu.focus();}});
+ const links=nav?.querySelector('#final-links');
+ if(menu&&links){
+  const drawer=document.createElement('dialog'),close=document.createElement('button'),slot=document.createComment('navigation');
+  drawer.className='site-drawer';drawer.setAttribute('aria-label','Menu');close.type='button';close.className='drawer-close';close.textContent='×';drawer.append(close);document.body.append(drawer);links.before(slot);
+  menu.onclick=()=>{const lang=document.documentElement.lang.slice(0,2);close.setAttribute('aria-label',({es:'Cerrar menú',pt:'Fechar menu'})[lang]||'Close menu');drawer.append(links);drawer.showModal();menu.setAttribute('aria-expanded','true');close.focus();};
+  close.onclick=()=>drawer.close();drawer.onclick=e=>{if(e.target===drawer&&e.clientX>=drawer.getBoundingClientRect().right)drawer.close();};
+  drawer.addEventListener('close',()=>{slot.after(links);menu.setAttribute('aria-expanded','false');if(menu.offsetWidth)menu.focus({preventScroll:true});});
+  matchMedia('(max-width:1100px)').addEventListener('change',e=>{if(!e.matches&&drawer.open)drawer.close();});
+  new ResizeObserver(()=>document.documentElement.style.setProperty('--nav-height',nav.getBoundingClientRect().height+'px')).observe(nav);
+ }
  function linkPage(key){return '/proyecto/'+key+'/';}
  function correctLinks(){document.querySelectorAll('a[href]').forEach(a=>{
   if(a.matches('.scroll-link,.skip,.c-skip')||a.closest('.zone-viewport'))return;
@@ -24,10 +32,17 @@
  // Preserve the home's model preview, but take deeper actions to the complete studio.
  if(home){
   document.addEventListener('click',event=>{if(event.target.closest('#compare-homes,[data-open-placement],[data-open-tour]')){event.preventDefault();event.stopImmediatePropagation();location.href=linkPage('viviendas');}},true);
-  for(const [id,label] of [['lotes','Ver los lotes y sus detalles'],['entorno','Conocer el entorno de Ocala'],['viviendas','Ver fichas y recorridos de Utah y Bell'],['contacto','Preparar mi consulta']]){
+  document.querySelector('#home-back-top')?.addEventListener('click',event=>{
+   event.preventDefault();
+   const hero=document.getElementById('inicio');
+   hero.setAttribute('tabindex','-1');
+   hero.focus({preventScroll:true});
+   window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'instant':'smooth'});
+  });
+  for(const [id,label] of [['lotes','Ver los lotes y sus detalles'],['entorno','Conocer el entorno de Ocala'],['viviendas','Ver fichas y recorridos de Utah y Bell']]){
    const section=document.getElementById(id);if(!section)continue;
    const a=document.createElement('a');a.href=linkPage(id);a.className='final-section-link';a.textContent=label;
-   if(id==='contacto')section.querySelector('.contact-layout').append(a);else section.append(a);
+   section.append(a);
   }
  }
  if(home){
@@ -64,6 +79,34 @@
   const note=explorer.querySelector('#zone-initial-note');if(note){note.innerHTML='<p>Selecciona un número en el mapa o en la lista para ver la ubicación y los detalles del lote.</p>';}
   const eyebrow=explorer.querySelector('.zone-panel>.eyebrow');if(eyebrow)eyebrow.textContent='Elige un lote';
  }}
+ if(home){
+  const explorer=document.querySelector('#lot-explorer');
+  const picker=explorer.querySelector('.integrated-lot-picker');
+  const compact=document.createElement('div');
+  compact.className='mobile-lot-controls';
+  explorer.querySelector('.zone-layout').before(compact);
+  const pickerCaption=document.createElement('span');pickerCaption.className='mobile-picker-caption';pickerCaption.textContent='Elige un lote';picker.prepend(pickerCaption);
+  const controls=[picker,explorer.querySelector('.zone-state-heading'),explorer.querySelector('.zone-states'),houseChoice];
+  const anchors=controls.map(el=>{const marker=document.createComment('lot control');el.before(marker);return marker});
+  const narrow=matchMedia('(max-width:750px)');
+  function arrangeControls(){
+   controls.forEach((el,i)=>{if(narrow.matches)compact.append(el);else anchors[i].after(el)});
+   compact.hidden=!narrow.matches;
+  }
+  arrangeControls();narrow.addEventListener('change',arrangeControls);
+  const scene=document.querySelector('#home-scene');
+  const tip=document.createElement('span');
+  tip.className='home-rotate-tip';tip.dataset.noTranslate='';
+  scene.after(tip);
+  function showTip(){
+   const labels={en:'Drag to rotate',es:'Arrastra para girar',pt:'Arraste para girar'};
+   tip.textContent='↔ '+(labels[window.rpcI18n?.language]||labels.en);
+   tip.hidden=false;
+  }
+  showTip();document.addEventListener('rpc:language',showTip);
+  scene.addEventListener('pointermove',event=>{if(event.buttons)tip.hidden=true});
+  document.querySelector('.showroom').addEventListener('click',event=>{if(event.target.closest('[data-home-view],[data-home]'))showTip()});
+ }
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
  function updateHeader(){if(!home||!nav)return;const progress=Math.min(1,Math.max(0,scrollY/Math.max(200,(document.querySelector('.hero')?.offsetHeight||700)*.65)));nav.style.setProperty('--header-progress',String(progress));nav.style.setProperty('--header-blur',(progress*18)+'px');nav.classList.toggle('is-solid',progress>.55);}
  addEventListener('scroll',updateHeader,{passive:true});updateHeader();

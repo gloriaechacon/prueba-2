@@ -15,16 +15,39 @@
 .photo-arrow::before{content:"";width:10px;height:10px;border:solid currentColor;border-width:2px 2px 0 0;transform:rotate(45deg)}
 .photo-arrow.previous::before{transform:rotate(-135deg)}
 #lot-gallery .photo-arrow:hover,#lot-gallery .photo-arrow:focus-visible{background:#f4e9cf;color:#30291f}
-.media-stage[tabindex]{--lens:clamp(230px,45vw,680px);perspective:var(--lens);touch-action:none;cursor:grab}
+.media-stage[tabindex]{background-size:auto 100%;background-repeat:repeat-x;user-select:none;touch-action:none;cursor:grab}
 .media-stage:active{cursor:grabbing}
 .panorama-frame{position:relative;margin:1rem 0}
 .panorama-frame .media-stage{margin:0}
 .panorama-hint{position:absolute;bottom:1rem;left:50%;transform:translateX(-50%);max-width:95%;width:max-content;padding:.55rem .9rem;border-radius:6px;background:#25282cf2;color:white;font-weight:600;pointer-events:none;transition:opacity .25s}
 .panorama-explored .panorama-hint{opacity:0}
 @media(prefers-reduced-motion:reduce){.panorama-hint{transition:none}}
-.pano-cube{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d}
-.pano-cube img{position:absolute;max-width:none;width:1001px;height:1001px;left:-500.5px;top:-500.5px;user-select:none;pointer-events:none}
+.media-stage canvas{display:block;width:100%;height:100%;pointer-events:none}
 .media-thumbs{overflow-x:auto;padding:.5rem 2px}
 .media-thumbs button{padding:3px;flex:0 0 84px}
 .media-thumbs img{width:100%;height:48px;display:block;object-fit:cover;border-radius:3px}
 #lot-gallery footer{margin-bottom:.5rem}
+body.final-detail[data-page=lotes] .c-heading{margin:0 0 1rem;padding:0}
+body.final-detail[data-page=lotes] .c-heading h1{margin:0;font-size:clamp(32px,4vw,52px)}
+body.final-detail[data-page=lotes] .c-lot-workspace{grid-template-columns:minmax(0,1fr)!important;gap:16px}
+body.final-detail[data-page=lotes] #c-map{grid-area:1/1}
+body.final-detail[data-page=lotes] .c-lot-card{grid-area:2/1;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px 28px;padding:clamp(16px,2vw,24px)!important}
+.lot-picker{display:grid;gap:4px}
+.lot-summary{grid-area:1/1;display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px}
+.lot-summary #c-street{flex-basis:100%;margin:0}
+body.final-detail[data-page=lotes] .c-lot-card dl{grid-column:1/-1;grid-row:auto;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:12px 0}
+body.final-detail[data-page=lotes] .c-lot-card dl>div{display:grid;gap:2px;justify-content:start}
+body.final-detail[data-page=lotes] .c-lot-card dd{text-align:left}
+.lot-actions{display:flex;align-items:center;flex-wrap:wrap;gap:8px 18px}
+body.final-detail[data-page=lotes] .lot-actions .c-button{width:auto}
+@media(max-width:700px){
+ body.final-detail[data-page=lotes] .c-lot-card{grid-template-columns:minmax(0,1fr);gap:12px}
+ .lot-summary{grid-area:auto}
+ body.final-detail[data-page=lotes] .c-lot-card dl{grid-template-columns:1fr 1fr}
+ body.final-detail[data-page=lotes] .c-lot-card dl>div:last-child{grid-column:1/-1}
+}
+body.final-detail[data-page=lotes] .c-lot-card>*,body.final-detail[data-page=lotes] .c-lot-card dl>div{margin:0}
+body.final-detail[data-page=lotes] .c-lot-card dl>div{padding:0;border:0}
+@media(max-width:700px){
+ body.final-detail[data-page=lotes] .c-lot-card dl>div:last-child{display:flex;align-items:baseline;gap:10px}
+}

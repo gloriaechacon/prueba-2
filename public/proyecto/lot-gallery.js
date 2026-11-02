@@ -5,7 +5,10 @@ const strings={
  pt:['Lote','Fotografias do terreno','Fotos','Passeios 360°','Arraste para olhar ao redor ou use as setas do teclado.','Foto']
 };
 let catalog,lot,type='photo',index=0;
+let releasePanorama;
 function render(){
+ releasePanorama?.();
+ releasePanorama=null;
  const key=select.value, items=catalog?.[key];panel.hidden=!items?.length;if(panel.hidden){panel.replaceChildren();return}
  if(key!==lot){lot=key;type='photo';index=0}
  const t=strings[window.rpcI18n?.language]||strings.en, list=items.filter(x=>x.type===type), item=list[index];
@@ -34,7 +37,7 @@ function render(){
  if(type==='360'){
   stage.tabIndex=0;
   stage.setAttribute('aria-label',label+' · '+name+'. '+t[4]);
-  panorama(stage,source);
+  releasePanorama=panorama(stage,source);
   const instructions={
    en:['Drag to explore','Swipe to explore'],
    es:['Arrastra para explorar','Desliza para explorar'],
@@ -54,16 +57,74 @@ function render(){
  }
  list.forEach((it,i)=>{const b=button(panel.querySelector('.media-thumbs'),'',i===index,()=>{index=i;render();panel.querySelector('.media-thumbs [aria-pressed=true]').focus({preventScroll:true})});b.setAttribute('aria-label',(type==='photo'?t[5]:'360°')+' '+(i+1));const img=new Image();img.alt='';img.loading='lazy';img.src=base+it.file.replace('.jpg','-thumb.jpg');b.append(img)});
 }
-// A perspective cube gives touch, mouse and keyboard users a full spherical view without a second WebGL context.
+// Draw a continuous panorama in a single canvas. The wrapped image also
+// provides a draggable preview while the renderer loads or if WebGL is unavailable.
 function panorama(stage,src){
- const cube=document.createElement('div');cube.className='pano-cube';stage.append(cube);
- ['','rotateY(-90deg)','rotateY(180deg)','rotateY(90deg)','rotateX(-90deg)','rotateX(90deg)'].forEach((r,i)=>{const img=new Image();img.alt='';img.draggable=false;img.src=src.replace('.jpg','-'+i+'.jpg');img.style.transform=r+' translateZ(-500px)';cube.append(img)});
- let yaw=0,pitch=0,drag=null;
- function draw(){pitch=Math.max(-89,Math.min(89,pitch));cube.style.transform='translateZ(var(--lens)) rotateX('+pitch+'deg) rotateY('+yaw+'deg)';if(yaw||pitch)stage.parentElement.classList.add('panorama-explored')}
- draw();stage.onpointerdown=e=>{drag=[e.clientX,e.clientY];stage.setPointerCapture(e.pointerId)};
- stage.onpointermove=e=>{if(!drag)return;yaw-=(e.clientX-drag[0])*.16;pitch+=(e.clientY-drag[1])*.16;drag=[e.clientX,e.clientY];draw()};
- stage.onlostpointercapture=()=>{drag=null};
- stage.onkeydown=e=>{const delta={ArrowLeft:[-8,0],ArrowRight:[8,0],ArrowUp:[0,-8],ArrowDown:[0,8]}[e.key];if(delta){e.preventDefault();yaw+=delta[0];pitch+=delta[1];draw()}};
+ let yaw=0, pitch=0, pointer=null, lastX=0, lastY=0;
+ let disposed=false, raf=0, renderScene, disposeScene;
+ stage.style.backgroundImage='url("'+src+'")';
+ function paint(){
+  raf=0;
+  stage.style.backgroundPosition=((.5-yaw/360)*stage.clientHeight*2+stage.clientWidth/2-stage.clientHeight*2)+'px '+(50+pitch/2)+'%';
+  renderScene?.();
+ }
+ function schedule(){if(!raf && !disposed)raf=requestAnimationFrame(paint)}
+ function turn(horizontal,vertical){
+  yaw=(yaw+horizontal)%360;
+  pitch=Math.max(-85,Math.min(85,pitch+vertical));
+  stage.parentElement.classList.add('panorama-explored');
+  schedule();
+ }
+ stage.onpointerdown=e=>{
+  if(pointer!==null || e.button!==0)return;
+  pointer=e.pointerId;lastX=e.clientX;lastY=e.clientY;
+  stage.setPointerCapture(pointer);
+ };
+ stage.onpointermove=e=>{
+  if(e.pointerId!==pointer)return;
+  const scale=72/Math.max(1,stage.clientHeight);
+  turn((lastX-e.clientX)*scale,(e.clientY-lastY)*scale);
+  lastX=e.clientX;lastY=e.clientY;
+ };
+ stage.onpointerup=stage.onpointercancel=stage.onlostpointercapture=e=>{
+  if(e.pointerId===pointer)pointer=null;
+ };
+ stage.onkeydown=e=>{
+  const delta={ArrowLeft:[-8,0],ArrowRight:[8,0],ArrowUp:[0,8],ArrowDown:[0,-8]}[e.key];
+  if(delta){e.preventDefault();turn(...delta)}
+ };
+ const resize=new ResizeObserver(schedule);
+ resize.observe(stage);
+ schedule();
+ async function load(){
+  const T=await import('/vendor/three.module.js');
+  if(disposed)return;
+  const renderer=new T.WebGLRenderer({antialias:false});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+  const scene=new T.Scene(), camera=new T.PerspectiveCamera(72,1,.1,20);
+  const texture=new T.TextureLoader().load(src,()=>{if(!disposed){stage.append(renderer.domElement);schedule()}});
+  texture.colorSpace=T.SRGBColorSpace;
+  texture.wrapS=T.RepeatWrapping;
+  const geometry=new T.SphereGeometry(10,64,40);
+  geometry.scale(-1,1,1);
+  const material=new T.MeshBasicMaterial({map:texture});
+  scene.add(new T.Mesh(geometry,material));
+  let width=0,height=0;
+  renderScene=()=>{
+   if(width!==stage.clientWidth || height!==stage.clientHeight){
+    width=stage.clientWidth;height=stage.clientHeight;
+    if(!width || !height)return;
+    renderer.setSize(width,height,false);
+    camera.aspect=width/height;camera.updateProjectionMatrix();
+   }
+   const h=yaw*Math.PI/180,v=pitch*Math.PI/180;
+   camera.lookAt(Math.cos(v)*Math.cos(h),Math.sin(v),Math.cos(v)*Math.sin(h));
+   renderer.render(scene,camera);
+  };
+  disposeScene=()=>{texture.dispose();material.dispose();geometry.dispose();renderer.dispose();renderer.forceContextLoss()};
+ }
+ load().catch(()=>{/* The draggable preview remains available. */});
+ return ()=>{disposed=true;resize.disconnect();cancelAnimationFrame(raf);disposeScene?.()};
 }
 select.addEventListener('change',render);window.addEventListener('rpc:lots-ready',render);document.addEventListener('rpc:language',render);
 fetch(base+'catalog.json').then(r=>r.json()).then(data=>{catalog=data;render()});

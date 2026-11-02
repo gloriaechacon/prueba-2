@@ -76,14 +76,32 @@ function genericScene(container){
 
 function homeScene(container){
  const scene=new THREE.Scene();scene.background=new THREE.Color('#e8e8e1');scene.add(new THREE.HemisphereLight(0xf5f6ff,0xaaa294,1.15));
- const ground=new THREE.Mesh(new THREE.CircleGeometry(25,80),mat(0xc4cbb7));ground.rotation.x=-Math.PI/2;ground.position.y=-.18;ground.receiveShadow=true;scene.add(ground);
+ const ground=new THREE.Mesh(new THREE.CircleGeometry(25,80),mat(0x777b7c));ground.rotation.x=-Math.PI/2;ground.position.y=-.18;ground.receiveShadow=true;scene.add(ground);
  const sun=new THREE.DirectionalLight(0xfff1d6,2.4);sun.position.set(-14,25,20);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-24,right:24,top:24,bottom:-24,near:1,far:110});sun.shadow.normalBias=.008;sun.shadow.bias=-.00006;scene.add(sun);
  const camera=new THREE.PerspectiveCamera(40,1,.1,250);let azimuth=.20,elevation=6,distance=26,renderer,home='a',view='model',environmentOn=false,environmentGroup,environmentPromise;
  const target=new THREE.Vector3(0,1.6,0),models={},promises={};
  const plan=document.querySelector('#home-plan'),poster=document.querySelector('#home-poster'),hint=document.querySelector('.home-instruction');
  const draw=()=>{camera.position.set(Math.sin(azimuth)*distance,elevation,Math.cos(azimuth)*distance);camera.lookAt(target);camera.zoom=Math.min(1,camera.aspect/1.2);camera.updateProjectionMatrix();renderer?.render(scene,camera)};
- function syncModels(){Object.entries(models).forEach(([key,model])=>{model.visible=key===home;model.position.z=environmentOn?lotOffset(houses[key]):0;model.children.filter(n=>n.userData.roof).forEach(n=>n.visible=view!=='cutaway')});if(environmentGroup){environmentGroup.visible=environmentOn;environmentGroup.scale.set(lotExample.width/23,1,lotExample.depth/44);environmentGroup.userData.setGarageSide?.(houses[home].garageSide)}}
- function ensureModel(){if(!renderer){try{renderer=makeRenderer(container,scene,camera,draw);daylight(scene,renderer);let drag;renderer.domElement.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,azimuth,elevation};renderer.domElement.setPointerCapture(e.pointerId)});renderer.domElement.addEventListener('pointermove',e=>{if(!drag)return;azimuth=drag.azimuth-(e.clientX-drag.x)*.007;elevation=THREE.MathUtils.clamp(drag.elevation+(e.clientY-drag.y)*.06,3,environmentOn?75:40);draw()});for(const ev of ['pointerup','pointercancel'])renderer.domElement.addEventListener(ev,()=>drag=null)}catch{hint.textContent='Vista 3D no disponible. Puedes consultar el plano arquitectónico.';return}}
+ function syncModels(){if(renderer)renderer.shadowMap.needsUpdate=true;Object.entries(models).forEach(([key,model])=>{model.visible=key===home;model.position.z=environmentOn?lotOffset(houses[key]):0;model.children.filter(n=>n.userData.roof).forEach(n=>n.visible=view!=='cutaway')});if(environmentGroup){environmentGroup.visible=environmentOn;environmentGroup.scale.set(lotExample.width/23,1,lotExample.depth/44);environmentGroup.userData.setGarageSide?.(houses[home].garageSide)}}
+ function ensureModel(){if(!renderer){try{renderer=makeRenderer(container,scene,camera,draw);daylight(scene,renderer);renderer.domElement.style.touchAction='none';let drag,frame=0;
+ const canvas=renderer.domElement;
+ canvas.addEventListener('pointerdown',e=>{
+   if(drag||e.button!==0)return;
+   const height=elevation-target.y;
+   drag={id:e.pointerId,x:e.clientX,y:e.clientY,azimuth,radius:Math.hypot(distance,height),polar:Math.atan2(distance,height)};
+   canvas.setPointerCapture(e.pointerId);
+ });
+ canvas.addEventListener('pointermove',e=>{
+   if(!drag||e.pointerId!==drag.id)return;
+   const radiansPerPixel=2*Math.PI/Math.max(240,container.clientHeight);
+   azimuth=drag.azimuth-(e.clientX-drag.x)*radiansPerPixel;
+   const polar=THREE.MathUtils.clamp(drag.polar-(e.clientY-drag.y)*radiansPerPixel,.08,Math.PI*.49);
+   distance=drag.radius*Math.sin(polar);
+   elevation=target.y+drag.radius*Math.cos(polar);
+   if(!frame)frame=requestAnimationFrame(()=>{frame=0;draw()});
+ });
+ canvas.addEventListener('lostpointercapture',e=>{if(drag?.id===e.pointerId)drag=null});
+ }catch{hint.textContent='Vista 3D no disponible. Puedes consultar el plano arquitectónico.';return}}
  if(!promises[home]){const key=home;hint.textContent='CARGANDO '+houses[key].name.toUpperCase()+'…';promises[key]=loadHouse(houses[key].model).then(model=>{models[key]=model;scene.add(model);syncModels();if(home===key)hint.textContent='MODELO SEGÚN PLANOS · ACABADOS PROPUESTOS · ARRASTRA PARA GIRAR';draw()}).catch(()=>{delete promises[key];hint.textContent='No se pudo cargar el modelo. Consulta su plano o vuelve a intentarlo.'})}syncModels();draw()}
  function showView(next){view=next;const is3d=view==='model'||view==='cutaway';plan.hidden=view!=='plan';poster.hidden=view!=='image';container.hidden=!is3d;document.querySelector('.home-environment-controls').hidden=!is3d;document.querySelector('#home-environment-info').hidden=!environmentOn||!is3d;document.querySelectorAll('[data-home-view]').forEach(b=>{b.classList.toggle('active',b.dataset.homeView===view);b.setAttribute('aria-pressed',String(b.dataset.homeView===view));if(b.dataset.homeView==='image')b.hidden=home!=='a'});for(const id of ['home-zoom-in','home-zoom-out','home-reset'])document.getElementById(id).hidden=!is3d;
  hint.textContent=view==='plan'?'PLANO ARQUITECTÓNICO DEL CLIENTE · ABRE EL PDF PARA VER LAS COTAS':view==='image'?'CONCEPTO DE ACABADOS · IMAGEN GENERADA':'MODELO SEGÚN PLANOS · ACABADOS PROPUESTOS';if(view==='cutaway'){elevation=28;distance=14;azimuth=.08;target.set(0,0,environmentOn?lotOffset(houses[home]):0)}if(is3d)ensureModel();syncModels();draw()}

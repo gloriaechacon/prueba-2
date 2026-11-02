@@ -368,3 +368,133 @@ body.final-detail[data-page=entorno]{background:var(--night,#26272b)!important}
 .selected-lot-action{border-top:1px solid #c4b697;margin-top:20px;padding-top:18px}
 .selected-lot-action a{display:flex;align-items:center;justify-content:center;min-height:46px;border-radius:6px;background:#483b28;color:white;text-decoration:none;font-weight:600}
 .selected-lot-action a:hover,.selected-lot-action a:focus-visible{background:#30271d;color:white}
+@media(max-width:700px){
+ .final-home .territory-intro-note{display:flex;flex-direction:column;gap:.65rem}
+ .final-home .territory-intro-note p{margin:0}
+}
+/* Mobile Home: keep decisions next to the surface they change. */
+.final-home .hero .enter-orbit.home-cta{left:auto;right:var(--gutter,6vw)}
+body.final-home.proposal-a #viviendas .home-cta{background:#30291f!important;color:#fffaf0!important;border-color:#30291f!important}
+body.final-home.proposal-a #viviendas .home-cta:hover{background:#50412d!important}
+.final-home #viviendas .home-selector button{position:relative;display:flex;flex-direction:column-reverse;align-items:flex-start;justify-content:center;gap:4px;padding-right:35px;text-align:left}
+.final-home #viviendas .home-selector button:after{content:"";position:absolute;right:12px;top:15px;width:12px;height:12px;border:1px solid currentColor;border-radius:50%}
+.final-home #viviendas .home-selector button[aria-pressed=true]:after{background:radial-gradient(circle,currentColor 40%,transparent 45%)}
+.final-home #viviendas .home-selector button span{font:400 clamp(24px,3vw,32px)/1.1 Italiana,Georgia,serif}
+.final-home #viviendas .home-selector button small{font-size:11px;line-height:1.3}
+.home-rotate-tip{position:absolute;left:50%;top:30%;transform:translateX(-50%);z-index:3;background:#30291fe8;color:white;border-radius:6px;padding:7px 12px;pointer-events:none;white-space:nowrap}
+.home-stage:has(#home-scene[hidden]) .home-rotate-tip,.home-rotate-tip[hidden]{display:none}
+.final-home #home-environment{background:#51432f!important;color:white!important}
+.final-home .territory-map-toolbar,.final-home .territory-map-toolbar [role=group]{background:#eee7d8;border-color:#bbae95}
+.final-home .leaflet-control-zoom a{text-decoration:none!important;border-bottom:0!important}
+.final-home .leaflet-control-zoom a span{text-decoration:none!important}
+.final-home .mobile-lot-controls[hidden]{display:none}
+@media(max-width:750px){
+ .final-home .hero .enter-orbit.home-cta{right:6vw;left:auto}
+ .final-home #viviendas .home-selector button{min-height:68px;padding:10px 29px 10px 12px}
+ .final-home .territory-map-toolbar{display:grid;justify-items:center;gap:8px;padding:10px}
+ .final-home .territory-map-toolbar [role=group]{display:flex;justify-content:center;flex-wrap:wrap;gap:4px;border:none;padding:0}
+ .final-home .territory-map-toolbar [role=group] button{min-height:44px;padding:6px 10px}
+ .final-home .destination-tabs{display:flex;overflow-x:auto;gap:6px;padding-bottom:5px}
+ .final-home .destination-tabs button{flex:0 0 auto;min-height:44px;padding:8px 12px}
+ .final-home .destination-tabs button>span,.final-home .destination-tabs button>b{display:none}
+ .final-home .destination-tabs button strong{font-size:14px}
+ .mobile-lot-controls{padding:12px 16px;background:#efe8d9;display:grid;gap:8px}
+ .mobile-lot-controls .integrated-lot-picker{margin:0}
+ .mobile-lot-controls .zone-state-heading{margin:4px 0 0}
+ .final-home #lot-explorer:not([data-selected-lot]) .mobile-lot-controls>:not(.integrated-lot-picker){display:none!important}
+ .final-home #lot-explorer.zone-expanded{display:block!important;height:100dvh;max-height:100dvh;overflow:auto;overscroll-behavior:contain}
+ .final-home #lot-explorer.zone-expanded .zone-top{position:sticky;top:0;z-index:12}
+ .final-home #lot-explorer.zone-expanded .zone-layout{display:block;height:auto!important;max-height:none!important;overflow:visible}
+ .final-home #lot-explorer.zone-expanded .zone-world{height:clamp(275px,52dvh,560px)!important}
+ .final-home #lot-explorer.zone-expanded #zone-expand{min-width:64px;min-height:44px;background:#fff6df;color:#342919}
+ .final-home #lot-explorer.zone-expanded #zone-expand span{display:inline!important}
+}
+.mobile-picker-caption{display:none}
+.mobile-lot-controls .mobile-picker-caption{display:block;margin:0 0 4px;font-weight:600}
+@media(max-width:750px){
+ .final-home #viviendas .view-switch{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));align-items:stretch;gap:4px}
+ .final-home #viviendas .view-switch [data-home-view]{grid-column:span 3}
+ .final-home #viviendas .view-switch button[id]{grid-column:span 2}
+ .final-home #viviendas .view-switch button[hidden]{display:none}
+}
+
+.site-drawer{position:fixed;inset:0 auto 0 0;margin:0;width:min(80vw,310px);max-width:none;height:100dvh;max-height:none;box-sizing:border-box;padding:20px;color:#292a2d;background:#f4efe4;border:0;border-radius:0!important}
+.site-drawer::backdrop{background:rgb(26 23 19 / .38)}
+.site-drawer .drawer-close{display:block;margin:0 0 18px auto;width:44px;height:44px;background:transparent;border:1px solid #bdb39f;border-radius:8px;font:26px/1 sans-serif;color:inherit}
+.site-drawer #final-links{display:grid;width:100%;gap:4px;margin:0}
+.site-drawer #final-links a{padding:14px;text-align:left;color:inherit}
+html:has(.site-drawer[open]){overflow:hidden}
+@media(max-width:520px){
+ .final-nav{grid-template-columns:auto auto 1fr;column-gap:12px;row-gap:4px;padding:8px 14px}
+ .final-nav .final-brand{justify-self:start}
+ .final-nav .final-fraga{grid-column:2;justify-self:start;padding-left:12px;width:84px}
+ .final-nav .final-menu{grid-column:1;grid-row:2;justify-self:start}
+ .final-nav .rpc-language-control{grid-column:2/-1;grid-row:2;justify-self:end;min-height:44px;border:0;padding:0;gap:0}
+ .final-nav .rpc-language-control select{width:auto;min-width:0;border:0;padding:0 4px;background:transparent;color:inherit;font:500 14px var(--sans)}
+ .final-nav .rpc-language-control select option{color:#292a2d}
+ .final-nav .rpc-language-control select:focus-visible{outline:none}
+}
+@media(max-width:900px){
+ .regional-tour{gap:10px}
+ #region-map{height:clamp(225px,56vw,320px)}
+ .regional-tour .regional-map-note{margin-bottom:0}
+ .regional-tour .c-destination>div{order:-1;padding:18px!important}
+ .regional-tour .c-destination h2{margin-bottom:8px}
+}
+.region-detail-jump{display:block;padding:12px 0 2px;color:#503e21;font-weight:600;text-decoration:underline;text-underline-offset:3px}
+@media(min-width:901px){.region-detail-jump{display:none}}
+.final-housing .studio-tabs button[data-studio-house]{flex:0 1 180px;min-width:0;text-align:left;background:transparent!important;color:#363028!important;border:0;border-radius:0!important;border-bottom:3px solid transparent;padding:10px 14px;transition:none;transform:none}
+.final-housing .studio-tabs button[data-studio-house][aria-pressed=true]{background:#f5efe3!important;border-bottom-color:#70572f}
+.final-housing .studio-object>.studio-views{display:flex;flex-wrap:wrap;gap:5px;margin:0;padding:12px;background:#f5efe3}
+.final-housing .studio-object>.studio-views legend{float:left;width:100%;margin:0;padding-bottom:4px}
+.final-housing .studio-views button{transition:none;transform:none}
+.final-housing .plan-section{grid-template-columns:minmax(0,1fr);gap:18px;padding:clamp(12px,3vw,36px)}
+.final-housing .floorplan-preview{display:block;position:relative;background:white}
+.final-housing .floorplan-preview img{display:block;width:100%;height:auto;max-height:75vh;object-fit:contain}
+.final-housing .plan-expand{position:absolute;top:8px;right:8px;display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:6px;background:#382f24;color:white;font:600 14px/1.4 var(--sans)}
+.final-housing .plan-section>div{max-width:68ch}
+.final-housing .plan-section p{margin-block:8px}
+@media(max-width:650px){
+ .final-housing .studio-object{order:-1;width:100%}
+ .final-housing .studio-object>.studio-views{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+ .final-housing .studio-views button{padding:7px 9px;text-align:left}
+ .final-housing .floorplan-preview img{max-height:none}
+}
+.final-detail .contact-image img[src*="/utah/poster"]{aspect-ratio:16/10;object-fit:contain;background:#e7e0d3}
+
+/* The finish photograph and its toolbar each take their own row. */
+.final-home #viviendas .home-stage:has(#home-poster:not([hidden])){
+ height:auto;min-height:0;display:flex;flex-direction:column;background:#f6efe3
+}
+.final-home #viviendas #home-poster:not([hidden]),
+.final-housing .studio-object img.studio-still:not([hidden]),
+.final-housing .interiors img{
+ position:static;display:block;width:100%;height:auto;max-height:none;object-fit:contain;flex:none
+}
+.final-home #viviendas .home-stage:has(#home-poster:not([hidden])) .view-switch{
+ position:static;align-self:stretch;max-width:none;margin:0
+}
+.finish-expand{align-self:flex-end;display:inline-flex;align-items:center;gap:6px;margin:6px 10px;padding:8px 12px;min-height:44px;box-sizing:border-box;color:#fff;background:#534329;border-radius:6px;text-decoration:none;font:600 15px/1.3 var(--sans)}
+.finish-expand[hidden],#home-poster[hidden]+.finish-expand{display:none}
+.final-home .home-stage:has(#home-poster:not([hidden])) .home-instruction{display:none}
+
+.final-home #entorno button[data-destination]{position:relative;padding-left:2.35rem}
+.final-home #entorno button[data-destination]::before{content:"";position:absolute;left:.75rem;top:50%;transform:translateY(-50%);width:.95rem;height:.95rem;border:1.5px solid currentColor;border-radius:50%;box-sizing:border-box}
+.final-home #entorno button[data-destination][aria-pressed=true]::before{background:radial-gradient(circle,currentColor 0 38%,transparent 42%)}
+body.final-home.proposal-a #contacto footer{margin-top:1.5rem;padding-block:1.5rem}
+.final-home #contacto .contact-layout{padding-bottom:0;margin-bottom:0}
+.final-home .project-introduction .intro-secondary{max-width:60ch;margin-block:.85rem}
+@media (min-width:521px) and (max-width:1100px){
+ .final-nav .final-menu{order:-1}
+}
+@media (max-width:520px){
+ .final-nav{grid-template-columns:auto minmax(0,1fr) auto;column-gap:10px}
+ .final-nav .final-menu{grid-column:1;grid-row:1/3;align-self:center;order:0;margin:0}
+ .final-nav .final-brand{grid-column:2;grid-row:1}
+ .final-nav .final-fraga{grid-column:2;grid-row:2;width:76px;height:25px;border:0;padding:0}
+ .final-nav .rpc-language-control{grid-column:3;grid-row:1/3;align-self:center}
+}
+@media(prefers-reduced-motion:no-preference){
+ .site-drawer[open]{animation:drawer-enter .2s ease-out}
+ @keyframes drawer-enter{from{transform:translateX(-100%)}to{transform:translateX(0)}}
+}

@@ -98,3 +98,7 @@
 .zone-poi svg .poi-horse-silhouette,.zone-poi-key svg .poi-horse-silhouette{fill:currentColor;stroke:none}
 #lot-explorer .zone-poi>span{margin-left:6px}
 @media(max-width:600px){#lot-explorer .zone-regional-label.zone-poi{width:36px!important;height:36px!important;min-width:36px!important;min-height:36px!important;max-width:36px!important;padding:5px!important}}
+#zone-pins > [hidden]{display:none!important}
+.zone-cluster-choices{position:absolute;z-index:5;inset:auto 8px 48px;display:flex;align-items:center;gap:6px;overflow-x:auto;width:max-content;max-width:calc(100% - 16px);margin:auto;padding:6px;background:#fff9ec;border-radius:8px;box-shadow:0 2px 12px #0004;pointer-events:auto}
+.zone-cluster-choices button{flex:none;min-height:44px;padding:0 12px;border:1px solid #8d7851;border-radius:5px;background:#fff9ec;color:#403822;cursor:pointer}
+.zone-cluster-choices button[aria-pressed=true]{background:#dec389}
