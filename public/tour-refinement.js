@@ -8,7 +8,7 @@
   if(node.nodeType===3){if(/[↗↖⤴]/.test(node.data))node.data=node.data.replace(/[↗↖⤴]/g,'').trimEnd();return;}
   if(node.nodeType!==1||node.matches('script,style,canvas,svg'))return;
   [...node.childNodes].forEach(clean);
-  if(node.matches('a,button')&&!node.textContent.trim()&&node.getAttribute('aria-label'))node.append(document.createTextNode(node.getAttribute('aria-label')));
+  if(node.matches('a,button')&&!node.matches('.photo-arrow')&&!node.textContent.trim()&&node.getAttribute('aria-label'))node.append(document.createTextNode(node.getAttribute('aria-label')));
  }
  clean(document.body);
  new MutationObserver(records=>records.forEach(r=>r.type==='characterData'?clean(r.target):r.addedNodes.forEach(clean))).observe(document.body,{subtree:true,childList:true,characterData:true});
@@ -25,6 +25,23 @@
   fetch('/assets/geography/collection-lots.json').then(r=>r.json()).then(data=>{data.lots.forEach(l=>$('#guided-lot').add(new Option('Lote '+String(l.pinIndex).padStart(2,'0')+' · '+l.front.nearestStreet,l.id)));if(pendingLot)pickLot(pendingLot);}).catch(()=>{});
   $('#guided-lot').addEventListener('change',e=>{if(e.target.value)pickLot(e.target.value);else $('#zone-overview')?.click();});
   document.addEventListener('rpc:lot',event=>{const id='RP-'+String(event.detail).padStart(2,'0');$('#guided-lot').value=id;if(parent!==window)parent.postMessage({type:'parcel-selected',lot:id},location.origin);});
+  if(!embed){
+   const row=document.createElement('div');
+   row.className='selected-lot-action';
+   const link=document.createElement('a');
+   link.dataset.noTranslate='';
+   row.append(link);
+   zone.querySelector('#zone-details').append(row);
+   function updateLink(){
+    const language=window.rpcI18n?.language||'en';
+    const number=String(zone.dataset.selectedLot||'').padStart(2,'0');
+    link.textContent=({en:'View this lot',es:'Ver este lote',pt:'Ver este lote'})[language];
+    link.href='/proyecto/lotes/?'+new URLSearchParams({lang:language,lot:'RP-'+number});
+   }
+   updateLink();
+   document.addEventListener('rpc:lot',updateLink);
+   document.addEventListener('rpc:language',updateLink);
+  }
   const watch=new MutationObserver(()=>{if(pendingLot){const n=pendingLot;pendingLot=null;pickLot(n);}});watch.observe($('#zone-list'),{childList:true});
   addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==parent)return;if(e.data?.type==='rainbow-lot')pickLot(e.data.lot);});
  }
@@ -93,24 +110,23 @@
  }
 })();
 
-// Demonstration inventory only; values must be replaced by confirmed commercial data.
+// Availability supplied for the current collection.
 (()=>{
- const status=n=>n<=5?'Disponible':n<=7?'Reservado':'Vendido';
+ const status=n=>n<=6?'Disponible':'Reservado';
  const translate=s=>window.rpcI18n?.t(s)||s;
  function refresh(){
   document.querySelectorAll('#guided-lot,#c-lot').forEach(select=>{
    for(const option of select.options){const n=Number(option.value.replace('RP-',''));if(!n)continue;
     if(!option.dataset.baseLabel)option.dataset.baseLabel=option.textContent.split(' · '+translate('Disponible'))[0];
-    const street=option.dataset.baseLabel.split(' · ').slice(1).join(' · ');const text=String(n).padStart(2,'0')+' — '+translate(status(n))+' · '+street+' ('+translate('Ejemplo')+')';if(option.textContent!==text)option.textContent=text;
+    const street=option.dataset.baseLabel.split(' · ').slice(1).join(' · ');const text=String(n).padStart(2,'0')+' — '+translate(status(n))+' · '+street;if(option.textContent!==text)option.textContent=text;
    }
-   let note=select.parentElement.querySelector('.availability-note');if(!note){note=document.createElement('p');note.className='availability-note';select.after(note)}
-   const text=translate('Estados de ejemplo · Pendientes de confirmación');if(note.textContent!==text)note.textContent=text;
+
   });
-  document.querySelectorAll('[data-zone-lot]').forEach(button=>{const n=Number(button.dataset.zoneLot);if(!n)return;button.dataset.availability=n<=5?'available':n<=7?'reserved':'sold';button.title=translate('Lote')+' '+n+' · '+translate(status(n))+' ('+translate('Ejemplo')+')';});
+  document.querySelectorAll('[data-zone-lot]').forEach(button=>{const n=Number(button.dataset.zoneLot);if(!n)return;button.dataset.availability=n<=6?'available':'reserved';button.title=translate('Lote')+' '+n+' · '+translate(status(n));});
   document.querySelectorAll('#zone-title,#c-lot-title').forEach(title=>{
    const raw=title.id==='c-lot-title'?document.querySelector('#c-lot')?.value:document.querySelector('#lot-explorer')?.dataset.selectedLot;
    const n=Number(String(raw||'').replace('RP-',''));let badge=title.parentElement.querySelector('.availability-badge');if(!badge){badge=document.createElement('span');badge.className='availability-badge';title.after(badge)}
-   badge.hidden=!n;if(n){badge.dataset.availability=n<=5?'available':n<=7?'reserved':'sold';const text=translate(status(n))+' · '+translate('Ejemplo');if(badge.textContent!==text)badge.textContent=text;}
+   badge.hidden=!n;if(n){badge.dataset.availability=n<=6?'available':'reserved';const text=translate(status(n))+' · '+translate('Ejemplo');if(badge.textContent!==text)badge.textContent=text;}
   });
   const north=document.querySelector('#zone-north small');if(north&&north.textContent!==translate('Norte'))north.textContent=translate('Norte');
  }

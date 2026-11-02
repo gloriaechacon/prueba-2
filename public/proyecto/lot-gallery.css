@@ -1,0 +1,25 @@
+#lot-gallery{margin:clamp(2rem,5vw,5rem) auto 2rem;color:#30291f}
+#lot-gallery[hidden]{display:none}
+#lot-gallery header,#lot-gallery footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+#lot-gallery h2{font:400 clamp(2rem,4vw,3.5rem)/1.1 Italiana,Georgia,serif;margin:.25em 0}
+#lot-gallery small{letter-spacing:.09em;text-transform:uppercase}
+.media-tabs,.media-thumbs{display:flex;gap:.5rem}
+#lot-gallery button{cursor:pointer;border:1px solid #a7987a;border-radius:6px;color:#30291f;background:#f7f3ea;font:inherit}
+.media-tabs button{min-height:44px;padding:.5rem 1rem}
+#lot-gallery button[aria-pressed=true]{background:#57472e;color:white}
+.media-stage{margin:1rem 0;position:relative;width:100%;height:clamp(240px,48vw,640px);overflow:hidden;border-radius:12px;background:#232622}
+.media-stage>img{width:100%;height:100%;object-fit:contain}
+#lot-gallery .photo-arrow{position:absolute;top:50%;transform:translateY(-50%);display:grid;place-items:center;width:46px;height:46px;padding:0;border:1px solid #ffffff85;border-radius:50%;background:#25282ce6;color:white}
+.photo-arrow.previous{left:clamp(8px,2%,24px)}
+.photo-arrow.next{right:clamp(8px,2%,24px)}
+.photo-arrow::before{content:"";width:10px;height:10px;border:solid currentColor;border-width:2px 2px 0 0;transform:rotate(45deg)}
+.photo-arrow.previous::before{transform:rotate(-135deg)}
+#lot-gallery .photo-arrow:hover,#lot-gallery .photo-arrow:focus-visible{background:#f4e9cf;color:#30291f}
+.media-stage[tabindex]{--lens:clamp(230px,45vw,680px);perspective:var(--lens);touch-action:none;cursor:grab}
+.media-stage:active{cursor:grabbing}
+.pano-cube{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d}
+.pano-cube img{position:absolute;max-width:none;width:1001px;height:1001px;left:-500.5px;top:-500.5px;user-select:none;pointer-events:none}
+.media-thumbs{overflow-x:auto;padding:.5rem 2px}
+.media-thumbs button{padding:3px;flex:0 0 84px}
+.media-thumbs img{width:100%;height:48px;display:block;object-fit:cover;border-radius:3px}
+#lot-gallery footer{margin-bottom:.5rem}

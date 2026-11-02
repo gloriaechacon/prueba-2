@@ -29,7 +29,28 @@ host.innerHTML=`<div class="plot-study"><svg id="study-svg" viewBox="${bounds.mi
 const draw=()=>{const h=$('#study-house').value,fp=meta[h].geometry_footprint;let contours=fp?.contours_xz;if(!contours){const b=meta[h].footprint_m;contours=[[[-b.width/2,-b.max_depth_with_front_porch/2],[b.width/2,-b.max_depth_with_front_porch/2],[b.width/2,b.max_depth_with_front_porch/2],[-b.width/2,b.max_depth_with_front_porch/2]]]};const all=contours.flat(),cx=(Math.min(...all.map(p=>p[0]))+Math.max(...all.map(p=>p[0])))/2,cy=(Math.min(...all.map(p=>p[1]))+Math.max(...all.map(p=>p[1])))/2;$('#footprint').innerHTML=contours.map(c=>`<polygon points="${c.map(p=>`${p[0]-cx},${p[1]-cy}`).join(' ')}" fill="#1649a2aa" stroke="#1649a2" stroke-width=".25"/>`).join('');$('#footprint').setAttribute('transform',`rotate(${$('#rotation').value})`)};$('#study-house').onchange=draw;$('#rotation').oninput=draw;draw()}
 function houses(){houseStudio(main,{inlineDetails:true,catalog,saved,addHouse,openHouse,currentHouse,mountViewer:mountStudioViewer,closeDetail:()=>{routeToken++;dispose3d?.();dispose3d=null;$('#house-detail').innerHTML=''}})}
 async function openHouse(id){currentHouse=id;const h=catalog[id];$('#house-detail').innerHTML=`<section class="model-area"><div class="model-heading"><h3>Conocer ${h.name} por dentro y por fuera.</h3></div><div class="plan-section"><a href="recursos/${id}/${h.plan}" target="_blank" rel="noopener"><img src="recursos/${id}/${h.plan}" alt="Plano arquitectónico de ${h.name}, abrir para ampliar"></a><div><h3>Lee la distribución.</h3><p>${id==='utah'?'El estudio/anexo aparece separado del área principal y dispone de su propio baño. No se presenta como un cuarto dormitorio confirmado.':'La zona común conecta cocina, comedor y sala; los tres dormitorios se distribuyen a ambos lados.'}</p><div class="actions"><a class="button secondary" href="recursos/${id}/${h.pdf}" target="_blank" rel="noopener">Abrir plano PDF</a></div><p class="small muted" style="margin-top:20px">Puedes explorar el modelo 3D en la vista principal y consultar aquí los planos originales.</p></div></div><div id="model-stage"></div></section>${id==='utah'?'<div class="interiors"><figure><img loading="lazy" src="recursos/utah/cocina-concepto.png" alt="Propuesta conceptual de cocina Utah"><figcaption>Cocina Utah: imagen conceptual, no fotografía de una vivienda construida.</figcaption></figure><figure><img loading="lazy" src="recursos/utah/acabados-concepto.png" alt="Propuesta conceptual de acabados Utah"><figcaption>Acabados propuestos. Consultar su correspondencia con la solución final.</figcaption></figure></div>':'<p class="notice">No se suministró una colección fotográfica real de interiores Bell. El plano y el modelo permiten estudiar su distribución; los acabados son propuestos.</p>'}`;}
+function studioViews(id, host) {
+ document.querySelector('.studio-views')?.remove();
+ document.querySelector('.studio-still')?.remove();
+ const model=catalog[id];
+ const choices=[['model','Modelo 3D'],...(id==='utah'?[['image','Concepto de acabados']]:[]),['cutaway','Distribución 3D'],['plan','Planta']];
+ const group=document.createElement('fieldset');group.className='studio-views';
+ const legend=document.createElement('legend');legend.textContent='Vista de la vivienda';group.append(legend);
+ const photo=document.createElement('img');photo.className='studio-still';photo.hidden=true;host.after(photo);
+ const controls=$('.studio-controls');let viewer=null, current='model';
+ function select(view){
+  current=view;const staticView=view==='image'||view==='plan';
+  host.hidden=staticView;photo.hidden=!staticView;controls.hidden=staticView;$('#studio-gesture').hidden=staticView;
+  if(staticView){photo.src=view==='image'?'recursos/utah/acabados-concepto.png':`recursos/${id}/${model.plan}`;photo.alt=(view==='image'?'Concepto de acabados':'Plano arquitectónico')+' · '+model.name;}
+  if(viewer&&!staticView){const open=view==='cutaway';viewer.roof(!open);viewer.camera(open?'above':'front');const roof=$('#studio-roof');roof.setAttribute('aria-pressed',String(open));roof.textContent=open?'Mostrar cubierta':'Ocultar cubierta';}
+  for(const b of group.querySelectorAll('button'))b.setAttribute('aria-pressed',String(b.dataset.view===view));
+ }
+ for(const [key,label] of choices){const b=document.createElement('button');b.type='button';b.textContent=label;b.dataset.view=key;b.onclick=()=>select(key);group.append(b);}
+ $('.studio-caption').append(group);select('model');
+ return ready=>{viewer=ready;select(current)};
+}
 async function mountStudioViewer(id,host){
+ const attachViews=studioViews(id,host);
  const token=++routeToken;currentHouse=id;dispose3d?.();dispose3d=null;
  try{
   const {createViewer}=await import('/proyecto/viewer.js');
@@ -39,6 +60,7 @@ async function mountStudioViewer(id,host){
   dispose3d=viewer.dispose;host.setAttribute('aria-busy','false');
   $$('[data-studio-camera]').forEach(b=>{b.disabled=false;b.onclick=()=>viewer.camera(b.dataset.studioCamera)});
   const roof=$('#studio-roof');roof.disabled=false;roof.onclick=()=>{const hidden=roof.getAttribute('aria-pressed')!=='true';viewer.roof(!hidden);roof.setAttribute('aria-pressed',String(hidden));roof.textContent=hidden?'Mostrar cubierta':'Ocultar cubierta'};
+  attachViews(viewer);
  }catch(e){
   if(token!==routeToken||!host.isConnected)return;
   host.setAttribute('aria-busy','false');host.innerHTML=`<div class="studio-error"><p>No se pudo mostrar el modelo 3D.</p><button id="retry-studio">Reintentar</button><a href="recursos/${id}/${catalog[id].pdf}" target="_blank" rel="noopener">Consultar plano PDF</a></div>`;

@@ -291,11 +291,11 @@ body.final-home #inversion .investment-evidence-copy>p{font:400 14px/1.6 var(--s
 /* Clear chapter contrast and a compact home-only lot preview. */
 body.final-home{--radius-control:6px}
 body.final-home.proposal-a .home-cta{border-radius:6px!important}
-body.final-home.proposal-a #viviendas{background:#292d32!important;color:#f5efe3!important}
-body.final-home.proposal-a #viviendas .showroom{background:#343a40!important;color:#f5efe3!important}
-body.final-home.proposal-a #viviendas :is(.home-heading h2,.home-heading p,.home-specs strong,.home-specs small,.home-note,.home-note a){color:#f5efe3!important}
-body.final-home.proposal-a #viviendas .home-selector button{background:#343a40!important;color:#f5efe3!important;border-color:#777b7d!important}
-body.final-home.proposal-a #viviendas .home-selector button[aria-pressed=true]{background:#d2b77e!important;color:#292a2d!important}
+body.final-home.proposal-a #viviendas{background:#c5aa77!important;color:#30291f!important}
+body.final-home.proposal-a #viviendas .showroom{background:#deca9f!important;color:#30291f!important}
+body.final-home.proposal-a #viviendas :is(.home-heading h2,.home-heading p,.home-specs strong,.home-specs small,.home-note,.home-note a){color:#30291f!important}
+body.final-home.proposal-a #viviendas .home-selector button{background:#f5ebd8!important;color:#30291f!important;border-color:#a48a5e!important}
+body.final-home.proposal-a #viviendas .home-selector button[aria-pressed=true]{background:#685333!important;color:#fffaf1!important}
 body.final-home.proposal-a #viviendas .home-selector button small{color:inherit!important}
 .final-home #lot-explorer .zone-world{position:relative!important;top:auto!important;height:520px!important;min-height:0!important}
 .final-home #lot-explorer .zone-layout{min-height:0!important;align-items:stretch}
@@ -321,8 +321,9 @@ body.final-home.proposal-a #viviendas .home-selector button small{color:inherit!
 .final-home #lot-explorer .zone-measures{margin:8px 0;padding:12px 0}
 .final-home #lot-explorer .zone-world{height:620px!important}
 body.final-home.proposal-a #viviendas .home-selector{background:none!important;border:0!important;box-shadow:none!important}
-body.final-home.proposal-a #contacto{background:#f2ebde!important;color:#292a2d!important;padding-bottom:0}
-body.final-home.proposal-a #contacto .contact-layout :is(h2,h2 em,p){color:#292a2d!important}
+body.final-home.proposal-a #contacto{background:#25282c!important;color:#f4efe4!important;padding-bottom:0}
+body.final-home.proposal-a #contacto .contact-layout>div:first-child :is(h2,p){color:#f4efe4!important}
+body.final-home.proposal-a #contacto .contact-layout h2 em{color:#d2b77e!important}
 body.final-home.proposal-a #contacto .consultation{background:#e6d8bc!important;border:1px solid #c1ae88!important;color:#292a2d!important}
 body.final-home.proposal-a #contacto footer{background:#25282c!important;color:#f4efe4!important;margin:64px -6vw 0;padding:40px 6vw;border:0}
 body.final-home.proposal-a #contacto footer :is(a,button,span,em){color:#f4efe4!important}
@@ -331,3 +332,39 @@ body.final-home.proposal-a #contacto footer :is(a,button,span,em){color:#f4efe4!
 /* Surroundings uses one uninterrupted dark canvas across the viewport. */
 body.final-detail[data-page=entorno]{background:var(--night,#26272b)!important}
 
+
+.final-home #lot-explorer .final-map-toolbar .zone-modes {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  gap: 6px;
+}
+.final-home #lot-explorer .zone-modes button { transition: background-color .2s ease, color .2s ease; }
+.final-home #entorno .territory-explorer {
+  gap: clamp(16px, 2vw, 30px);
+  background: transparent;
+  border: 0;
+}
+.final-home #entorno .territory-map-wrap,
+.final-home #entorno .destination-story {
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+.final-home #viviendas .view-switch { gap: 5px; padding: 6px; background: #f6efdf; border-radius: 8px; }
+.final-home #viviendas .view-switch button, .final-housing .studio-views button {
+  background: #fffaf0 !important; color: #30291f !important; border: 1px solid #a18b68 !important;
+  min-height: 44px; padding: 8px 13px; font: 600 15px/1.35 var(--sans) !important;
+}
+.final-home #viviendas .view-switch button[aria-pressed=true], .final-housing .studio-views button[aria-pressed=true] { background: #645033 !important; color: white !important; }
+.final-home #viviendas .view-switch button:focus-visible,.final-housing .studio-views button:focus-visible { outline: 3px solid #8b661d; outline-offset: 2px; }
+.studio-views { display: grid; gap: 6px; border: 0; padding: 0; margin: 24px 0 0; min-width: 0; }
+.studio-views legend { font: 600 16px/1.4 var(--sans); padding: 0 0 8px; }
+.studio-views button { text-align: left; }
+.studio-still { display: block; width: 100%; height: clamp(280px,42vw,520px); object-fit: contain; background: #fcfaf4; }
+.final-housing .studio-object [hidden] { display: none !important; }
+@media(max-width:750px){.studio-views{grid-template-columns:repeat(2,minmax(0,1fr))}.final-home #viviendas .view-switch{position:static;max-width:none;justify-content:flex-start}.final-home #viviendas .home-stage{padding-bottom:0;display:flex;flex-direction:column;justify-content:flex-end}.final-home #viviendas .view-switch{z-index:5}.final-home #viviendas .home-instruction{display:none}}
+.selected-lot-action{border-top:1px solid #c4b697;margin-top:20px;padding-top:18px}
+.selected-lot-action a{display:flex;align-items:center;justify-content:center;min-height:46px;border-radius:6px;background:#483b28;color:white;text-decoration:none;font-weight:600}
+.selected-lot-action a:hover,.selected-lot-action a:focus-visible{background:#30271d;color:white}
