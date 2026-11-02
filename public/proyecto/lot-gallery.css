@@ -17,6 +17,11 @@
 #lot-gallery .photo-arrow:hover,#lot-gallery .photo-arrow:focus-visible{background:#f4e9cf;color:#30291f}
 .media-stage[tabindex]{--lens:clamp(230px,45vw,680px);perspective:var(--lens);touch-action:none;cursor:grab}
 .media-stage:active{cursor:grabbing}
+.panorama-frame{position:relative;margin:1rem 0}
+.panorama-frame .media-stage{margin:0}
+.panorama-hint{position:absolute;bottom:1rem;left:50%;transform:translateX(-50%);max-width:95%;width:max-content;padding:.55rem .9rem;border-radius:6px;background:#25282cf2;color:white;font-weight:600;pointer-events:none;transition:opacity .25s}
+.panorama-explored .panorama-hint{opacity:0}
+@media(prefers-reduced-motion:reduce){.panorama-hint{transition:none}}
 .pano-cube{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d}
 .pano-cube img{position:absolute;max-width:none;width:1001px;height:1001px;left:-500.5px;top:-500.5px;user-select:none;pointer-events:none}
 .media-thumbs{overflow-x:auto;padding:.5rem 2px}

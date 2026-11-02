@@ -31,7 +31,27 @@ function render(){
    stage.append(arrow);
   });
  }
- if(type==='360'){stage.tabIndex=0;stage.setAttribute('aria-label',label+' · '+name+'. '+t[4]);panorama(stage,source);panel.querySelector('footer span').textContent=t[4]}
+ if(type==='360'){
+  stage.tabIndex=0;
+  stage.setAttribute('aria-label',label+' · '+name+'. '+t[4]);
+  panorama(stage,source);
+  const instructions={
+   en:['Drag to explore','Swipe to explore'],
+   es:['Arrastra para explorar','Desliza para explorar'],
+   pt:['Arraste para explorar','Deslize para explorar']
+  };
+  const wording=instructions[window.rpcI18n?.language]||instructions.en;
+  const hint=document.createElement('span');
+  hint.className='panorama-hint';
+  hint.dataset.noTranslate='';
+  hint.setAttribute('aria-hidden','true');
+  hint.textContent='↔  '+wording[matchMedia('(pointer: coarse)').matches?1:0]+' · 360°';
+  const frame=document.createElement('div');
+  frame.className='panorama-frame';
+  stage.before(frame);
+  frame.append(stage,hint);
+  panel.querySelector('footer span').textContent=t[4];
+ }
  list.forEach((it,i)=>{const b=button(panel.querySelector('.media-thumbs'),'',i===index,()=>{index=i;render();panel.querySelector('.media-thumbs [aria-pressed=true]').focus({preventScroll:true})});b.setAttribute('aria-label',(type==='photo'?t[5]:'360°')+' '+(i+1));const img=new Image();img.alt='';img.loading='lazy';img.src=base+it.file.replace('.jpg','-thumb.jpg');b.append(img)});
 }
 // A perspective cube gives touch, mouse and keyboard users a full spherical view without a second WebGL context.
@@ -39,7 +59,7 @@ function panorama(stage,src){
  const cube=document.createElement('div');cube.className='pano-cube';stage.append(cube);
  ['','rotateY(-90deg)','rotateY(180deg)','rotateY(90deg)','rotateX(-90deg)','rotateX(90deg)'].forEach((r,i)=>{const img=new Image();img.alt='';img.draggable=false;img.src=src.replace('.jpg','-'+i+'.jpg');img.style.transform=r+' translateZ(-500px)';cube.append(img)});
  let yaw=0,pitch=0,drag=null;
- function draw(){pitch=Math.max(-89,Math.min(89,pitch));cube.style.transform='translateZ(var(--lens)) rotateX('+pitch+'deg) rotateY('+yaw+'deg)'}
+ function draw(){pitch=Math.max(-89,Math.min(89,pitch));cube.style.transform='translateZ(var(--lens)) rotateX('+pitch+'deg) rotateY('+yaw+'deg)';if(yaw||pitch)stage.parentElement.classList.add('panorama-explored')}
  draw();stage.onpointerdown=e=>{drag=[e.clientX,e.clientY];stage.setPointerCapture(e.pointerId)};
  stage.onpointermove=e=>{if(!drag)return;yaw-=(e.clientX-drag[0])*.16;pitch+=(e.clientY-drag[1])*.16;drag=[e.clientX,e.clientY];draw()};
  stage.onlostpointercapture=()=>{drag=null};
