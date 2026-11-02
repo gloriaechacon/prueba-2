@@ -14,7 +14,7 @@ for p in sorted(src.rglob('*.jpg')):
     kind='vertical' if h>=w else '360' if n in [92,93,97,102,106] else 'photo'
     dest=out/key; dest.mkdir(exist_ok=True); stem=p.stem
     rows.append([key,p.name,w,h,kind])
-    if kind=='vertical': continue
+    if kind=='vertical' or (lot,n) in {(1,4),(1,5),(2,9),(2,1384),(5,3295)}: continue
     item=dict(type=kind,file=f'{key}/{stem}.jpg'); items.append(item)
     if kind=='360':
         assert w==2*h
