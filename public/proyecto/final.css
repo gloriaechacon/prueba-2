@@ -287,3 +287,47 @@ body.final-home #inversion .investment-evidence-copy{display:block}
 body.final-home #inversion .investment-evidence-copy>p{font:400 14px/1.6 var(--sans);color:#514a40;margin-top:20px;max-width:65ch;grid-column:auto}
 @media(max-width:700px){body.final-home.proposal-a #inversion .home-investment-evidence{grid-template-columns:1fr}.home-investment-evidence figure img{height:230px}.final-home .contact-layout>.home-cta-row{grid-column:1}.final-home .home-cta-row{margin-top:24px}body.final-home.proposal-a .home-cta{font-size:15px;padding:14px 20px!important}}
 @media(prefers-reduced-motion:reduce){body.final-home.proposal-a .home-cta{transition:none}body.final-home.proposal-a .home-cta:hover{transform:none}}
+
+/* Clear chapter contrast and a compact home-only lot preview. */
+body.final-home{--radius-control:6px}
+body.final-home.proposal-a .home-cta{border-radius:6px!important}
+body.final-home.proposal-a #viviendas{background:#292d32!important;color:#f5efe3!important}
+body.final-home.proposal-a #viviendas .showroom{background:#343a40!important;color:#f5efe3!important}
+body.final-home.proposal-a #viviendas :is(.home-heading h2,.home-heading p,.home-specs strong,.home-specs small,.home-note,.home-note a){color:#f5efe3!important}
+body.final-home.proposal-a #viviendas .home-selector button{background:#343a40!important;color:#f5efe3!important;border-color:#777b7d!important}
+body.final-home.proposal-a #viviendas .home-selector button[aria-pressed=true]{background:#d2b77e!important;color:#292a2d!important}
+body.final-home.proposal-a #viviendas .home-selector button small{color:inherit!important}
+.final-home #lot-explorer .zone-world{position:relative!important;top:auto!important;height:520px!important;min-height:0!important}
+.final-home #lot-explorer .zone-layout{min-height:0!important;align-items:stretch}
+.final-home #lot-explorer .zone-panel{padding:22px!important;max-height:none!important;overflow:visible!important}
+.final-home #lot-explorer :is(.zone-parcel-meta,#zone-parcel-note,#zone-state-note,#zone-occupation,.zone-next,.zone-truth,.zone-tour-link,#zone-focus,.zone-lot-list){display:none!important}
+.final-home #lot-explorer .zone-panel-title h3{margin:0 0 10px;font-size:32px}
+.final-home #lot-explorer .zone-measures{padding:16px 0;margin:14px 0}
+.final-home #lot-explorer .zone-state-heading{margin-top:20px}
+.final-home .parcel-guide{grid-template-columns:1fr 1fr;padding:22px;margin-bottom:18px}
+.final-home .parcel-guide ol{display:none}
+.final-home #lot-explorer .zone-bottom{padding:10px 20px}
+@media(max-width:750px){.final-home #lot-explorer .zone-world{height:380px!important}.final-home .parcel-guide{grid-template-columns:1fr}.final-home #lot-explorer .zone-panel{padding:20px!important}}
+
+/* The lot picker belongs to the map, not a separate introductory card. */
+.final-home #lot-explorer .zone-landscape{display:none!important}
+.final-home #lot-explorer .zone-panel>.eyebrow{display:block;font:600 16px/1.4 var(--sans);letter-spacing:0;margin:0 0 10px}
+.integrated-lot-picker{display:block;margin-bottom:20px}
+.integrated-lot-picker select{box-sizing:border-box;width:100%;min-height:48px;padding:10px;font:400 14px/1.4 var(--sans);color:#292a2d;background:#fffaf0;border:1px solid #ad9e81}
+.integrated-lot-picker .availability-note{font-size:12px;margin:8px 0}
+.final-home #lot-explorer #zone-description{margin:12px 0}
+.final-home #lot-explorer .zone-panel-title h3{font-size:28px}
+.final-home #lot-explorer .zone-panel-title>span{display:none}
+.final-home #lot-explorer .zone-measures{margin:8px 0;padding:12px 0}
+.final-home #lot-explorer .zone-world{height:620px!important}
+body.final-home.proposal-a #viviendas .home-selector{background:none!important;border:0!important;box-shadow:none!important}
+body.final-home.proposal-a #contacto{background:#f2ebde!important;color:#292a2d!important;padding-bottom:0}
+body.final-home.proposal-a #contacto .contact-layout :is(h2,h2 em,p){color:#292a2d!important}
+body.final-home.proposal-a #contacto .consultation{background:#e6d8bc!important;border:1px solid #c1ae88!important;color:#292a2d!important}
+body.final-home.proposal-a #contacto footer{background:#25282c!important;color:#f4efe4!important;margin:64px -6vw 0;padding:40px 6vw;border:0}
+body.final-home.proposal-a #contacto footer :is(a,button,span,em){color:#f4efe4!important}
+@media(max-width:750px){.final-home #lot-explorer .zone-world{height:380px!important}.final-home #lot-explorer .zone-panel{padding:20px!important}}
+
+/* Surroundings uses one uninterrupted dark canvas across the viewport. */
+body.final-detail[data-page=entorno]{background:var(--night,#26272b)!important}
+

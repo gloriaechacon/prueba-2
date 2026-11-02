@@ -47,6 +47,14 @@
   const buttons=document.querySelectorAll('.home-cta');
   const active=new IntersectionObserver(entries=>entries.forEach(e=>e.target.classList.toggle('cta-visible',e.isIntersecting)),{threshold:.8});buttons.forEach(b=>active.observe(b));
  }
+ if(home){
+  const guide=document.querySelector('.parcel-guide');
+  const picker=guide?.querySelector('label');
+  const panel=document.querySelector('#lot-explorer .zone-panel');
+  if(picker&&panel){picker.className='integrated-lot-picker';panel.querySelector('.eyebrow')?.after(picker);picker.firstChild.textContent='';picker.querySelector('select').setAttribute('aria-label','Choose a lot');guide.remove();}
+ }
+ const houseChoice=document.querySelector('#zone-house-choice');
+ if(houseChoice){const title=document.createElement('strong');title.className='house-choice-title';title.textContent='Choose a home';houseChoice.prepend(title);}
  // Give the aerial explorer its own toolbar instead of layering controls over the terrain.
  if(home){const explorer=document.querySelector('#lot-explorer');if(explorer){
   const toolbar=document.createElement('div');toolbar.className='final-map-toolbar';toolbar.setAttribute('aria-label','Controles del mapa');
