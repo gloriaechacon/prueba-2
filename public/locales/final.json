@@ -1334,5 +1334,17 @@
   "Vista de la vivienda": [
     "Home view",
     "Vista da casa"
+  ],
+  "Interés (opcional)": [
+    "Interest (optional)",
+    "Interesse (opcional)"
+  ],
+  "Enviar consulta": [
+    "Send inquiry",
+    "Enviar consulta"
+  ],
+  "Envío de correo pendiente de configurar.": [
+    "Email delivery setup pending.",
+    "Envio de e-mail pendente de configuração."
   ]
 }

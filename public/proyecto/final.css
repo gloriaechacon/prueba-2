@@ -498,3 +498,10 @@ body.final-home.proposal-a #contacto footer{margin-top:1.5rem;padding-block:1.5r
  .site-drawer[open]{animation:drawer-enter .2s ease-out}
  @keyframes drawer-enter{from{transform:translateX(-100%)}to{transform:translateX(0)}}
 }
+
+/* Contact selection uses the same readable type as the form labels. */
+.consultation .consultation-title{display:block;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:600;letter-spacing:0;text-transform:none;line-height:1.5;margin-bottom:10px}
+#consultation-interest{width:100%;min-height:48px;padding:12px 14px;margin-bottom:22px;font:inherit;color:inherit;background:transparent;border:1px solid currentColor;border-radius:6px}
+#consultation-interest option{color:#292a2b;background:#f6f0e3}
+.consultation .consultation-fields input{box-sizing:border-box;width:100%;min-height:48px;padding:12px 14px;font:inherit;border:1px solid #a89778;border-radius:6px;background:#fff9ee;color:#292a2b}
+.consultation .consultation-fields>label{display:grid;gap:8px;min-width:0;margin-bottom:18px}
