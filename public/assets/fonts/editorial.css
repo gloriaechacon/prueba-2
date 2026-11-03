@@ -1,10 +1,4 @@
 @font-face {
-  font-family: 'Newsreader';
-  src: url('./newsreader-latin-wght-normal.woff2') format('woff2');
-  font-weight: 200 800;
-  font-display: swap;
-}
-@font-face {
   font-family: 'DM Sans';
   src: url('./dm-sans-latin-wght-normal.woff2') format('woff2');
   font-weight: 100 1000;
@@ -14,9 +8,5 @@
   font-family: 'Italiana';
   src: url('./italiana-latin-400-normal.woff2') format('woff2');
   font-display: swap;
-}
-body :is(h1, h2, h3, h4, h5, h6),
-body :is(h1, h2, h3, h4, h5, h6) :is(em, strong, span) {
-  font-family: 'Newsreader', Georgia, serif !important;
 }
 .zone-top-actions #zone-expand span { display: inline; }
