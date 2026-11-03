@@ -48,7 +48,7 @@ function render(){
   hint.className='panorama-hint';
   hint.dataset.noTranslate='';
   hint.setAttribute('aria-hidden','true');
-  hint.textContent='↔  '+wording[matchMedia('(pointer: coarse)').matches?1:0]+' · 360°';
+  hint.textContent=wording[matchMedia('(pointer: coarse)').matches?1:0]+' · 360°';
   const frame=document.createElement('div');
   frame.className='panorama-frame';
   stage.before(frame);

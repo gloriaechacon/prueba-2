@@ -100,7 +100,7 @@
   scene.after(tip);
   function showTip(){
    const labels={en:'Drag to rotate',es:'Arrastra para girar',pt:'Arraste para girar'};
-   tip.textContent='↔ '+(labels[window.rpcI18n?.language]||labels.en);
+   tip.textContent=(labels[window.rpcI18n?.language]||labels.en);
    tip.hidden=false;
   }
   showTip();document.addEventListener('rpc:language',showTip);
