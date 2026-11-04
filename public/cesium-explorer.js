@@ -20,7 +20,7 @@ try{const provider=await C.ArcGisMapServerImageryProvider.fromUrl('https://basem
 try{const [west,south]=ll(-data.width/2,data.height/2),[east,north]=ll(data.width/2,-data.height/2);const detail=await C.SingleTileImageryProvider.fromUrl('assets/geography/collection-aerial.jpg',{rectangle:C.Rectangle.fromDegrees(west,south,east,north),credit:new C.Credit('Imagen local: USDA / USGS',true)});detailImagery=viewer.imageryLayers.addImageryProvider(detail);detailImagery.saturation=1.25;detailImagery.contrast=1.06;detailImagery.brightness=1.03}catch{}
 const root=document.querySelector('#lot-explorer');root.dataset.engine='cesium';
 const polygons=new Map();
-for(const lot of lots){lot.coordinates=[(lot.visualCenter||lot.center).lon,(lot.visualCenter||lot.center).lat];const coord=local(lot.coordinates[0]*rad,lot.coordinates[1]*rad);lot.x=coord[0];lot.z=coord[1];const ring=(lot.visualPolygon||lot.parcelPolygon).coordinates[0];const corners=ring.map(([lon,lat])=>C.Cartesian3.fromDegrees(lon,lat));const entity=viewer.entities.add({id:'collection-lot-'+lot.id,polygon:{hierarchy:new C.PolygonHierarchy(corners),material:C.Color.fromCssColorString(lot.groupedParcel?'#f1c886':'#e0ef9d').withAlpha(.24),classificationType:C.ClassificationType.BOTH},polyline:{positions:corners,clampToGround:true,width:2,material:C.Color.fromCssColorString(lot.groupedParcel?'#e7b869':'#edf6ba')}});entity.sampleLot=lot.id;polygons.set(lot.id,entity);if(lot.provisionalBoundary)viewer.entities.add({polyline:{positions:lot.parcelPolygon.coordinates[0].map(([lon,lat])=>C.Cartesian3.fromDegrees(lon,lat)),clampToGround:true,width:1,material:C.Color.fromCssColorString('#e0ae69').withAlpha(.6)}})}
+for(const lot of lots){lot.coordinates=[(lot.visualCenter||lot.center).lon,(lot.visualCenter||lot.center).lat];const coord=local(lot.coordinates[0]*rad,lot.coordinates[1]*rad);lot.x=coord[0];lot.z=coord[1];const ring=(lot.visualPolygon||lot.parcelPolygon).coordinates[0];const corners=ring.map(([lon,lat])=>C.Cartesian3.fromDegrees(lon,lat));const entity=viewer.entities.add({id:'collection-lot-'+lot.id,polygon:{hierarchy:new C.PolygonHierarchy(corners),material:C.Color.fromCssColorString(!window.rpcLots.available(lot.id)?'#af8178':lot.groupedParcel?'#f1c886':'#e0ef9d').withAlpha(.24),classificationType:C.ClassificationType.BOTH},polyline:{positions:corners,clampToGround:true,width:2,material:C.Color.fromCssColorString(!window.rpcLots.available(lot.id)?'#b98277':lot.groupedParcel?'#e7b869':'#edf6ba')}});entity.sampleLot=lot.id;polygons.set(lot.id,entity);if(lot.provisionalBoundary)viewer.entities.add({polyline:{positions:lot.parcelPolygon.coordinates[0].map(([lon,lat])=>C.Cartesian3.fromDegrees(lon,lat)),clampToGround:true,width:1,material:C.Color.fromCssColorString('#e0ae69').withAlpha(.6)}})}
 const collectionSphere=C.BoundingSphere.fromPoints(lots.map(l=>point(l.x,l.z)));
 const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
 // Only sourced geographic boundaries are shaded; never infer a boundary from a radius.
@@ -95,7 +95,7 @@ function toggleCluster(button){
  openCluster=button;button.setAttribute('aria-expanded','true');
  for(const {lot} of [...button.clusterPoints].sort((a,b)=>a.lot.id-b.lot.id)){
   const choice=document.createElement('button');choice.type='button';
-  choice.textContent=tr('Lote')+' '+String(lot.id).padStart(2,'0');
+  choice.textContent=window.rpcLots.label(lot.id);
   choice.setAttribute('aria-pressed',String(lot===activeLot));
   choice.onclick=()=>{closeCluster();onSelect(lot.id)};picker.append(choice);
  }
@@ -137,7 +137,7 @@ function renderPins(){
   button.clusterPoints=group.points;button.hidden=false;
   const text=group.points.length+' '+tr('lotes');
   if(button.textContent!==text)button.textContent=text;
-  button.setAttribute('aria-label',text+': '+group.points.map(p=>String(p.lot.id).padStart(2,'0')).join(', '));
+  button.setAttribute('aria-label',text+': '+group.points.map(p=>window.rpcLots.label(p.lot.id)).join(', '));
   button.classList.toggle('contains-selection',group.points.some(p=>p.lot===activeLot));
   button.style.left=Math.max(56,Math.min(scene.canvas.clientWidth-56,group.x))+'px';button.style.top=group.y+'px';
  }
@@ -174,7 +174,7 @@ function showRoadFront(lot){for(const e of accessEntities)viewer.entities.remove
  if(nearest){add({polyline:{positions:nearest.road.points.map(([x,z])=>point(x,z)),clampToGround:true,width:3,material:C.Color.fromCssColorString('#f6e7c8').withAlpha(.65)}});add({position:point(nearest.x,nearest.z,heightLocal(nearest.x,nearest.z)+1),label:{text:lot.front.nearestStreet+' · '+tr('ACCESO'),font:'12px sans-serif',fillColor:C.Color.WHITE,showBackground:true,backgroundColor:C.Color.fromCssColorString('#233c30').withAlpha(.9),pixelOffset:new C.Cartesian2(0,25),disableDepthTestDistance:Number.POSITIVE_INFINITY}})}
  scene.requestRender();
 }
-function select(lot,move){activeLot=lot;showRoadFront(lot);for(const l of lots)polygons.get(l.id).polygon.material=C.Color.fromCssColorString(l===lot?'#f1f8b9':'#d8e998').withAlpha(l===lot ? .35 : .18);setState(currentState);if(move)focus(lot,220)}
+function select(lot,move){activeLot=lot;showRoadFront(lot);for(const l of lots)polygons.get(l.id).polygon.material=C.Color.fromCssColorString(!window.rpcLots.available(l.id)?'#af8178':l===lot?'#f1f8b9':'#d8e998').withAlpha(l===lot ? .35 : .18);setState(currentState);if(move)focus(lot,220)}
 function focus(lot,range){let h=heightLocal(lot.x,lot.z)*factor;if(photoMode){try{h=scene.sampleHeight(C.Cartographic.fromDegrees(...lot.coordinates))||h}catch{}}flyToPoint(point(lot.x,lot.z,h),range*(scene.canvas.clientWidth<600?1.4:1),((lot.front?.frontBearingDegrees||0)-180)*rad,-.7)}
 function reframe({heading=camera.heading,pitch=camera.pitch,scale=1,duration=.65}){const target=anchor()||point(activeLot?.x||60,activeLot?.z||40);const dist=C.Cartesian3.distance(camera.positionWC,target);flyToPoint(target,C.Math.clamp(dist*scale,45,20000000),heading,pitch,duration)}
 

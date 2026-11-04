@@ -87,3 +87,15 @@ body.embedded-lotes .embedded-plot-actions #zone-house-choice{flex-basis:100%;ma
 .house-choice-title{grid-column:1/-1;font:600 17px/1.4 'DM Sans',sans-serif;color:#292a2d}
 #lot-explorer #zone-house-choice button{min-height:52px!important;padding:12px!important;font:600 16px/1.4 'DM Sans',sans-serif!important;border:1px solid #a18a5e!important;border-radius:6px!important;background:#fff9ed!important;color:#292a2d!important}
 #lot-explorer #zone-house-choice button[aria-pressed=true]{background:#d2b77e!important;border-color:#695534!important}
+
+/* Available-lot index: public numbers, stable parcel identities. */
+.available-lot-index{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:16px 0;margin:0 0 16px;color:#302d27}
+.available-lot-index>strong{font-size:15px;font-weight:500}
+.available-lot-index>div{display:flex;gap:8px;flex-wrap:wrap}
+.available-lot-index button{min-height:44px;padding:10px 18px;border:1px solid #ad9a71;border-radius:8px;background:#f7f1e4;color:#302d27;font:inherit;cursor:pointer}
+.available-lot-index button:hover{background:#e5d3a7}
+.available-lot-index button[aria-pressed=true]{background:#695735;color:#fff;border-color:#695735}
+#zone-pins .zone-pin[data-availability=sold]{background:#e4d4ce!important;border-color:#98685e!important;color:#69443c!important}
+#zone-pins .zone-pin[data-availability=sold] strong{font-size:12px;white-space:nowrap}
+#zone-pins .zone-pin[data-availability=sold] small:empty{display:none}
+@media(max-width:600px){.available-lot-index{gap:10px;padding:12px 0}.available-lot-index>div{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%}.available-lot-index button{padding:10px 8px}}

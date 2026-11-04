@@ -90,7 +90,7 @@
   function prepareEmail() {
     const data = new FormData(form);
     const body = ['Rainbow Park Collection', 'Name: ' + data.get('name'),
-      'Email: ' + data.get('email'), 'Lot: ' + (data.get('lot') || '—'),
+      'Email: ' + data.get('email'), 'Lot: ' + (data.get('lot') ? window.rpcLots.label(data.get('lot')) : '—'),
       'Home: ' + (data.get('house') || '—'), '', data.get('message') || ''].join('\n');
     fallback.href = 'mailto:' + recipient + '?subject=' +
       encodeURIComponent('Rainbow Park Collection — Inquiry') + '&body=' + encodeURIComponent(body);
@@ -105,6 +105,7 @@
     if (!form.reportValidity()) return;
     const data = Object.fromEntries(new FormData(form));
     if (data._honey) return;
+    if(data.lot){data.parcel_reference=data.lot;data.lot=window.rpcLots.label(data.lot);}
     state = 'sending';
     submit.disabled = true;
     form.setAttribute('aria-busy', 'true');

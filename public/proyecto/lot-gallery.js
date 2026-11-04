@@ -11,11 +11,13 @@ function render(){
  releasePanorama=null;
  const key=select.value, items=catalog?.[key]?.filter(x=>!x.hidden);panel.hidden=!items?.length;if(panel.hidden){panel.replaceChildren();return}
  if(key!==lot){lot=key;type='photo';index=0}
- const unified=['RP-01','RP-05','RP-07'].includes(key);
- const t=strings[window.rpcI18n?.language]||strings.en, list=unified?items:items.filter(x=>x.type===type), item=list[index];
+ const unified=['RP-01','RP-05','RP-06','RP-07','RP-09','RP-14'].includes(key);
+ const t=strings[window.rpcI18n?.language]||strings.en, list=unified?[...items.filter(x=>x.type==='photo'),...items.filter(x=>x.type==='360')]:items.filter(x=>x.type===type), item=list[index];
  if(unified)type=item.type;
- const label=t[0]+' '+Number(key.slice(3)), name=(type==='photo'?t[5]:'360°')+(unified?'':' '+(index+1));
- panel.innerHTML='<header><div><small>'+label+'</small><h2>'+t[1]+'</h2></div><div class="media-tabs"></div></header><div class="media-stage"></div><footer><strong>'+name+(unified?' · '+(index+1):'')+' / '+list.length+'</strong><span></span></footer><div class="media-thumbs"></div>';
+ const mediaNumber=list.slice(0,index+1).filter(x=>x.type===type).length;
+ const mediaCount=list.filter(x=>x.type===type).length;
+ const label=window.rpcLots.label(key), name=(type==='photo'?t[5]:'360°')+' '+mediaNumber;
+ panel.innerHTML='<header><div><small>'+label+'</small><h2>'+t[1]+'</h2></div><div class="media-tabs"></div></header><div class="media-stage"></div><footer><strong>'+name+' / '+mediaCount+'</strong><span></span></footer><div class="media-thumbs"></div>';
  function button(parent,label,active,click){const b=document.createElement('button');b.type='button';b.textContent=label;b.setAttribute('aria-pressed',active);b.onclick=click;parent.append(b);return b}
  if(!unified)for(const [mode,title] of [['photo',t[2]],['360',t[3]]]){const count=items.filter(x=>x.type===mode).length;if(count)button(panel.querySelector('.media-tabs'),title+' ('+count+')',type===mode,()=>{type=mode;index=0;render();panel.querySelector('.media-tabs [aria-pressed=true]').focus({preventScroll:true})})}
  const stage=panel.querySelector('.media-stage'), source=base+item.file;
@@ -58,7 +60,7 @@ function render(){
   panel.querySelector('footer span').textContent=t[4];
  }
  if(item.outline){const note=document.createElement('p');note.className='lot-outline-note';note.dataset.noTranslate='';note.textContent=label+' · '+(({en:'Indicative outline, pending your confirmation.',es:'Marcación orientativa, pendiente de tu confirmación.',pt:'Marcação indicativa, aguardando confirmação.'})[window.rpcI18n?.language]||'Indicative outline, pending confirmation.');panel.querySelector('footer').after(note);}
- list.forEach((it,i)=>{const b=button(panel.querySelector('.media-thumbs'),'',i===index,()=>{index=i;render();panel.querySelector('.media-thumbs [aria-pressed=true]').focus({preventScroll:true})});b.setAttribute('aria-label',(type==='photo'?t[5]:'360°')+' '+(i+1));const img=new Image();img.alt='';img.loading='lazy';img.src=base+it.file.replace('.jpg','-thumb.jpg');b.append(img);if(unified){const caption=it.type==='360'?'360°':t[5];b.setAttribute('aria-label',caption);const text=document.createElement('span');text.textContent=caption;b.append(text)}});
+ list.forEach((it,i)=>{const b=button(panel.querySelector('.media-thumbs'),'',i===index,()=>{index=i;render();panel.querySelector('.media-thumbs [aria-pressed=true]').focus({preventScroll:true})});b.setAttribute('aria-label',(type==='photo'?t[5]:'360°')+' '+(i+1));const img=new Image();img.alt='';img.loading='lazy';img.src=base+it.file.replace('.jpg','-thumb.jpg');b.append(img);if(unified){const n=list.slice(0,i+1).filter(x=>x.type===it.type).length;const caption=it.type==='360'?'360°':t[5]+' '+n;b.setAttribute('aria-label',caption);const text=document.createElement('span');text.textContent=caption;b.append(text)}});
 }
 // Draw a continuous panorama in a single canvas. The wrapped image also
 // provides a draggable preview while the renderer loads or if WebGL is unavailable.

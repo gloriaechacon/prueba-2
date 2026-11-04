@@ -22,7 +22,7 @@
   const help=document.createElement('div');help.className='parcel-guide';
   help.innerHTML='<div><h3>Estás viendo Rainbow Park desde el aire</h3><p>Los números señalan los lotes de la colección. Selecciona uno para acercarte a su ubicación.</p></div><label>Elige el lote que quieres conocer<select id="guided-lot"><option value="">Ver las 14 ubicaciones</option></select></label><ol><li>Elige un lote</li><li>Revisa su ubicación y superficie</li><li>Prueba la vista con vivienda</li></ol><details><summary>Cómo mover la vista</summary><p>Arrastra para moverte. Usa + y − para acercarte o alejarte. En teléfono, utiliza dos dedos. Las opciones de giro y vista aérea están dentro del explorador.</p></details>';
   zone.before(help);
-  fetch('/assets/geography/collection-lots.json').then(r=>r.json()).then(data=>{data.lots.forEach(l=>$('#guided-lot').add(new Option('Lote '+String(l.pinIndex).padStart(2,'0')+' · '+l.front.nearestStreet,l.id)));if(pendingLot)pickLot(pendingLot);}).catch(()=>{});
+  fetch('/assets/geography/collection-lots.json').then(r=>r.json()).then(data=>{data.lots.sort((a,b)=>window.rpcLots.rank(a.id)-window.rpcLots.rank(b.id)).forEach(l=>$('#guided-lot').add(new Option(window.rpcLots.label(l.id)+' · '+l.front.nearestStreet,l.id)));if(pendingLot)pickLot(pendingLot);}).catch(()=>{});
   $('#guided-lot').addEventListener('change',e=>{if(e.target.value)pickLot(e.target.value);else $('#zone-overview')?.click();});
   document.addEventListener('rpc:lot',event=>{const id='RP-'+String(event.detail).padStart(2,'0');$('#guided-lot').value=id;if(parent!==window)parent.postMessage({type:'parcel-selected',lot:id},location.origin);});
   if(!embed){
@@ -36,7 +36,7 @@
     const language=window.rpcI18n?.language||'en';
     const number=String(zone.dataset.selectedLot||'').padStart(2,'0');
     link.textContent=({en:'View this lot',es:'Ver este lote',pt:'Ver este lote'})[language];
-    link.href='/proyecto/lotes/?'+new URLSearchParams({lang:language,lot:'RP-'+number});
+    link.href='/proyecto/lotes/?'+new URLSearchParams({lang:language,lot:window.rpcLots.toURL('RP-'+(number==='00'?'01':number))});
    }
    updateLink();
    document.addEventListener('rpc:lot',updateLink);
@@ -109,28 +109,53 @@
  }
 })();
 
-// Availability supplied for the current collection.
+// Public numbering and availability; internal IDs continue to identify media and boundaries.
 (()=>{
- const isAvailable=n=>[1,5,6,7,9,14].includes(n);
- const status=n=>isAvailable(n)?'Disponible':'Vendido';
- const translate=s=>window.rpcI18n?.t(s)||s;
+ const lots=window.rpcLots, tr=s=>window.rpcI18n?.t(s)||s;
+ const lang=()=>window.rpcI18n?.language||'en';
+ const setText=(el,text)=>{if(el&&el.textContent!==text)el.textContent=text};
+ let index;
+ const map=document.querySelector('#c-map');
+ const zone=document.querySelector('#lot-explorer');
+ if(map||(zone&&parent===window)){
+  index=document.createElement('nav');index.className='available-lot-index';index.dataset.noTranslate='';
+  const heading=document.createElement('strong');index.append(heading);
+  const buttons=document.createElement('div');index.append(buttons);
+  for(const n of lots.order){const b=document.createElement('button');b.type='button';b.dataset.availableLot=n;
+   b.onclick=()=>{const select=document.querySelector('#c-lot');if(select){select.value='RP-'+String(n).padStart(2,'0');select.dispatchEvent(new Event('change'));}else document.querySelector('#zone-list [data-zone-lot="'+n+'"]')?.click()};buttons.append(b);
+  }
+  (map?.closest('.c-lot-workspace')||zone).before(index);
+ }
  function refresh(){
-  document.querySelectorAll('#guided-lot,#c-lot').forEach(select=>{
+  document.querySelectorAll('#guided-lot,#c-lot,form select[name="lot"]').forEach(select=>{
    for(const option of select.options){const n=Number(option.value.replace('RP-',''));if(!n)continue;
-    if(!option.dataset.baseLabel)option.dataset.baseLabel=option.textContent.split(' · '+translate('Disponible'))[0];
-    const street=option.dataset.baseLabel.split(' · ').slice(1).join(' · ');const text=String(n).padStart(2,'0')+' — '+translate(status(n))+' · '+street;if(option.textContent!==text)option.textContent=text;
+    option.dataset.noTranslate='';
+    if(option.dataset.lotStreet===undefined)option.dataset.lotStreet=option.textContent.split(' · ').slice(1).join(' · ');
+    const street=option.dataset.lotStreet;
+    setText(option,lots.label(n)+(street?' · '+street:''));
    }
-
   });
-  document.querySelectorAll('[data-zone-lot]').forEach(button=>{const n=Number(button.dataset.zoneLot);if(!n)return;button.dataset.availability=isAvailable(n)?'available':'sold';button.title=translate('Lote')+' '+n+' · '+translate(status(n));});
+  document.querySelectorAll('[data-zone-lot]').forEach(button=>{
+   const n=Number(button.dataset.zoneLot);if(!n)return;
+   button.dataset.noTranslate='';button.dataset.availability=lots.available(n)?'available':'sold';
+   button.title=lots.label(n);button.setAttribute('aria-label',lots.label(n));
+   if(button.classList.contains('zone-pin')){setText(button.querySelector('small'),lots.available(n)?tr('Lote'):'');setText(button.querySelector('strong'),lots.available(n)?String(lots.number(n)).padStart(2,'0'):lots.label(n));}
+   else setText(button,lots.label(n));
+  });
   document.querySelectorAll('#zone-title,#c-lot-title').forEach(title=>{
-   const raw=title.id==='c-lot-title'?document.querySelector('#c-lot')?.value:document.querySelector('#lot-explorer')?.dataset.selectedLot;
-   const n=Number(String(raw||'').replace('RP-',''));let badge=title.parentElement.querySelector('.availability-badge');if(!badge){badge=document.createElement('span');badge.className='availability-badge';title.after(badge)}
-   badge.hidden=!n;if(n){badge.dataset.availability=isAvailable(n)?'available':'sold';const text=translate(status(n));if(badge.textContent!==text)badge.textContent=text;}
+   const raw=title.id==='c-lot-title'?document.querySelector('#c-lot')?.value:zone?.dataset.selectedLot;
+   const n=Number(String(raw||'').replace('RP-',''));
+   title.dataset.noTranslate='';if(n)setText(title,lots.label(n));
+   let badge=title.parentElement.querySelector('.availability-badge');if(!badge){badge=document.createElement('span');badge.className='availability-badge';title.after(badge)}
+   badge.hidden=!n||!lots.available(n);if(n){badge.dataset.availability=lots.available(n)?'available':'sold';setText(badge,tr(lots.available(n)?'Disponible':'Vendido'));}
   });
-  const north=document.querySelector('#zone-north small');if(north&&north.textContent!==translate('Norte'))north.textContent=translate('Norte');
+  if(index){
+   setText(index.querySelector('strong'),({es:'6 lotes disponibles',en:'6 available lots',pt:'6 lotes disponíveis'})[lang()]||'6 available lots');
+   const current=Number(String(document.querySelector('#c-lot')?.value||zone?.dataset.selectedLot||'').replace('RP-',''));
+   index.querySelectorAll('button').forEach(b=>{setText(b,lots.label(b.dataset.availableLot));b.setAttribute('aria-pressed',String(Number(b.dataset.availableLot)===current));});
+  }
  }
  const observer=new MutationObserver(()=>{observer.disconnect();refresh();observer.observe(document.body,{childList:true,subtree:true})});
  observer.observe(document.body,{childList:true,subtree:true});
- document.addEventListener('rpc:lot',()=>queueMicrotask(refresh));addEventListener('rpc:lots-ready',refresh);document.addEventListener('change',refresh);addEventListener('rpc:language',refresh);refresh();
+ document.addEventListener('rpc:lot',()=>queueMicrotask(refresh));addEventListener('rpc:lots-ready',refresh);document.addEventListener('change',refresh);document.addEventListener('rpc:language',refresh);refresh();
 })();

@@ -102,3 +102,8 @@
 .zone-cluster-choices{position:absolute;z-index:5;inset:auto 8px 48px;display:flex;align-items:center;gap:6px;overflow-x:auto;width:max-content;max-width:calc(100% - 16px);margin:auto;padding:6px;background:#fff9ec;border-radius:8px;box-shadow:0 2px 12px #0004;pointer-events:auto}
 .zone-cluster-choices button{flex:none;min-height:44px;padding:0 12px;border:1px solid #8d7851;border-radius:5px;background:#fff9ec;color:#403822;cursor:pointer}
 .zone-cluster-choices button[aria-pressed=true]{background:#dec389}
+/* Sold parcels retain their locations without a public lot number. */
+#lot-explorer #zone-pins button.zone-pin:not(.zone-pin-cluster)[data-availability=sold]{width:112px;background:#e4d4ce!important;border-color:#98685e!important;color:#69443c!important}
+#lot-explorer #zone-pins button.zone-pin:not(.zone-pin-cluster)[data-availability=sold] strong{font-size:12px;white-space:nowrap}
+#lot-explorer #zone-pins button.zone-pin:not(.zone-pin-cluster)[data-availability=sold] svg{display:none}
+#lot-explorer #zone-pins button.zone-pin:not(.zone-pin-cluster)[data-availability=sold][aria-pressed=true]{background:#98685e!important;color:#fff!important;border-color:#fff!important}
