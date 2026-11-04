@@ -9,16 +9,18 @@ let releasePanorama;
 function render(){
  releasePanorama?.();
  releasePanorama=null;
- const key=select.value, items=catalog?.[key];panel.hidden=!items?.length;if(panel.hidden){panel.replaceChildren();return}
+ const key=select.value, items=catalog?.[key]?.filter(x=>!x.hidden);panel.hidden=!items?.length;if(panel.hidden){panel.replaceChildren();return}
  if(key!==lot){lot=key;type='photo';index=0}
- const t=strings[window.rpcI18n?.language]||strings.en, list=items.filter(x=>x.type===type), item=list[index];
- const label=t[0]+' '+Number(key.slice(3)), name=(type==='photo'?t[5]:'360°')+' '+(index+1);
- panel.innerHTML='<header><div><small>'+label+'</small><h2>'+t[1]+'</h2></div><div class="media-tabs"></div></header><div class="media-stage"></div><footer><strong>'+name+' / '+list.length+'</strong><span></span></footer><div class="media-thumbs"></div>';
+ const unified=['RP-01','RP-05','RP-07'].includes(key);
+ const t=strings[window.rpcI18n?.language]||strings.en, list=unified?items:items.filter(x=>x.type===type), item=list[index];
+ if(unified)type=item.type;
+ const label=t[0]+' '+Number(key.slice(3)), name=(type==='photo'?t[5]:'360°')+(unified?'':' '+(index+1));
+ panel.innerHTML='<header><div><small>'+label+'</small><h2>'+t[1]+'</h2></div><div class="media-tabs"></div></header><div class="media-stage"></div><footer><strong>'+name+(unified?' · '+(index+1):'')+' / '+list.length+'</strong><span></span></footer><div class="media-thumbs"></div>';
  function button(parent,label,active,click){const b=document.createElement('button');b.type='button';b.textContent=label;b.setAttribute('aria-pressed',active);b.onclick=click;parent.append(b);return b}
- for(const [mode,title] of [['photo',t[2]],['360',t[3]]]){const count=items.filter(x=>x.type===mode).length;if(count)button(panel.querySelector('.media-tabs'),title+' ('+count+')',type===mode,()=>{type=mode;index=0;render();panel.querySelector('.media-tabs [aria-pressed=true]').focus({preventScroll:true})})}
+ if(!unified)for(const [mode,title] of [['photo',t[2]],['360',t[3]]]){const count=items.filter(x=>x.type===mode).length;if(count)button(panel.querySelector('.media-tabs'),title+' ('+count+')',type===mode,()=>{type=mode;index=0;render();panel.querySelector('.media-tabs [aria-pressed=true]').focus({preventScroll:true})})}
  const stage=panel.querySelector('.media-stage'), source=base+item.file;
- if(type==='photo'){const img=new Image();img.src=source;img.alt=label+' · '+name;stage.append(img)}
- if(type==='photo' && list.length>1){
+ if(type==='photo'){const img=new Image();img.src=source;img.alt=label+' · '+name;stage.append(img);if(item.outline){const holder=document.createElement('div');holder.className='photo-outline-holder';stage.append(holder);const resize=new ResizeObserver(()=>{if(!img.naturalWidth)return;const scale=Math.min(stage.clientWidth/img.naturalWidth,stage.clientHeight/img.naturalHeight);holder.style.width=img.naturalWidth*scale+'px';holder.style.height=img.naturalHeight*scale+'px'});resize.observe(stage);img.onload=()=>{resize.unobserve(stage);resize.observe(stage)};holder.innerHTML='<svg viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true"><polygon points="'+item.outline.map(p=>p.map(v=>v*1000).join(',')).join(' ')+'"/></svg>';releasePanorama=()=>resize.disconnect();}}
+ if((unified||type==='photo') && list.length>1){
   const labels={en:['Previous photo','Next photo'],es:['Foto anterior','Foto siguiente'],pt:['Foto anterior','Próxima foto']};
   const captions=labels[window.rpcI18n?.language] || labels.en;
   [-1,1].forEach((step,i)=>{
@@ -37,7 +39,7 @@ function render(){
  if(type==='360'){
   stage.tabIndex=0;
   stage.setAttribute('aria-label',label+' · '+name+'. '+t[4]);
-  releasePanorama=panorama(stage,source);
+  releasePanorama=panorama(stage,source,item);
   const instructions={
    en:['Drag to explore','Swipe to explore'],
    es:['Arrastra para explorar','Desliza para explorar'],
@@ -55,12 +57,13 @@ function render(){
   frame.append(stage,hint);
   panel.querySelector('footer span').textContent=t[4];
  }
- list.forEach((it,i)=>{const b=button(panel.querySelector('.media-thumbs'),'',i===index,()=>{index=i;render();panel.querySelector('.media-thumbs [aria-pressed=true]').focus({preventScroll:true})});b.setAttribute('aria-label',(type==='photo'?t[5]:'360°')+' '+(i+1));const img=new Image();img.alt='';img.loading='lazy';img.src=base+it.file.replace('.jpg','-thumb.jpg');b.append(img)});
+ if(item.outline){const note=document.createElement('p');note.className='lot-outline-note';note.dataset.noTranslate='';note.textContent=label+' · '+(({en:'Indicative outline, pending your confirmation.',es:'Marcación orientativa, pendiente de tu confirmación.',pt:'Marcação indicativa, aguardando confirmação.'})[window.rpcI18n?.language]||'Indicative outline, pending confirmation.');panel.querySelector('footer').after(note);}
+ list.forEach((it,i)=>{const b=button(panel.querySelector('.media-thumbs'),'',i===index,()=>{index=i;render();panel.querySelector('.media-thumbs [aria-pressed=true]').focus({preventScroll:true})});b.setAttribute('aria-label',(type==='photo'?t[5]:'360°')+' '+(i+1));const img=new Image();img.alt='';img.loading='lazy';img.src=base+it.file.replace('.jpg','-thumb.jpg');b.append(img);if(unified){const caption=it.type==='360'?'360°':t[5];b.setAttribute('aria-label',caption);const text=document.createElement('span');text.textContent=caption;b.append(text)}});
 }
 // Draw a continuous panorama in a single canvas. The wrapped image also
 // provides a draggable preview while the renderer loads or if WebGL is unavailable.
-function panorama(stage,src){
- let yaw=0, pitch=0, pointer=null, lastX=0, lastY=0;
+function panorama(stage,src,item={}){
+ let yaw=item.initialView?.yaw||0, pitch=item.initialView?.pitch||0, pointer=null, lastX=0, lastY=0;
  let disposed=false, raf=0, renderScene, disposeScene;
  stage.style.backgroundImage='url("'+src+'")';
  function paint(){
@@ -76,7 +79,7 @@ function panorama(stage,src){
   schedule();
  }
  stage.onpointerdown=e=>{
-  if(pointer!==null || e.button!==0)return;
+  if(pointer!==null || e.button!==0 || e.target.closest('button'))return;
   pointer=e.pointerId;lastX=e.clientX;lastY=e.clientY;
   stage.setPointerCapture(pointer);
  };
@@ -109,6 +112,17 @@ function panorama(stage,src){
   geometry.scale(-1,1,1);
   const material=new T.MeshBasicMaterial({map:texture});
   scene.add(new T.Mesh(geometry,material));
+  const annotationResources=[];
+  if(item.outline){
+   const points=item.outline.map(([u,v])=>new T.Vector3(9.8*Math.sin(Math.PI*v)*Math.cos(2*Math.PI*u),9.8*Math.cos(Math.PI*v),9.8*Math.sin(Math.PI*v)*Math.sin(2*Math.PI*u)));
+   const borderGeometry=new T.BufferGeometry().setFromPoints([...points,points[0]]);
+   const borderMaterial=new T.LineBasicMaterial({color:0xffe3a0,depthTest:false});
+   const border=new T.Line(borderGeometry,borderMaterial);border.renderOrder=2;scene.add(border);
+   const fillGeometry=new T.BufferGeometry().setFromPoints(points);fillGeometry.setIndex([0,1,2,0,2,3]);
+   const fillMaterial=new T.MeshBasicMaterial({color:0xe5c578,transparent:true,opacity:.22,side:T.DoubleSide,depthTest:false});
+   const fill=new T.Mesh(fillGeometry,fillMaterial);fill.renderOrder=1;scene.add(fill);
+   annotationResources.push(borderGeometry,borderMaterial,fillGeometry,fillMaterial);
+  }
   let width=0,height=0;
   renderScene=()=>{
    if(width!==stage.clientWidth || height!==stage.clientHeight){
@@ -121,7 +135,7 @@ function panorama(stage,src){
    camera.lookAt(Math.cos(v)*Math.cos(h),Math.sin(v),Math.cos(v)*Math.sin(h));
    renderer.render(scene,camera);
   };
-  disposeScene=()=>{texture.dispose();material.dispose();geometry.dispose();renderer.dispose();renderer.forceContextLoss()};
+  disposeScene=()=>{annotationResources.forEach(r=>r.dispose());texture.dispose();material.dispose();geometry.dispose();renderer.dispose();renderer.forceContextLoss()};
  }
  load().catch(()=>{/* The draggable preview remains available. */});
  return ()=>{disposed=true;resize.disconnect();cancelAnimationFrame(raf);disposeScene?.()};

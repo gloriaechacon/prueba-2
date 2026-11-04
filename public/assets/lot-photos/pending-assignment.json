@@ -1,0 +1,34 @@
+{
+  "note": "Former lot 2 photos assigned to RP-14 on SW 40th St. Asset paths retained.",
+  "photos": [
+    {
+      "type": "photo",
+      "file": "RP-02/DJI_20261029135422_0094_D.jpg"
+    },
+    {
+      "type": "photo",
+      "file": "RP-02/DJI_20261029135456_0095_D.jpg"
+    },
+    {
+      "type": "360",
+      "file": "RP-02/DJI_20261029135622_0097_D.jpg"
+    },
+    {
+      "type": "photo",
+      "file": "RP-02/DJI_20261029140400_0008_D.jpg"
+    },
+    {
+      "type": "photo",
+      "file": "RP-02/DJI_20261029140458_0010_D.jpg"
+    },
+    {
+      "type": "photo",
+      "file": "RP-02/DJI_20261029140526_0011_D.jpg"
+    },
+    {
+      "type": "photo",
+      "file": "RP-02/IMG_1382.jpg"
+    }
+  ],
+  "assignedTo": "RP-14"
+}

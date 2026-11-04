@@ -48,7 +48,7 @@
  reduced.addEventListener('change',()=>{if(reduced.matches)placeAnimations.forEach(animation=>animation.cancel());});
 
  const form=document.querySelector('#c-consultation');
- if(form){for(let i=1;i<=6;i++){const id='RP-'+String(i).padStart(2,'0');form.elements.lot.add(new Option('Lote '+String(i).padStart(2,'0'),id));}form.elements.lot.value=state.lot||'';form.elements.house.value=state.house||'';form.addEventListener('submit',event=>{
+ if(form){for(const i of [1,5,6,7,9,14]){const id='RP-'+String(i).padStart(2,'0');form.elements.lot.add(new Option('Lote '+String(i).padStart(2,'0'),id));}form.elements.lot.value=state.lot||'';form.elements.house.value=state.house||'';form.addEventListener('submit',event=>{
   const data=Object.fromEntries(new FormData(form));state.lot=data.lot;state.house=data.house;save();
   
  });}

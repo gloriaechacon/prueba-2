@@ -2,33 +2,266 @@
   "RP-01": [
     {
       "type": "photo",
-      "file": "RP-01/DJI_20261029133239_0090_D.jpg"
+      "file": "RP-01/DJI_20261029133239_0090_D.jpg",
+      "hidden": false,
+      "outline": [
+        [
+          0.43,
+          0.69
+        ],
+        [
+          0.65,
+          0.69
+        ],
+        [
+          0.625,
+          0.36
+        ],
+        [
+          0.48,
+          0.37
+        ]
+      ]
     },
     {
       "type": "360",
-      "file": "RP-01/DJI_20261029133322_0092_D.jpg"
+      "file": "RP-01/DJI_20261029133322_0092_D.jpg",
+      "hidden": false,
+      "outline": [
+        [
+          0.465,
+          0.706
+        ],
+        [
+          0.531,
+          0.706
+        ],
+        [
+          0.521,
+          0.623
+        ],
+        [
+          0.479,
+          0.623
+        ]
+      ],
+      "initialView": {
+        "yaw": 179,
+        "pitch": -27
+      }
     },
     {
       "type": "360",
-      "file": "RP-01/DJI_20261029133435_0093_D.jpg"
+      "file": "RP-01/DJI_20261029133435_0093_D.jpg",
+      "hidden": true
     },
     {
       "type": "photo",
-      "file": "RP-01/DJI_20261029134225_0006_D.jpg"
+      "file": "RP-01/DJI_20261029134225_0006_D.jpg",
+      "hidden": false
     },
     {
       "type": "photo",
-      "file": "RP-01/DJI_20261029134244_0007_D.jpg"
+      "file": "RP-01/DJI_20261029134244_0007_D.jpg",
+      "hidden": false
     }
   ],
-  "RP-02": [
+  "RP-05": [
     {
       "type": "photo",
-      "file": "RP-02/DJI_20261029135422_0094_D.jpg"
+      "file": "RP-03/DJI_20261029140415_0098_D.jpg",
+      "hidden": false,
+      "outline": [
+        [
+          0.412,
+          0.61
+        ],
+        [
+          0.571,
+          0.61
+        ],
+        [
+          0.54,
+          0.375
+        ],
+        [
+          0.455,
+          0.375
+        ]
+      ]
+    },
+    {
+      "type": "360",
+      "file": "RP-03/DJI_20261029140655_0102_D.jpg",
+      "hidden": false,
+      "outline": [
+        [
+          0.466,
+          0.789
+        ],
+        [
+          0.534,
+          0.789
+        ],
+        [
+          0.52,
+          0.704
+        ],
+        [
+          0.481,
+          0.704
+        ]
+      ],
+      "initialView": {
+        "yaw": 180,
+        "pitch": -42
+      }
     },
     {
       "type": "photo",
-      "file": "RP-02/DJI_20261029135456_0095_D.jpg"
+      "file": "RP-03/IMG_1386.jpg",
+      "hidden": false
+    },
+    {
+      "type": "photo",
+      "file": "RP-03/IMG_1387.jpg",
+      "hidden": false
+    },
+    {
+      "type": "photo",
+      "file": "RP-03/IMG_1388.jpg",
+      "hidden": false
+    }
+  ],
+  "RP-06": [
+    {
+      "type": "photo",
+      "file": "RP-05/IMG_3293.jpg",
+      "hidden": false
+    },
+    {
+      "type": "photo",
+      "file": "RP-05/IMG_3294.jpg",
+      "hidden": false
+    },
+    {
+      "type": "photo",
+      "file": "RP-05/IMG_3296.jpg",
+      "hidden": false
+    },
+    {
+      "type": "360",
+      "file": "RP-05/IMG_20261029_084259_102.jpg",
+      "hidden": false,
+      "initialView": {
+        "yaw": 180,
+        "pitch": -25
+      }
+    }
+  ],
+  "RP-07": [
+    {
+      "type": "photo",
+      "file": "RP-04/DJI_20261029141620_0103_D.jpg",
+      "hidden": false,
+      "outline": [
+        [
+          0.27943760984182775,
+          0.5
+        ],
+        [
+          0.38488576449912126,
+          0.421875
+        ],
+        [
+          0.6045694200351494,
+          0.653125
+        ],
+        [
+          0.5096660808435852,
+          0.71875
+        ]
+      ]
+    },
+    {
+      "type": "360",
+      "file": "RP-04/DJI_20261029141726_0106_D.jpg",
+      "hidden": false,
+      "outline": [
+        [
+          0.436971,
+          0.74358
+        ],
+        [
+          0.465124,
+          0.735944
+        ],
+        [
+          0.527199,
+          0.81007
+        ],
+        [
+          0.479642,
+          0.829822
+        ]
+      ],
+      "initialView": {
+        "yaw": 178,
+        "pitch": -53
+      }
+    },
+    {
+      "type": "photo",
+      "file": "RP-04/IMG_1389.jpg",
+      "hidden": false
+    },
+    {
+      "type": "photo",
+      "file": "RP-04/IMG_1390.jpg",
+      "hidden": false
+    },
+    {
+      "type": "photo",
+      "file": "RP-04/IMG_1391.jpg",
+      "hidden": false
+    }
+  ],
+  "RP-09": [
+    {
+      "type": "photo",
+      "file": "RP-06/IMG_1392.jpg",
+      "hidden": false
+    },
+    {
+      "type": "photo",
+      "file": "RP-06/IMG_1393.jpg",
+      "hidden": false
+    },
+    {
+      "type": "photo",
+      "file": "RP-06/IMG_1394.jpg",
+      "hidden": false
+    },
+    {
+      "type": "360",
+      "file": "RP-06/IMG_20261029_133922_106.jpg",
+      "hidden": false,
+      "initialView": {
+        "yaw": 180,
+        "pitch": -25
+      }
+    }
+  ],
+  "RP-14": [
+    {
+      "type": "photo",
+      "file": "RP-02/DJI_20261029135422_0094_D.jpg",
+      "hidden": false
+    },
+    {
+      "type": "photo",
+      "file": "RP-02/DJI_20261029135456_0095_D.jpg",
+      "hidden": false
     },
     {
       "type": "360",
@@ -36,91 +269,23 @@
     },
     {
       "type": "photo",
-      "file": "RP-02/DJI_20261029140400_0008_D.jpg"
+      "file": "RP-02/DJI_20261029140400_0008_D.jpg",
+      "hidden": false
     },
     {
       "type": "photo",
-      "file": "RP-02/DJI_20261029140458_0010_D.jpg"
+      "file": "RP-02/DJI_20261029140458_0010_D.jpg",
+      "hidden": false
     },
     {
       "type": "photo",
-      "file": "RP-02/DJI_20261029140526_0011_D.jpg"
+      "file": "RP-02/DJI_20261029140526_0011_D.jpg",
+      "hidden": false
     },
     {
       "type": "photo",
-      "file": "RP-02/IMG_1382.jpg"
-    }
-  ],
-  "RP-03": [
-    {
-      "type": "photo",
-      "file": "RP-03/DJI_20261029140415_0098_D.jpg"
-    },
-    {
-      "type": "360",
-      "file": "RP-03/DJI_20261029140655_0102_D.jpg"
-    },
-    {
-      "type": "photo",
-      "file": "RP-03/IMG_1386.jpg"
-    },
-    {
-      "type": "photo",
-      "file": "RP-03/IMG_1387.jpg"
-    },
-    {
-      "type": "photo",
-      "file": "RP-03/IMG_1388.jpg"
-    }
-  ],
-  "RP-04": [
-    {
-      "type": "photo",
-      "file": "RP-04/DJI_20261029141620_0103_D.jpg"
-    },
-    {
-      "type": "360",
-      "file": "RP-04/DJI_20261029141726_0106_D.jpg"
-    },
-    {
-      "type": "photo",
-      "file": "RP-04/IMG_1389.jpg"
-    },
-    {
-      "type": "photo",
-      "file": "RP-04/IMG_1390.jpg"
-    },
-    {
-      "type": "photo",
-      "file": "RP-04/IMG_1391.jpg"
-    }
-  ],
-  "RP-06": [
-    {
-      "type": "photo",
-      "file": "RP-06/IMG_1392.jpg"
-    },
-    {
-      "type": "photo",
-      "file": "RP-06/IMG_1393.jpg"
-    },
-    {
-      "type": "photo",
-      "file": "RP-06/IMG_1394.jpg"
-    }
-  ],
-  "RP-05": [
-    {
-      "type": "photo",
-      "file": "RP-05/IMG_3293.jpg"
-    },
-    {
-      "type": "photo",
-      "file": "RP-05/IMG_3294.jpg"
-    },
-    {
-      "type": "photo",
-      "file": "RP-05/IMG_3296.jpg"
+      "file": "RP-02/IMG_1382.jpg",
+      "hidden": false
     }
   ]
 }

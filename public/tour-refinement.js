@@ -20,7 +20,7 @@
   const intro=$('.zone-intro h2');if(intro)intro.innerHTML='Conoce los lotes<br><em>de Rainbow Park.</em>';
   const description=$('.zone-intro>p');if(description)description.textContent='Primero elige una ubicación. Después podrás acercarte al terreno y explorar una vivienda sobre él.';
   const help=document.createElement('div');help.className='parcel-guide';
-  help.innerHTML='<div><h3>Estás viendo Rainbow Park desde el aire</h3><p>Los números señalan los lotes de la colección. Selecciona uno para acercarte a su ubicación.</p></div><label>Elige el lote que quieres conocer<select id="guided-lot"><option value="">Ver las 13 ubicaciones</option></select></label><ol><li>Elige un lote</li><li>Revisa su ubicación y superficie</li><li>Prueba la vista con vivienda</li></ol><details><summary>Cómo mover la vista</summary><p>Arrastra para moverte. Usa + y − para acercarte o alejarte. En teléfono, utiliza dos dedos. Las opciones de giro y vista aérea están dentro del explorador.</p></details>';
+  help.innerHTML='<div><h3>Estás viendo Rainbow Park desde el aire</h3><p>Los números señalan los lotes de la colección. Selecciona uno para acercarte a su ubicación.</p></div><label>Elige el lote que quieres conocer<select id="guided-lot"><option value="">Ver las 14 ubicaciones</option></select></label><ol><li>Elige un lote</li><li>Revisa su ubicación y superficie</li><li>Prueba la vista con vivienda</li></ol><details><summary>Cómo mover la vista</summary><p>Arrastra para moverte. Usa + y − para acercarte o alejarte. En teléfono, utiliza dos dedos. Las opciones de giro y vista aérea están dentro del explorador.</p></details>';
   zone.before(help);
   fetch('/assets/geography/collection-lots.json').then(r=>r.json()).then(data=>{data.lots.forEach(l=>$('#guided-lot').add(new Option('Lote '+String(l.pinIndex).padStart(2,'0')+' · '+l.front.nearestStreet,l.id)));if(pendingLot)pickLot(pendingLot);}).catch(()=>{});
   $('#guided-lot').addEventListener('change',e=>{if(e.target.value)pickLot(e.target.value);else $('#zone-overview')?.click();});
@@ -111,7 +111,8 @@
 
 // Availability supplied for the current collection.
 (()=>{
- const status=n=>n<=6?'Disponible':'Reservado';
+ const isAvailable=n=>[1,5,6,7,9,14].includes(n);
+ const status=n=>isAvailable(n)?'Disponible':'Vendido';
  const translate=s=>window.rpcI18n?.t(s)||s;
  function refresh(){
   document.querySelectorAll('#guided-lot,#c-lot').forEach(select=>{
@@ -121,11 +122,11 @@
    }
 
   });
-  document.querySelectorAll('[data-zone-lot]').forEach(button=>{const n=Number(button.dataset.zoneLot);if(!n)return;button.dataset.availability=n<=6?'available':'reserved';button.title=translate('Lote')+' '+n+' · '+translate(status(n));});
+  document.querySelectorAll('[data-zone-lot]').forEach(button=>{const n=Number(button.dataset.zoneLot);if(!n)return;button.dataset.availability=isAvailable(n)?'available':'sold';button.title=translate('Lote')+' '+n+' · '+translate(status(n));});
   document.querySelectorAll('#zone-title,#c-lot-title').forEach(title=>{
    const raw=title.id==='c-lot-title'?document.querySelector('#c-lot')?.value:document.querySelector('#lot-explorer')?.dataset.selectedLot;
    const n=Number(String(raw||'').replace('RP-',''));let badge=title.parentElement.querySelector('.availability-badge');if(!badge){badge=document.createElement('span');badge.className='availability-badge';title.after(badge)}
-   badge.hidden=!n;if(n){badge.dataset.availability=n<=6?'available':'reserved';const text=translate(status(n))+' · '+translate('Ejemplo');if(badge.textContent!==text)badge.textContent=text;}
+   badge.hidden=!n;if(n){badge.dataset.availability=isAvailable(n)?'available':'sold';const text=translate(status(n));if(badge.textContent!==text)badge.textContent=text;}
   });
   const north=document.querySelector('#zone-north small');if(north&&north.textContent!==translate('Norte'))north.textContent=translate('Norte');
  }

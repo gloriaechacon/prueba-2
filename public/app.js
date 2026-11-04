@@ -30,7 +30,7 @@ document.addEventListener('click',e=>{if(!e.target.closest('.topbar')&&menu.getA
 const consultationLot=document.querySelector('#consultation-lot');
 const useExploredLot=document.querySelector('#use-explored-lot');
 const selectionStatus=document.querySelector('#consultation-selection');
-const syncSelection=()=>{useExploredLot.hidden=!document.querySelector('#lot-explorer').dataset.selectedLot};
+const syncSelection=()=>{useExploredLot.hidden=![1,5,6,7,9,14].includes(Number(document.querySelector('#lot-explorer').dataset.selectedLot))};
 document.addEventListener('rpc:lot',syncSelection);syncSelection();
 useExploredLot.addEventListener('click',()=>{const lot=document.querySelector('#lot-explorer').dataset.selectedLot;if(!lot)return;consultationLot.value=String(lot).padStart(2,'0');selectionStatus.textContent=(window.rpcI18n?.t('Lote seleccionado:')||'Lote seleccionado:')+' '+consultationLot.value});
 consultationLot.addEventListener('change',()=>{selectionStatus.textContent=''});
