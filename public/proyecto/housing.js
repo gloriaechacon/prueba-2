@@ -60,7 +60,7 @@ async function mountStudioViewer(id,host){
  const attachViews=studioViews(id,host);
  const token=++routeToken;currentHouse=id;dispose3d?.();dispose3d=null;
  try{
-  const {createViewer}=await import('/proyecto/viewer.js');
+  const {createViewer}=await import('/proyecto/viewer.js?v=house-models');
   if(token!==routeToken||!host.isConnected)return;
   const viewer=await createViewer(host,id);
   if(token!==routeToken||!host.isConnected){viewer.dispose();return}
@@ -70,6 +70,7 @@ async function mountStudioViewer(id,host){
   attachViews(viewer);
  }catch(e){
   if(token!==routeToken||!host.isConnected)return;
+  console.error('No se pudo abrir el visor de '+id,e);
   host.setAttribute('aria-busy','false');host.innerHTML=`<div class="studio-error"><p>No se pudo mostrar el modelo 3D.</p><button id="retry-studio">Reintentar</button><a href="recursos/${id}/${catalog[id].pdf}" target="_blank" rel="noopener">Consultar plano PDF</a></div>`;
   $('#retry-studio').onclick=()=>{host.innerHTML='<p role="status">Preparando el modelo 3D…</p>';host.setAttribute('aria-busy','true');mountStudioViewer(id,host)};
  }

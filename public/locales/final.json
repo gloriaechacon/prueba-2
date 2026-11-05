@@ -1346,5 +1346,17 @@
   "Envío de correo pendiente de configurar.": [
     "Email delivery setup pending.",
     "Envio de e-mail pendente de configuração."
+  ],
+  "Modelos de vivienda": [
+    "House Models",
+    "Modelos de casas"
+  ],
+  "04 / MODELOS DE VIVIENDA": [
+    "04 / HOUSE MODELS",
+    "04 / MODELOS DE CASAS"
+  ],
+  "← Volver a los modelos de vivienda": [
+    "← Back to house models",
+    "← Voltar aos modelos de casas"
   ]
 }

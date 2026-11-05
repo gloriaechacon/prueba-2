@@ -1,3 +1,4 @@
+import {addHouseStage, createSceneRenderer} from './exterior-atmosphere.js';
 import * as THREE from './vendor/three.module.js';
 import {houses,lotExample,lotOffset} from './house-data.js?v=finishes6';
 import {loadHouse,daylight} from './utah/model-loader.js?v=finishes6';
@@ -7,11 +8,7 @@ const mat = (color, extra={}) => new THREE.MeshStandardMaterial({color,roughness
 const box = (w,h,d,color) => new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat(color));
 const addBox = (group,w,h,d,color,x,y,z) => { const o=box(w,h,d,color); o.position.set(x,y,z); group.add(o); return o; };
 function makeRenderer(container, scene, camera, draw) {
-  const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
-  renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.75));
-  renderer.outputColorSpace=THREE.SRGBColorSpace;
-  renderer.toneMapping=THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure=1.05;
+  const renderer=createSceneRenderer(THREE);
   container.querySelector('.scene-loading')?.remove();
   container.append(renderer.domElement);
   const resize=()=>{const w=container.clientWidth,h=container.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();draw();};
@@ -75,9 +72,8 @@ function genericScene(container){
 }
 
 function homeScene(container){
- const scene=new THREE.Scene();scene.background=new THREE.Color('#e8e8e1');scene.add(new THREE.HemisphereLight(0xf5f6ff,0xaaa294,1.15));
- const ground=new THREE.Mesh(new THREE.CircleGeometry(25,80),mat(0x777b7c));ground.rotation.x=-Math.PI/2;ground.position.y=-.18;ground.receiveShadow=true;scene.add(ground);
- const sun=new THREE.DirectionalLight(0xfff1d6,2.4);sun.position.set(-14,25,20);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-24,right:24,top:24,bottom:-24,near:1,far:110});sun.shadow.normalBias=.008;sun.shadow.bias=-.00006;scene.add(sun);
+ const scene=new THREE.Scene();
+ const ground=addHouseStage(THREE,scene);
  const camera=new THREE.PerspectiveCamera(40,1,.1,250);let azimuth=.20,elevation=6,distance=26,renderer,home='a',view='model',environmentOn=false,environmentGroup,environmentPromise;
  const target=new THREE.Vector3(0,1.6,0),models={},promises={};
  const plan=document.querySelector('#home-plan'),poster=document.querySelector('#home-poster'),hint=document.querySelector('.home-instruction');
@@ -110,7 +106,7 @@ function homeScene(container){
  document.querySelector('#home-zoom-in').onclick=()=>{distance=Math.max(12,distance-3);draw()};document.querySelector('#home-zoom-out').onclick=()=>{distance=Math.min(environmentOn?110:65,distance+4);draw()};document.querySelector('#home-reset').onclick=()=>{if(environmentOn){environmentCamera('aerial');return}azimuth=.20;elevation=6;distance=26;target.set(0,1.6,0);showView('model')};
  container.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))return;e.preventDefault();if(e.key==='ArrowLeft')azimuth-=.15;if(e.key==='ArrowRight')azimuth+=.15;if(e.key==='ArrowUp')elevation=Math.min(75,elevation+2);if(e.key==='ArrowDown')elevation=Math.max(3,elevation-2);draw()});
  function environmentCamera(which){const poses={aerial:[.3,43,54,0],front:[.05,9,42,9],garden:[Math.PI+.3,14,40,-1]};const [az,el,dist,z]=poses[which];azimuth=az;elevation=el;distance=dist;target.set(0,1.6,z);document.querySelectorAll('[data-environment-camera]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.environmentCamera===which)));draw()}
- function setEnvironment(enabled){environmentOn=enabled;ground.visible=!enabled;scene.background.set(enabled?'#b9d0d5':'#e8e8e1');scene.fog=enabled?new THREE.Fog('#b9d0d5',70,155):null;const toggle=document.querySelector('#home-environment');toggle.setAttribute('aria-pressed',String(enabled));toggle.textContent=enabled?'− Quitar entorno':'＋ Entorno · 0.24 acres';document.querySelector('#home-environment-info').hidden=!enabled;syncModels();if(!enabled){target.set(0,1.6,0);azimuth=.2;elevation=6;distance=26;draw();return}showView('model');environmentCamera('aerial');if(!environmentPromise){toggle.setAttribute('aria-busy','true');environmentPromise=import('./utah/lot-environment.js?v=collection14').then(({createLotEnvironment})=>{environmentGroup=createLotEnvironment();scene.add(environmentGroup);syncModels();draw()}).catch(()=>{environmentPromise=null;setEnvironment(false);hint.textContent='El entorno no pudo cargarse. Puedes volver a intentarlo.'}).finally(()=>toggle.removeAttribute('aria-busy'))}draw()}
+ function setEnvironment(enabled){environmentOn=enabled;ground.visible=!enabled;scene.background=enabled?new THREE.Color('#b9d0d5'):null;scene.fog=enabled?new THREE.Fog('#b9d0d5',70,155):null;const toggle=document.querySelector('#home-environment');toggle.setAttribute('aria-pressed',String(enabled));toggle.textContent=enabled?'− Quitar entorno':'＋ Entorno · 0.24 acres';document.querySelector('#home-environment-info').hidden=!enabled;syncModels();if(!enabled){target.set(0,1.6,0);azimuth=.2;elevation=6;distance=26;draw();return}showView('model');environmentCamera('aerial');if(!environmentPromise){toggle.setAttribute('aria-busy','true');environmentPromise=import('./utah/lot-environment.js?v=collection14').then(({createLotEnvironment})=>{environmentGroup=createLotEnvironment();scene.add(environmentGroup);syncModels();draw()}).catch(()=>{environmentPromise=null;setEnvironment(false);hint.textContent='El entorno no pudo cargarse. Puedes volver a intentarlo.'}).finally(()=>toggle.removeAttribute('aria-busy'))}draw()}
  document.querySelector('#home-environment').onclick=()=>setEnvironment(!environmentOn);document.querySelectorAll('[data-environment-camera]').forEach(b=>b.onclick=()=>environmentCamera(b.dataset.environmentCamera));document.addEventListener('rpc:home',e=>{if(['a','b'].includes(e.detail)&&e.detail!==home)selectHome(e.detail)});selectHome(document.querySelector('#lot-explorer').dataset.selectedHouse||'a');
 }
 genericScene(document.querySelector('#lot-scene'));
