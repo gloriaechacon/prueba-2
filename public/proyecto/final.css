@@ -508,6 +508,7 @@ body.final-home.proposal-a #contacto footer{margin-top:1.5rem;padding-block:1.5r
 
 .finish-trigger,.finish-dialog button,.final-housing .inquiry-link{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;min-height:44px;padding:.55rem 1rem;border:1px solid #78664d;border-radius:6px;color:#493b29;background:#faf6ef;font:600 15px/1.25 var(--sans,sans-serif);text-decoration:none;cursor:pointer}
 .finish-trigger{margin-top:.65rem}
+.final-home .home-specs .finish-trigger{grid-column:1/-1;width:100%;margin:0}
 .final-home #viviendas:has([data-home="b"][aria-pressed="true"]) .finish-trigger{display:none}
 .final-housing .studio-caption .finish-trigger{width:100%}
 .finish-dialog{box-sizing:border-box;width:min(94vw,1050px);max-width:94vw;max-height:94dvh;margin:auto;padding:0;border:0;background:#faf6ef;color:#30291f}

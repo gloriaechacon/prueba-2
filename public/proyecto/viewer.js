@@ -48,7 +48,7 @@ export async function createViewer(host, id) {
   controls.addEventListener('change', render);
   const views={
     front:[Math.sin(.20)*26, 6, Math.cos(.20)*26],
-    above:[size.x*.35, Math.max(size.x,size.z)*1.7, size.z*.6],
+    above:[0, Math.max(size.x,size.z)*2, .001],
     back:[-size.x*.9, size.y*1.7, -size.z*1.7]
   };
   const setCamera = name => {

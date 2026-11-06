@@ -120,7 +120,9 @@ function panorama(stage,src,item={}){
    const borderGeometry=new T.BufferGeometry().setFromPoints([...points,points[0]]);
    const borderMaterial=new T.LineBasicMaterial({color:0xffe3a0,depthTest:false});
    const border=new T.Line(borderGeometry,borderMaterial);border.renderOrder=2;scene.add(border);
-   const fillGeometry=new T.BufferGeometry().setFromPoints(points);fillGeometry.setIndex([0,1,2,0,2,3]);
+   const fillGeometry=new T.BufferGeometry().setFromPoints(points);const triangles=[];
+   for(let i=1;i<points.length-1;i++)triangles.push(0,i,i+1);
+   fillGeometry.setIndex(triangles);
    const fillMaterial=new T.MeshBasicMaterial({color:0xe5c578,transparent:true,opacity:.22,side:T.DoubleSide,depthTest:false});
    const fill=new T.Mesh(fillGeometry,fillMaterial);fill.renderOrder=1;scene.add(fill);
    annotationResources.push(borderGeometry,borderMaterial,fillGeometry,fillMaterial);
