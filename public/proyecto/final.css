@@ -511,9 +511,24 @@ body.final-home.proposal-a #contacto footer{margin-top:1.5rem;padding-block:1.5r
 .final-home .home-specs .finish-trigger{grid-column:1/-1;width:100%;margin:0}
 .final-home #viviendas:has([data-home="b"][aria-pressed="true"]) .finish-trigger{display:none}
 .final-housing .studio-caption .finish-trigger{width:100%}
-.finish-dialog{box-sizing:border-box;width:min(94vw,1050px);max-width:94vw;max-height:94dvh;margin:auto;padding:0;border:0;background:#faf6ef;color:#30291f}
+dialog.finish-dialog{box-sizing:border-box;width:min(94vw,1050px,calc(138dvh - 108px));max-width:94vw;max-height:96dvh;margin:auto;padding:0;border:0;overflow:auto;background:#f6efe3;color:#30291f;scrollbar-gutter:auto}
 .finish-dialog::backdrop{background:#201c17c9}
-.finish-dialog header{position:static;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 16px}
-.finish-dialog h2{margin:0;font-size:clamp(1.2rem,3vw,2rem)}
-.finish-dialog img{display:block;width:100%;height:auto;max-height:calc(90dvh - 64px);object-fit:contain}
+.finish-dialog .finish-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 16px}
+.finish-dialog #finish-title{font:400 clamp(1.35rem,3vw,2.1rem)/1.1 'Italiana',Georgia,serif;margin:0;letter-spacing:normal}
+.finish-dialog .finish-bar form{margin:0}
+dialog.finish-dialog img{display:block;width:100%;height:auto;max-height:none;aspect-ratio:3/2;margin:0;object-fit:contain}
 body:has(.finish-dialog[open]){overflow:hidden}
+
+.regional-tour:has(.c-destination[hidden]){grid-template-columns:minmax(0,1fr)}
+.regional-tour .c-destination[hidden],.regional-tour:has(.c-destination[hidden]) .region-detail-jump{display:none!important}
+body.final-detail[data-page=entorno] .c-destinations{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+
+.regional-map-panel .regional-map-heading{flex-wrap:wrap;gap:12px}
+.regional-map-panel .region-view-tools{display:flex;align-items:center;flex-wrap:wrap;gap:10px}
+.region-view-tools [role=group]{border-inline-start:1px solid #bbad93;padding-inline-start:10px}
+.regional-map-panel .region-view-tools .region-reset{margin:0}
+body.final-detail[data-page=entorno] .regional-map-panel .c-destinations{display:flex;gap:7px;margin:12px 0 16px}
+body.final-detail[data-page=entorno] .regional-map-panel [data-place]{flex:0 1 auto;min-height:44px;padding:9px 14px;background:#fffaf0;color:#392f20;border:1px solid #aa936b;border-radius:9px;font-size:15px;cursor:pointer}
+body.final-detail[data-page=entorno] .regional-map-panel [data-place]:hover{border-color:#685331;box-shadow:inset 0 0 0 1px #685331}
+body.final-detail[data-page=entorno] .regional-map-panel [data-place][aria-pressed=true]{background:#695534;border-color:#695534;color:#fff;font-weight:600}
+@media(max-width:600px){.regional-map-panel .region-view-tools{width:100%}.region-view-tools button{padding-inline:9px}.region-view-tools [role=group]{padding-inline-start:8px}}

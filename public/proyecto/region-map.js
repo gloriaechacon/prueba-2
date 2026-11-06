@@ -7,18 +7,25 @@ const rainbowPin=L.marker([29.15,-82.373],{title:'Rainbow Park',alt:'Rainbow Par
 rainbowPin.on('click',()=>{document.querySelector('[data-place="rainbow"]').click();Object.values(markers).forEach(m=>m.getElement()?.classList.remove('selected'));map.panInside([29.15,-82.373],{padding:[45,45]})});
 
 const markers={};Object.entries(places).forEach(([key,p])=>{const marker=L.marker(p.point,{keyboard:true,title:p.name,icon:L.divIcon({className:'region-place region-'+key,html:'<span>'+p.name+'</span>',iconSize:[0,0],iconAnchor:[0,0]})}).addTo(map);marker.on('click',()=>choose(key));markers[key]=marker;});
-const reset=()=>map.fitBounds(Object.values(places).map(p=>p.point),{padding:host.clientWidth<500?[45,80]:[85,65],animate:false});reset();
-function choose(key){document.querySelector('[data-place="'+key+'"]').click();Object.entries(markers).forEach(([id,m])=>{m.getElement()?.classList.toggle('selected',id===key);m.getElement()?.setAttribute('aria-pressed',String(id===key));m.setZIndexOffset(id===key?1000:0)});map.panInside(places[key].point,{padding:[80,70],animate:!matchMedia('(prefers-reduced-motion:reduce)').matches});}
+const card=document.querySelector('.regional-tour .c-destination');
+const reset=()=>{
+ areas.focus(null);
+ map.invalidateSize({pan:false});
+ map.fitBounds([rainbowPin.getLatLng(),...Object.values(places).map(p=>p.point)],{padding:host.clientWidth<500?[54,78]:[95,65],animate:false});
+};
+function choose(key){document.querySelector('[data-place="'+key+'"]').click()}
 document.querySelectorAll('[data-region-mode]').forEach(b=>b.onclick=()=>{map.removeLayer(layer);layer=layers[b.dataset.regionMode].addTo(map);host.dataset.mode=b.dataset.regionMode;document.querySelectorAll('[data-region-mode]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));});
-const resetButton=document.createElement('button');resetButton.className='region-reset';resetButton.textContent='Ver todo el entorno';resetButton.onclick=reset;document.querySelector('.regional-map-note').before(resetButton);
+document.querySelector('.region-reset').onclick=reset;
 new ResizeObserver(()=>map.invalidateSize({pan:false})).observe(host);
 const areas=window.addRegionalAreas(map,key=>document.querySelector('[data-place="'+key+'"]')?.click());
 document.querySelectorAll('[data-place]').forEach(b=>b.addEventListener('click',()=>{
  const key=b.dataset.place;
+ card.hidden=false;map.invalidateSize({pan:false});
  Object.entries(markers).forEach(([id,m])=>{m.getElement()?.classList.toggle('selected',id===key);m.setZIndexOffset(id===key?1000:0)});
  areas.focus(key);
 }));
-choose('wec');
+reset();
+choose('rainbow');
 })();
 (()=>{const map=document.querySelector('#region-map'),title=document.querySelector('#c-place-title');if(!map||!title)return;
  const jump=document.createElement('a');jump.className='region-detail-jump';jump.href='#c-place-title';map.after(jump);

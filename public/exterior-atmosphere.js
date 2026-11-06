@@ -18,7 +18,8 @@ export function exteriorLight(T, scene, renderer) {
   const ctx = image.getContext('2d');
   const gradient = ctx.createLinearGradient(0,0,0,256);
   gradient.addColorStop(0, '#9ebfd3');
-  gradient.addColorStop(.48, '#f0f3f2');
+  gradient.addColorStop(.45, '#eef2f3');
+  gradient.addColorStop(.51, '#737b74');
   gradient.addColorStop(.53, '#babbb3');
   gradient.addColorStop(1, '#777a70');
   ctx.fillStyle=gradient;
@@ -27,7 +28,19 @@ export function exteriorLight(T, scene, renderer) {
   ctx.filter='blur(10px)';
   ctx.fillRect(80,35,90,24);
   ctx.fillRect(330,68,115,18);
+  // Narrow studio reflections describe bevels and glazing as the camera orbits.
+  ctx.filter='blur(3px)';
+  ctx.fillStyle='#f9f8ef';
+  ctx.fillRect(114,60,13,76);
+  ctx.fillRect(335,56,24,79);
+  ctx.fillStyle='#596361';
+  ctx.fillRect(354,104,45,39);
   ctx.filter='none';
+  const sidelight=ctx.createRadialGradient(377,116,1,377,116,26);
+  sidelight.addColorStop(0,'rgba(255,248,225,.88)');
+  sidelight.addColorStop(1,'rgba(255,248,225,0)');
+  ctx.fillStyle=sidelight;
+  ctx.fillRect(351,90,52,52);
   const texture = new T.CanvasTexture(image);
   texture.colorSpace=T.SRGBColorSpace;
   texture.mapping=T.EquirectangularReflectionMapping;
@@ -54,11 +67,56 @@ export function finishExterior(T, model) {
     for(const material of materials) {
       if(material.isMeshBasicMaterial){material.toneMapped=false;continue;}
       material.envMapIntensity=.85;
-      if(!material.transparent && material.name.toLowerCase().includes('vidrio') && !material.name.toLowerCase().includes('luminaria')) {
-        material.color.set('#9bafb8');
-        material.metalness=.95;
-        material.roughness=.07;
-        material.envMapIntensity=1.35;
+      const name=material.name.toLowerCase();
+      if(material.userData.textureKind==='roof'){
+        material.color.set('#cccccc');
+        material.normalScale.setScalar(1.85);
+        material.roughness=.94;
+        material.envMapIntensity=.45;
+        // Match the twelve staggered courses in the asphalt texture. A narrow
+        // contact shadow and a worn lip keep adjacent tabs readable at midrange.
+        material.onBeforeCompile=shader=>{
+          shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>', `
+            #include <map_fragment>
+            vec2 courses = vMapUv * vec2(6.0, 12.0);
+            float row = floor(courses.y);
+            float tab = floor(courses.x - 0.5 * mod(row, 2.0));
+            vec2 tile = mod(vec2(tab, row), vec2(6.0, 12.0));
+            float tone = fract(sin(dot(tile, vec2(17.13, 61.79))) * 4375.12);
+            float heightInRow = fract(courses.y);
+            float detail = 1.0 - smoothstep(0.08, 0.55, fwidth(courses.y));
+            float seam = 1.0 - smoothstep(0.0, 0.17, heightInRow);
+            float lip = smoothstep(0.89, 0.98, heightInRow);
+            diffuseColor.rgb *= mix(1.0, 0.85 + 0.31 * tone - 0.29 * seam + 0.09 * lip, detail);
+          `);
+        };
+      }else if(material.userData.textureKind==='stucco'){
+        material.color.set('#fff9ee');
+        material.roughness=.92;
+        material.normalScale.setScalar(.34);
+      }else if(name==='concrete_02_1k'){
+        material.color.set('#bcbab4');
+        material.roughness=.98;
+        material.metalness=0;
+      }else if(name==='exterior / asphalt shingle edges'){
+        material.color.set('#35393a');
+      }else if(name==='exterior / satin garage panels' || (name.includes('garaje') && name.includes('acero pintado'))){
+        material.color.set(name==='exterior / satin garage panels'?'#958d80':'#797366');
+        material.roughness=.49;
+      }else if(material.userData.textureKind==='oak'){
+        // Both exterior models use this wood surface on the principal entry leaf.
+        material.color.set('#a65c42');
+        material.normalScale.setScalar(.48);
+        material.roughness=.58;
+      }else if(name.includes('graphite window rebates') || name.includes('aluminio bronce')){
+        material.metalness=.78;
+        material.roughness=.29;
+        material.envMapIntensity=1.2;
+      }else if(!material.transparent && name.includes('vidrio') && !name.includes('luminaria')){
+        material.color.set('#859ba1');
+        material.metalness=.88;
+        material.roughness=.075;
+        material.envMapIntensity=1.38;
       }
     }
   });

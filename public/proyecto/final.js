@@ -11,7 +11,7 @@
     dialog=document.createElement('dialog');
     dialog.className='finish-dialog';
     dialog.setAttribute('aria-labelledby','finish-title');
-    dialog.innerHTML='<header><h2 id="finish-title">Utah · Finish concept</h2><form method="dialog"><button autofocus>Close</button></form></header><img src="/utah/acabados-concepto.png" alt="Casa Utah: conceptual finish proposal based on the project model">';
+    dialog.innerHTML='<div class="finish-bar"><h2 id="finish-title">Utah · Finish concept</h2><form method="dialog"><button autofocus>Close</button></form></div><img width="1536" height="1024" src="/utah/acabados-concepto.png" alt="Casa Utah: conceptual finish proposal based on the project model">';
     document.body.append(dialog);
     dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});
    }
