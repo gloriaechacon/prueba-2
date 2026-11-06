@@ -3,6 +3,21 @@
  const consultation=document.querySelector('#c-consultation textarea');if(consultation){try{const question=sessionStorage.getItem('rpc-question');if(question&&!consultation.value){consultation.value=question;sessionStorage.removeItem('rpc-question');}}catch{}}
  const home=document.body.classList.contains('final-home');
  const housing=document.body.classList.contains('final-housing');
+ if(home || housing){
+  let dialog;
+  document.addEventListener('click',event=>{
+   if(!event.target.closest('.finish-trigger'))return;
+   if(!dialog){
+    dialog=document.createElement('dialog');
+    dialog.className='finish-dialog';
+    dialog.setAttribute('aria-labelledby','finish-title');
+    dialog.innerHTML='<header><h2 id="finish-title">Utah · Finish concept</h2><form method="dialog"><button autofocus>Close</button></form></header><img src="/utah/acabados-concepto.png" alt="Casa Utah: conceptual finish proposal based on the project model">';
+    document.body.append(dialog);
+    dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});
+   }
+   dialog.showModal();
+  });
+ }
  const routes={lotes:'lotes',entorno:'entorno',inversion:'inversion',dossier:'inversion',viviendas:'viviendas',casas:'viviendas',contacto:'contacto',consulta:'contacto'};
  const nav=document.querySelector('.final-nav'),menu=nav?.querySelector('.final-menu');
  const links=nav?.querySelector('#final-links');

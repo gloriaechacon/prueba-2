@@ -106,7 +106,7 @@ function panorama(stage,src,item={}){
   if(disposed)return;
   const renderer=new T.WebGLRenderer({antialias:false});
   renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
-  const scene=new T.Scene(), camera=new T.PerspectiveCamera(72,1,.1,20);
+  const scene=new T.Scene(), camera=new T.PerspectiveCamera(item.initialView?.fov ?? 72,1,.1,20);
   const texture=new T.TextureLoader().load(src,()=>{if(!disposed){stage.append(renderer.domElement);schedule()}});
   texture.colorSpace=T.SRGBColorSpace;
   texture.wrapS=T.RepeatWrapping;

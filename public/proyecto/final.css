@@ -505,3 +505,14 @@ body.final-home.proposal-a #contacto footer{margin-top:1.5rem;padding-block:1.5r
 #consultation-interest option{color:#292a2b;background:#f6f0e3}
 .consultation .consultation-fields input{box-sizing:border-box;width:100%;min-height:48px;padding:12px 14px;font:inherit;border:1px solid #a89778;border-radius:6px;background:#fff9ee;color:#292a2b}
 .consultation .consultation-fields>label{display:grid;gap:8px;min-width:0;margin-bottom:18px}
+
+.finish-trigger,.finish-dialog button,.final-housing .inquiry-link{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;min-height:44px;padding:.55rem 1rem;border:1px solid #78664d;border-radius:6px;color:#493b29;background:#faf6ef;font:600 15px/1.25 var(--sans,sans-serif);text-decoration:none;cursor:pointer}
+.finish-trigger{margin-top:.65rem}
+.final-home #viviendas:has([data-home="b"][aria-pressed="true"]) .finish-trigger{display:none}
+.final-housing .studio-caption .finish-trigger{width:100%}
+.finish-dialog{box-sizing:border-box;width:min(94vw,1050px);max-width:94vw;max-height:94dvh;margin:auto;padding:0;border:0;background:#faf6ef;color:#30291f}
+.finish-dialog::backdrop{background:#201c17c9}
+.finish-dialog header{position:static;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 16px}
+.finish-dialog h2{margin:0;font-size:clamp(1.2rem,3vw,2rem)}
+.finish-dialog img{display:block;width:100%;height:auto;max-height:calc(90dvh - 64px);object-fit:contain}
+body:has(.finish-dialog[open]){overflow:hidden}

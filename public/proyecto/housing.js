@@ -33,22 +33,15 @@ function studioViews(id, host) {
  document.querySelector('.studio-views')?.remove();
  document.querySelector('.studio-still')?.remove();
  const model=catalog[id];
- const choices=[['model','Modelo 3D'],...(id==='utah'?[['image','Concepto de acabados']]:[]),['cutaway','Distribución 3D'],['plan','Planta']];
+ const choices=[['model','Modelo 3D'],['cutaway','Distribución 3D'],['plan','Planta']];
  const group=document.createElement('fieldset');group.className='studio-views';
  const legend=document.createElement('legend');legend.textContent='Vista de la vivienda';group.append(legend);
  const photo=document.createElement('img');photo.className='studio-still';photo.hidden=true;host.after(photo);
- const expand=document.createElement('a');
- expand.className='finish-expand';
- expand.href='recursos/utah/acabados-concepto.png';
- expand.target='_blank';
- expand.rel='noopener';
- expand.innerHTML='<span>Ampliar</span>';
- photo.after(expand);
  const controls=$('.studio-controls');let viewer=null, current='model';
  function select(view){
-  current=view;const staticView=view==='image'||view==='plan';
-  host.hidden=staticView;photo.hidden=!staticView;expand.hidden=view!=='image';controls.hidden=staticView;$('#studio-gesture').hidden=staticView;
-  if(staticView){photo.src=view==='image'?'recursos/utah/acabados-concepto.png':`recursos/${id}/${model.plan}`;photo.alt=(view==='image'?'Concepto de acabados':'Plano arquitectónico')+' · '+model.name;}
+  current=view;const staticView=view==='plan';
+  host.hidden=staticView;photo.hidden=!staticView;controls.hidden=staticView;$('#studio-gesture').hidden=staticView;
+  if(staticView){photo.src=`recursos/${id}/${model.plan}`;photo.alt='Plano arquitectónico'+' · '+model.name;}
   if(viewer&&!staticView){const open=view==='cutaway';viewer.roof(!open);viewer.camera(open?'above':'front');const roof=$('#studio-roof');roof.setAttribute('aria-pressed',String(open));roof.textContent=open?'Mostrar cubierta':'Ocultar cubierta';}
   for(const b of group.querySelectorAll('button'))b.setAttribute('aria-pressed',String(b.dataset.view===view));
  }

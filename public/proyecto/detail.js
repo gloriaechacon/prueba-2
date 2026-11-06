@@ -13,6 +13,7 @@
  if(video){if(reduced.matches)video.pause();function label(){pause.textContent=video.paused?'Reproducir video':'Pausar video';}video.addEventListener('play',label);video.addEventListener('pause',label);pause.addEventListener('click',()=>video.paused?video.play().catch(()=>{}):video.pause());label();}
  // Keep the current page visible until native navigation commits.
  let state={};try{state=JSON.parse(sessionStorage.getItem('rpc-choice')||'{}');}catch{}
+ if(page==="contacto" && ["utah","bell"].includes(query.get("house"))) state.house=query.get("house");
  function save(){sessionStorage.setItem('rpc-choice',JSON.stringify(state));const form=document.querySelector('#c-consultation');if(form){form.elements.lot.value=state.lot||'';form.elements.house.value=state.house||'';}}
  async function lotData(){const response=await fetch('/assets/geography/collection-lots.json');if(!response.ok)throw Error('Datos no disponibles');return response.json();}
  if(document.querySelector('#c-map')){
