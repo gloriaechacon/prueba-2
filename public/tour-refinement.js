@@ -17,7 +17,7 @@
  function pickLot(id){const n=Number(String(id).replace('RP-',''));const button=document.querySelector('#zone-list [data-zone-lot="'+n+'"]');if(button)button.click();else pendingLot=n;}
  let pendingLot=null;
  if(zone){
-  const intro=$('.zone-intro h2');if(intro)intro.innerHTML='Conoce los lotes<br><em>de Rainbow Park.</em>';
+  const intro=$('.zone-intro h2');if(intro){intro.innerHTML='Find your <em>place</em>';intro.classList.add('chapter-title');intro.dataset.reveal='lines';}
   const description=$('.zone-intro>p');if(description)description.textContent='Primero elige una ubicación. Después podrás acercarte al terreno y explorar una vivienda sobre él.';
   const help=document.createElement('div');help.className='parcel-guide';
   help.innerHTML='<div><h3>Estás viendo Rainbow Park desde el aire</h3><p>Los números señalan los lotes de la colección. Selecciona uno para acercarte a su ubicación.</p></div><label>Elige el lote que quieres conocer<select id="guided-lot"><option value="">Ver las 14 ubicaciones</option></select></label><ol><li>Elige un lote</li><li>Revisa su ubicación y superficie</li><li>Prueba la vista con vivienda</li></ol><details><summary>Cómo mover la vista</summary><p>Arrastra para moverte. Usa + y − para acercarte o alejarte. En teléfono, utiliza dos dedos. Las opciones de giro y vista aérea están dentro del explorador.</p></details>';
