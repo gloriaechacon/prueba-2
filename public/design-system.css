@@ -48,6 +48,88 @@
   --ease-in-out:cubic-bezier(.65,0,.35,1);
 }
 
+/* ===================================================================
+   Colour roles + palettes (redesign, round 4).
+   Every component reads these roles; the palette is chosen with
+   data-palette on <html> (palettes.js). Role pairs are WCAG AA checked:
+   adjusted tones are marked "AA" with the original value.
+     --c-deep      dark section background          --c-on-deep   text on deep
+     --c-paper     light section background         --c-ink       text on paper
+     --c-accent    brand accent (fills, lines, CTA) --c-accent-2  secondary accent
+     --c-support   third section background         --c-line      hairlines (derived)
+   Helpers (derived per palette so each pair passes AA):
+     --c-on-support, --c-on-accent (label on --c-btn), --c-btn (primary fill),
+     --c-accent-text (accent as text on paper), --c-accent-on-deep, --c-accent-on-support,
+     --c-detail, --c-tone (legacy dark bars), map roles --c-map-*.
+   =================================================================== */
+:root,html[data-palette=champana]{
+  --c-deep:#26272b;--c-paper:#f4efe4;--c-ink:#26272b;--c-on-deep:#f4efe4;
+  --c-accent:#896714;            /* AA: #8b6914 → #896714 (4.44 → 4.56 with paper label) */
+  --c-accent-2:#d2b77e;--c-support:#d8c49d;
+  --c-on-support:#26272b;--c-on-accent:#f4efe4;--c-btn:#896714;
+  --c-accent-text:#896714;--c-accent-on-deep:#d2b77e;--c-accent-on-support:#684e0f;
+  --c-detail:#d2b77e;
+  --c-map-line:#6d5f45;--c-map-active:#8b6914;--c-pin:#a33e32;
+  --c-map-lot:#edf6ba;--c-map-lot-fill:#e0ef9d;--c-map-lot-active:#f1f8b9;--c-map-group:#e7b869;--c-map-sold:#b98277;
+  --c-tone:#695534;--c-shade:23 24 25
+}
+html[data-palette=verde-ocala]{
+  --c-deep:#1F3A2E;--c-paper:#F4EEE2;--c-ink:#1F3A2E;--c-on-deep:#F4EEE2;
+  --c-accent:#C29A4B;--c-accent-2:#B8653F;
+  --c-support:#597446;           /* AA: #5E7A4A → #597446 (paper text 4.17 → 4.53) */
+  --c-on-support:#F4EEE2;--c-on-accent:#1F3A2E;--c-btn:#C29A4B;
+  --c-accent-text:#86682d;       /* AA: accent as small text on paper #C29A4B → #86682d */
+  --c-accent-on-deep:#C29A4B;--c-accent-on-support:#F4EEE2;
+  --c-detail:#B8653F;
+  --c-map-line:#1F3A2E;--c-map-active:#C29A4B;--c-pin:#B8653F;
+  --c-map-lot:#F4EEE2;--c-map-lot-fill:#e6d3a3;--c-map-lot-active:#C29A4B;--c-map-group:#d9b36a;--c-map-sold:#b98277;
+  --c-tone:#2b4a3b;--c-shade:16 31 24
+}
+html[data-palette=atardecer]{
+  --c-deep:#16233B;--c-paper:#F2E6D3;--c-ink:#16233B;--c-on-deep:#F2E6D3;
+  --c-accent:#E8875B;--c-accent-2:#D9A441;--c-support:#8FA58C;
+  --c-on-support:#16233B;--c-on-accent:#16233B;--c-btn:#E8875B;
+  --c-accent-text:#ae4718;       /* AA: accent as small text on paper #E8875B → #ae4718 */
+  --c-accent-on-deep:#E8875B;--c-accent-on-support:#5d260d;
+  --c-detail:#D9A441;
+  --c-map-line:#16233B;--c-map-active:#E8875B;--c-pin:#E8875B;
+  --c-map-lot:#F2E6D3;--c-map-lot-fill:#f0c9a6;--c-map-lot-active:#E8875B;--c-map-group:#D9A441;--c-map-sold:#b98277;
+  --c-tone:#24375a;--c-shade:14 22 38
+}
+html[data-palette=tierra-ecuestre]{
+  --c-deep:#7A3E22;--c-paper:#F6F0E4;--c-ink:#2F4A35;--c-on-deep:#F6F0E4;
+  --c-accent:#B98B3E;--c-accent-2:#7A3E22;--c-support:#2F4A35;
+  --c-on-support:#F6F0E4;--c-on-accent:#2F4A35;
+  --c-btn:#cfab6f;               /* AA: button fill #B98B3E → #cfab6f (ink label 3.17 → 4.51) */
+  --c-accent-text:#89672e;       /* AA: accent as small text on paper #B98B3E → #89672e */
+  --c-accent-on-deep:#d9bc8c;    /* AA: accent on deep #B98B3E → #d9bc8c (2.69 → 4.5) */
+  --c-accent-on-support:#cfab6f; /* AA: accent on support #B98B3E → #cfab6f */
+  --c-detail:#9DB8C9;
+  --c-map-line:#7A3E22;--c-map-active:#B98B3E;--c-pin:#7A3E22;
+  --c-map-lot:#9DB8C9;--c-map-lot-fill:#c9dbe6;--c-map-lot-active:#e3c48a;--c-map-group:#e3c48a;--c-map-sold:#b98277;
+  --c-tone:#5e2f19;--c-shade:48 26 14
+}
+:root{
+  --c-line:color-mix(in srgb,var(--c-ink) 22%,transparent);
+  --c-line-strong:color-mix(in srgb,var(--c-ink) 70%,transparent);
+  --c-muted:color-mix(in srgb,var(--c-ink) 76%,var(--c-paper));
+  --c-paper-2:color-mix(in srgb,#fff 50%,var(--c-paper));
+  --c-paper-tint:color-mix(in srgb,var(--c-ink) 7%,var(--c-paper));
+  --c-line-mid:color-mix(in srgb,var(--c-ink) 40%,transparent);
+  --c-btn-hover:color-mix(in srgb,var(--c-btn) 84%,var(--c-ink));
+  --c-focus:var(--c-accent)
+}
+/* Surfaces: a section declares data-surface=deep|paper|support and its
+   content reads --s-* (bg, fg, muted, line, accent, card). */
+[data-surface=paper],:root{--s-bg:var(--c-paper);--s-fg:var(--c-ink);--s-muted:var(--c-muted);--s-line:var(--c-line);--s-accent:var(--c-accent-text);--s-card:var(--c-paper-2);--s-card-fg:var(--c-ink)}
+[data-surface=deep]{--s-bg:var(--c-deep);--s-fg:var(--c-on-deep);--s-muted:color-mix(in srgb,var(--c-on-deep) 80%,var(--c-deep));--s-line:color-mix(in srgb,var(--c-on-deep) 26%,transparent);--s-accent:var(--c-accent-on-deep);--s-card:var(--c-paper);--s-card-fg:var(--c-ink)}
+[data-surface=support]{--s-bg:var(--c-support);--s-fg:var(--c-on-support);--s-muted:var(--c-on-support);--s-line:color-mix(in srgb,var(--c-on-support) 30%,transparent);--s-accent:var(--c-accent-on-support);--s-card:var(--c-paper);--s-card-fg:var(--c-ink)}
+[data-surface]{background-color:var(--s-bg)!important;color:var(--s-fg)!important}
+/* Smooth palette switch (class set by palettes.js for ~450 ms) */
+html.palette-switching,html.palette-switching *,html.palette-switching *::before,html.palette-switching *::after{
+  transition:background-color .4s ease,color .4s ease,border-color .4s ease,fill .4s ease,stroke .4s ease,box-shadow .4s ease,outline-color .4s ease!important}
+@media(prefers-reduced-motion:reduce){html.palette-switching *{transition:none!important}}
+
 /* Base roles */
 body{font-family:var(--font-sans);font-optical-sizing:auto}
 .t-display{font-family:var(--font-display);font-weight:var(--w-display);font-size:var(--step-5);line-height:var(--lh-display);letter-spacing:var(--track-display)}
@@ -79,14 +161,14 @@ em,i{font-synthesis:none}
   transform:scaleX(0);transform-origin:right;transition:transform .5s var(--ease-out-expo)}
 #final-links a[aria-current]::after,#final-links a:hover::after,#final-links a:focus-visible::after{transform:scaleX(1);transform-origin:left}
 #final-links:hover a[aria-current]:not(:hover)::after{transform:scaleX(0);transform-origin:right}
-#final-links a:focus-visible{outline:2px solid #b08a3e;outline-offset:2px}
+#final-links a:focus-visible{outline:2px solid var(--c-focus);outline-offset:2px}
 .final-nav .final-menu{font:600 var(--step--2)/1 var(--font-sans)!important;letter-spacing:var(--track-label-tight);text-transform:uppercase;
   background:transparent!important;color:inherit!important;border:1px solid currentColor!important;border-radius:var(--radius-btn,10px)!important;padding:12px 16px!important;min-height:44px}
 /* Mobile drawer: same language, larger targets */
-.site-drawer{background:var(--paper-warm,#f4efe4)!important;color:#26272b!important;padding:20px 24px!important}
+.site-drawer{background:var(--c-paper)!important;color:var(--c-ink)!important;padding:20px 24px!important}
 .site-drawer .drawer-close{border:1px solid currentColor!important;border-radius:var(--radius-btn,10px)!important;font:300 26px/1 var(--font-sans)!important}
 .site-drawer #final-links{gap:0!important}
-.site-drawer #final-links a{display:block;padding:18px 0!important;font-size:var(--step--1)!important;letter-spacing:var(--track-label)!important;border-bottom:1px solid #d6cbb4!important}
+.site-drawer #final-links a{display:block;padding:18px 0!important;font-size:var(--step--1)!important;letter-spacing:var(--track-label)!important;border-bottom:1px solid var(--c-line)!important}
 .site-drawer #final-links a::after{left:0;right:auto;width:44px;bottom:-1px;height:2px}
 @media(prefers-reduced-motion:reduce){#final-links a::after{transition:none}}
 
@@ -99,34 +181,34 @@ em,i{font-synthesis:none}
    .link-line           text link with the nav's sliding underline
    Optional trailing <b aria-hidden="true">→</b> slides on hover.
    =================================================================== */
+/* Legacy names kept as aliases of the colour roles */
 :root{
-  --gold:#8b6914;--gold-deep:#6f5310;--gold-soft:#d2b77e;
-  --ink:#26272b;--paper-warm:#f4efe4;--cream:#fffaf0;
-  --radius-btn:10px
+  --gold:var(--c-btn);--gold-deep:var(--c-btn-hover);--gold-soft:var(--c-accent-2);
+  --ink:var(--c-ink);--paper-warm:var(--c-paper);--cream:var(--c-paper-2);
+  --radius-btn:10px;--hairline:var(--c-line)
 }
-:root{--hairline:#cbbfa6}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:16px;min-height:52px;padding:0 28px;
   border-radius:var(--radius-btn);border:1px solid transparent;cursor:pointer;text-decoration:none;
   font:600 var(--step--1)/1.1 var(--font-sans);letter-spacing:var(--track-label-tight);text-transform:uppercase;
   transition:background .35s var(--ease-out-expo),color .35s var(--ease-out-expo),border-color .35s var(--ease-out-expo)}
 .btn b{font-weight:400;font-size:1.15em;letter-spacing:0;transition:transform .5s var(--ease-out-expo)}
 .btn:hover b{transform:translateX(5px)}
-.btn:focus-visible{outline:2px solid var(--gold-soft);outline-offset:3px}
-.btn--primary{background:var(--gold);color:var(--cream)}
-.btn--primary:hover{background:var(--gold-deep);color:var(--cream)}
+.btn:focus-visible{outline:2px solid var(--c-focus);outline-offset:3px}
+.btn--primary{background:var(--c-btn);color:var(--c-on-accent)}
+.btn--primary:hover{background:var(--c-btn-hover);color:var(--c-on-accent)}
 .btn--secondary{background:transparent;color:inherit;border-color:currentColor}
-.btn--secondary:hover{background:var(--ink);color:var(--cream);border-color:var(--ink)}
-.btn--light.btn--primary{background:var(--cream);color:var(--ink)}
-.btn--light.btn--primary:hover{background:var(--gold-soft);color:var(--ink)}
-.btn--light.btn--secondary{color:var(--cream);border-color:rgb(255 250 240 / .7)}
-.btn--light.btn--secondary:hover{background:var(--cream);color:var(--ink);border-color:var(--cream)}
+.btn--secondary:hover{background:var(--s-fg,var(--c-ink));color:var(--s-bg,var(--c-paper));border-color:var(--s-fg,var(--c-ink))}
+.btn--light.btn--primary{background:var(--c-on-deep);color:var(--c-deep)}
+.btn--light.btn--primary:hover{background:var(--c-btn);color:var(--c-on-accent)}
+.btn--light.btn--secondary{color:var(--c-on-deep);border-color:color-mix(in srgb,var(--c-on-deep) 75%,transparent)}
+.btn--light.btn--secondary:hover{background:var(--c-on-deep);color:var(--c-deep);border-color:var(--c-on-deep)}
 .btn--block{width:100%;justify-content:space-between}
 .link-line{position:relative;display:inline-flex;align-items:center;gap:10px;color:inherit;text-decoration:none;padding:8px 0;
   font:600 var(--step--2)/1.3 var(--font-sans);letter-spacing:var(--track-label-tight);text-transform:uppercase}
 .link-line::after{content:"";position:absolute;left:0;right:0;bottom:2px;height:1px;background:currentColor;transform:scaleX(1);transform-origin:left;transition:transform .5s var(--ease-out-expo)}
 .link-line:hover::after{animation:link-line-sweep .7s var(--ease-out-expo)}
 @keyframes link-line-sweep{0%{transform:scaleX(1);transform-origin:right}45%{transform:scaleX(0);transform-origin:right}46%{transform:scaleX(0);transform-origin:left}100%{transform:scaleX(1);transform-origin:left}}
-.link-line:focus-visible{outline:2px solid var(--gold-soft);outline-offset:3px}
+.link-line:focus-visible{outline:2px solid var(--c-focus);outline-offset:3px}
 @media(prefers-reduced-motion:reduce){.btn,.btn b,.link-line::after{transition:none;animation:none}}
 
 /* Shared editorial chapter title: "Find your *place*" + spaced subtitle */

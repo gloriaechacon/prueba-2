@@ -1,25 +1,25 @@
-#lot-gallery{margin:clamp(2rem,5vw,5rem) auto 2rem;color:#30291f}
+#lot-gallery{margin:clamp(2rem,5vw,5rem) auto 2rem;color:var(--c-ink)}
 #lot-gallery[hidden]{display:none}
 #lot-gallery header,#lot-gallery footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
 #lot-gallery h2{font:400 clamp(2rem,4vw,3.5rem)/1.1 var(--font-display);margin:.25em 0}
 #lot-gallery small{letter-spacing:.09em;text-transform:uppercase}
 .media-tabs,.media-thumbs{display:flex;gap:.5rem}
-#lot-gallery button{cursor:pointer;border:1px solid #a7987a;border-radius:6px;color:#30291f;background:#f7f3ea;font:inherit}
+#lot-gallery button{cursor:pointer;border:1px solid var(--c-line-mid);border-radius:6px;color:var(--c-ink);background:var(--c-paper-2);font:inherit}
 .media-tabs button{min-height:44px;padding:.5rem 1rem}
-#lot-gallery button[aria-pressed=true]{background:#57472e;color:white}
-.media-stage{margin:1rem 0;position:relative;width:100%;height:clamp(240px,48vw,640px);overflow:hidden;border-radius:12px;background:#232622}
+#lot-gallery button[aria-pressed=true]{background:var(--c-deep);color:var(--c-on-deep)}#lot-gallery button[aria-pressed=true] *{color:inherit!important}
+.media-stage{margin:1rem 0;position:relative;width:100%;height:clamp(240px,48vw,640px);overflow:hidden;border-radius:12px;background:var(--c-deep)}
 .media-stage>img{width:100%;height:100%;object-fit:contain}
-#lot-gallery .photo-arrow{position:absolute;top:50%;transform:translateY(-50%);display:grid;place-items:center;width:46px;height:46px;padding:0;border:1px solid #ffffff85;border-radius:50%;background:#25282ce6;color:white}
+#lot-gallery .photo-arrow{position:absolute;top:50%;transform:translateY(-50%);display:grid;place-items:center;width:46px;height:46px;padding:0;border:1px solid #ffffff85;border-radius:50%;background:rgb(var(--c-shade) / .9);color:white}
 .photo-arrow.previous{left:clamp(8px,2%,24px)}
 .photo-arrow.next{right:clamp(8px,2%,24px)}
 .photo-arrow::before{content:"";width:10px;height:10px;border:solid currentColor;border-width:2px 2px 0 0;transform:rotate(45deg)}
 .photo-arrow.previous::before{transform:rotate(-135deg)}
-#lot-gallery .photo-arrow:hover,#lot-gallery .photo-arrow:focus-visible{background:#f4e9cf;color:#30291f}
+#lot-gallery .photo-arrow:hover,#lot-gallery .photo-arrow:focus-visible{background:var(--c-paper);color:var(--c-ink)}
 .media-stage[tabindex]{background-size:auto 100%;background-repeat:repeat-x;user-select:none;touch-action:none;cursor:grab}
 .media-stage:active{cursor:grabbing}
 .panorama-frame{position:relative;margin:1rem 0}
 .panorama-frame .media-stage{margin:0}
-.panorama-hint{position:absolute;bottom:1rem;left:50%;transform:translateX(-50%);max-width:95%;width:max-content;padding:.55rem .9rem;border-radius:6px;background:#25282cf2;color:#fff9ec;font-family:inherit;font-size:clamp(.75rem,1.1vw,.875rem);font-weight:400;line-height:1.5;letter-spacing:.09em;text-transform:uppercase;text-align:center;pointer-events:none;transition:opacity .25s}
+.panorama-hint{position:absolute;bottom:1rem;left:50%;transform:translateX(-50%);max-width:95%;width:max-content;padding:.55rem .9rem;border-radius:6px;background:rgb(var(--c-shade) / .95);color:var(--c-paper-2);font-family:inherit;font-size:clamp(.75rem,1.1vw,.875rem);font-weight:400;line-height:1.5;letter-spacing:.09em;text-transform:uppercase;text-align:center;pointer-events:none;transition:opacity .25s}
 .panorama-explored .panorama-hint{opacity:0}
 @media(prefers-reduced-motion:reduce){.panorama-hint{transition:none}}
 .media-stage canvas{display:block;width:100%;height:100%;pointer-events:none}
@@ -54,7 +54,7 @@ body.final-detail[data-page=lotes] .c-lot-card dl>div{padding:0;border:0}
 
 .photo-outline-holder{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none}
 .photo-outline-holder svg{width:100%;height:100%;overflow:visible}
-.photo-outline-holder polygon{fill:#e5c57838;stroke:#ffe3a0;stroke-width:3;vector-effect:non-scaling-stroke;stroke-linejoin:round}
-.lot-outline-note{font-size:.9rem;line-height:1.5;margin:.5rem 0;color:#655234}
+.photo-outline-holder polygon{fill:color-mix(in srgb,var(--c-map-lot-active) 22%,transparent);stroke:var(--c-map-lot-active);stroke-width:3;vector-effect:non-scaling-stroke;stroke-linejoin:round}
+.lot-outline-note{font-size:.9rem;line-height:1.5;margin:.5rem 0;color:var(--c-tone)}
 .media-thumbs button span{display:block;padding:.25rem}
 #lot-gallery .photo-arrow{z-index:3}

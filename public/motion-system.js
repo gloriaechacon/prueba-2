@@ -27,8 +27,6 @@
   const root = document.documentElement;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
   const EASE = 'expo.out';
-  const INK = '#292a2d';
-  const CREAM = '#f7f2e7';
 
   const load = src => new Promise((resolve, reject) => {
     const s = document.createElement('script');
@@ -197,7 +195,7 @@
         { x: 0, y: 0, scale: 1, duration: 0.7, ease: 'power2.inOut' }, 0)
       .fromTo(right, { x: () => startPose(right, false).x, y: () => startPose(right, false).y, scale: () => startPose(right, false).scale },
         { x: 0, y: 0, scale: 1, duration: 0.7, ease: 'power2.inOut' }, 0)
-      .fromTo(tinted, { color: INK }, { color: CREAM, duration: 0.22 }, 0.3)
+      .fromTo(tinted, { '--portal-tint': 0 }, { '--portal-tint': 1, duration: 0.22 }, 0.3)
       .fromTo(shade, { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0.35)
       .fromTo(footer, { autoAlpha: 0, y: 26 }, { autoAlpha: 1, y: 0, duration: 0.16 }, 0.7)
       .to({}, { duration: 0.12 });

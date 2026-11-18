@@ -50,8 +50,8 @@
 
     data.destinations.forEach((d, i) => {
       const end = [d.lat, d.lon];
-      const line = L.polyline(arc(origin, end), { className: `route-arc route-${d.key}`, color: '#6d5f45', weight: 1.4, opacity: 0.9, interactive: false }).addTo(map);
-      const dot = L.circleMarker(end, { className: 'route-dot', radius: 4.5, color: '#6d5f45', weight: 1.5, fillColor: '#f7f2e7', fillOpacity: 1, interactive: false }).addTo(map);
+      const line = L.polyline(arc(origin, end), { className: `route-arc route-${d.key}`, weight: 1.4, opacity: 0.9, interactive: false }).addTo(map);
+      const dot = L.circleMarker(end, { className: 'route-dot', radius: 4.5, weight: 1.5, fillOpacity: 1, interactive: false }).addTo(map);
       // Label side per destination keeps neighbours (WEC / airport) apart at the regional zoom.
       const placeSide = { wec: 'n', airport: 's', downtown: 'n', classic: 's', nature: 'w' }[d.key] || (d.lon < data.origin.lon ? 'w' : 'e');
       const label = L.marker(end, { keyboard: false, zIndexOffset: 400, icon: L.divIcon({ className: `route-label route-label--${placeSide}`, iconSize: null, iconAnchor: [0, 0], html: '' }) }).addTo(map);
@@ -108,9 +108,10 @@
       active = key;
       Object.entries(routes).forEach(([k, r]) => {
         const on = k === key;
-        r.line.setStyle({ color: on ? '#8b6914' : '#6d5f45', weight: on ? 2.6 : 1.4 });
+        r.line.setStyle({ weight: on ? 2.6 : 1.4 });
         r.line.getElement()?.classList.toggle('is-active', on);
-        r.dot.setStyle({ radius: on ? 7 : 4.5, color: on ? '#8b6914' : '#6d5f45', fillColor: on ? '#8b6914' : '#f7f2e7' });
+        r.dot.setStyle({ radius: on ? 7 : 4.5 });
+        r.dot.getElement()?.classList.toggle('is-active', on);
         r.label.getElement()?.classList.toggle('is-active', on);
         if (on) r.line.bringToFront();
       });

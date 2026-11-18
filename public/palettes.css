@@ -1,39 +1,132 @@
-/* One palette follows the chosen composition through the whole proposal. */
-.proposal[data-palette]{--surface:#f0eee5;--tint:#e4e9df;--text:#172e29;--muted:#4b5e53;--accent:#294d3f;--border:#a4b1a2;--pine:var(--accent);--deep:var(--text);--cream:var(--surface);--lime:#d3e5a3;--ink:var(--text)}
-.proposal[data-palette="earth"]{--surface:#fcf6ee;--tint:#eee1d4;--text:#3d302a;--muted:#70594a;--accent:#824b35;--border:#bba18e;--lime:#e4c4a6}
-.proposal[data-palette] :is(.destination-copy,.destination-story,.zone-panel,.project-register,.investment-signals article,.investment-library-cta){background:var(--surface);color:var(--text)}
-.proposal[data-palette] :is(.destination-copy p,.home-note,.home-specs small,.territory-footnote p,.zone-panel>p){color:var(--muted)}
-.proposal[data-palette] :is(.destination-tabs button,.home-selector button){color:var(--text)}
-.proposal[data-palette] :is(.destination-tabs button,.home-selector button)[aria-pressed=true]{background:var(--accent);color:white}
-.proposal[data-palette] :is(.zone-top-sub,.zone-top-actions button){color:white}
-.proposal[data-palette] .home-selector{background:var(--surface)}
-.proposal[data-palette] .project-introduction{color:var(--text)}
-.proposal-b[data-palette] :is(.project-introduction,#lotes,#entorno,#viviendas,.investment){background:var(--surface);border-bottom:1px solid var(--border)}
-.proposal-b[data-palette] :is(.project-introduction h2,.zone-intro h2,.territory-opening h2,.investment-intro h2,.contact h2){font-family:var(--sans);font-weight:500}
-.proposal-b[data-palette] main :is(h2,h3) em{font-family:var(--sans);font-weight:inherit;color:inherit}
-.proposal-b[data-palette] .project-introduction{grid-template-columns:1fr 1.15fr;gap:10vw}
-.proposal-b[data-palette] .project-introduction h2{font-size:clamp(32px,3.4vw,48px)}
-.proposal-b[data-palette] .investment{color:var(--text)}
-.proposal-b[data-palette] .investment-intro>div>p:nth-child(2){color:var(--muted)}
-.proposal-b[data-palette] .investment-opening .investment-button{background:var(--accent);color:white}
-.proposal-b[data-palette] .investment-detail{border-color:var(--border)}
-.proposal-b[data-palette] .showroom{background:var(--surface);border:1px solid var(--border)}
-@media(max-width:700px){.proposal-b[data-palette] .project-introduction{grid-template-columns:1fr;gap:24px}}
-.proposal :is(header.unified-header,.hero){--cover-paper:#f0eee5;--cover-ink:#172e29;--cover-accent:#294d3f;--cover-detail:#d3e5a3;--cover-shade:9 31 26}
-.proposal[data-palette="earth"] :is(header.unified-header,.hero){--cover-paper:#fcf6ee;--cover-ink:#3d302a;--cover-accent:#824b35;--cover-detail:#e4c4a6;--cover-shade:49 29 20}
-.proposal[data-palette="slate"] :is(header.unified-header,.hero){--cover-paper:#f1f5f5;--cover-ink:#203d50;--cover-accent:#285a70;--cover-detail:#c8dce3;--cover-shade:12 33 49}
-.proposal-a[data-palette] .hero-shade{background:linear-gradient(90deg,rgb(var(--cover-shade)/.65),rgb(var(--cover-shade)/.12)),linear-gradient(0deg,rgb(var(--cover-shade)/.7),transparent 65%)}
-.proposal[data-palette] .hero .enter-orbit{background:var(--cover-accent);color:#fff;border:1px solid #ffffff55}
-.proposal[data-palette] .hero .enter-orbit:hover{background:var(--cover-ink);color:#fff}
-.proposal[data-palette] .hero .enter-orbit:focus-visible{outline:3px solid var(--cover-detail);outline-offset:5px}
-.proposal-a[data-palette] .topbar.unified-header{background:rgb(from var(--cover-paper) r g b / var(--header-progress))}
-.proposal[data-palette] .unified-header.header-solid,.proposal[data-palette] .unified-header.menu-open{color:var(--cover-ink)}
-.proposal[data-palette] .unified-header.menu-open,.proposal[data-palette] .topbar.unified-header #main-menu{background:var(--cover-paper);color:var(--cover-ink)}
-.proposal-b[data-palette] .topbar.unified-header{background:var(--cover-paper);color:var(--cover-ink)}
-.proposal-b[data-palette] .hero{background:var(--cover-paper);color:var(--cover-ink)}
-.proposal-b[data-palette] .hero h1 em{color:var(--cover-accent)}
-.proposal-b[data-palette] .hero-bottom,.proposal-b[data-palette] .hero #video-toggle{color:var(--cover-ink)}
-.proposal-b[data-palette] .media-note{background:var(--cover-paper);color:var(--cover-ink)}
+/* Palettes · section rhythm + legacy bridge + floating selector.
+   Colour roles and the four palettes live in design-system.css; palettes.js sets html[data-palette].
+   Loaded last in <head> so it can re-point older stylesheets at the roles.
 
-.proposal[data-palette=champagne]{--surface:#efe8d9;--tint:#ddd5c4;--text:#26272b;--muted:#56514a;--accent:#695534;--border:#a99b7f;--lime:#d2b77e}.proposal[data-palette=navy]{--surface:#f0f1f3;--tint:#dde3ea;--text:#142b49;--muted:#475b70;--accent:#334f70;--border:#a2afbd;--lime:#c7b58d}
-.proposal[data-palette=champagne] :is(header.unified-header,.hero){--cover-paper:#efe8d9;--cover-ink:#26272b;--cover-accent:#695534;--cover-detail:#d2b77e;--cover-shade:38 39 43}.proposal[data-palette=navy] :is(header.unified-header,.hero){--cover-paper:#f0f1f3;--cover-ink:#142b49;--cover-accent:#334f70;--cover-detail:#c7b58d;--cover-shade:20 43 73}
+   Section rhythm (same for every palette; data-surface in the HTML):
+     Home       Inicio (3D, media) · Introducción SUPPORT · Lotes PAPER · Portal Entorno (film, media)
+                · Entorno SUPPORT · Inversión PAPER · Viviendas SUPPORT · Contacto DEEP · Footer DEEP
+     Lotes      Página PAPER · Galería SUPPORT
+     Entorno    Portal (film, media) · Página SUPPORT
+     Inversión  Intro (media) · Cifras DEEP · Mapa PAPER · Dossier SUPPORT · Footer DEEP
+     Contacto   Intro (media) · Página PAPER */
+
+/* ---------- Legacy bridge: proposal-A base (home + /a/ embeds) ---------- */
+.proposal{--surface:var(--c-paper);--tint:var(--c-paper-tint);--text:var(--c-ink);--muted:var(--c-muted);--accent:var(--c-tone);--border:var(--c-line-mid);
+  --pine:var(--c-tone);--deep:var(--c-ink);--cream:var(--c-paper);--lime:var(--c-accent-2);--ink:var(--c-ink)}
+.proposal :is(.destination-copy,.destination-story,.zone-panel,.project-register,.investment-signals article,.investment-library-cta){background:var(--surface);color:var(--text)}
+.proposal :is(.destination-copy p,.home-note,.home-specs small,.territory-footnote p,.zone-panel>p){color:var(--muted)}
+.proposal :is(.destination-tabs button,.home-selector button){color:var(--text)}
+.proposal :is(.destination-tabs button,.home-selector button)[aria-pressed=true]{background:var(--c-deep);color:var(--c-on-deep)}
+.proposal :is(.zone-top-sub,.zone-top-actions button){color:var(--c-on-deep)}
+.proposal .home-selector{background:var(--surface)}
+.proposal :is(header.unified-header,.hero){--cover-paper:var(--c-paper);--cover-ink:var(--c-ink);--cover-accent:var(--c-tone);--cover-detail:var(--c-accent-2);--cover-shade:var(--c-shade)}
+.proposal-a .hero-shade{background:linear-gradient(90deg,rgb(var(--cover-shade)/.65),rgb(var(--cover-shade)/.12)),linear-gradient(0deg,rgb(var(--cover-shade)/.7),transparent 65%)}
+.proposal .hero .enter-orbit{background:var(--cover-accent);color:var(--c-on-deep);border:1px solid color-mix(in srgb,var(--c-on-deep) 35%,transparent)}
+.proposal .hero .enter-orbit:hover{background:var(--cover-ink);color:var(--c-on-deep)}
+.proposal .hero .enter-orbit:focus-visible{outline:3px solid var(--cover-detail);outline-offset:5px}
+.proposal-a .topbar.unified-header{background:color-mix(in srgb,var(--cover-paper) calc(var(--header-progress,1) * 100%),transparent)}
+.proposal .unified-header.header-solid,.proposal .unified-header.menu-open{color:var(--cover-ink)}
+.proposal .unified-header.menu-open,.proposal .topbar.unified-header #main-menu{background:var(--cover-paper);color:var(--cover-ink)}
+
+/* ---------- Global: page canvas, nav, focus ---------- */
+body{background-color:var(--c-paper)}
+.final-nav:not(.is-over-media){background-color:var(--c-paper)!important;color:var(--c-ink)!important;border-color:var(--c-line)!important}
+.final-home>.final-nav:not(.is-solid):not(.menu-open){background-color:transparent!important}
+.final-home>.final-nav.is-solid{background-color:var(--c-paper)!important}
+.final-nav .rpc-language-control,.final-nav select{color:inherit!important;border-color:currentColor!important;background-color:transparent!important}
+.final-nav select option{color:var(--c-ink);background:var(--c-paper)}
+:focus-visible{outline-color:var(--c-focus)}
+::selection{background:var(--c-accent-2);color:var(--c-ink)}
+
+/* ---------- Text directly on a surface follows the surface ---------- */
+[data-surface] :is(h1,h2,h3,h4,.chapter-title,.chapter-kicker):not([data-surface] [data-surface] *){color:inherit}
+[data-surface] :is(h1,h2,h3,.chapter-title) em{color:var(--s-accent)}
+[data-surface=deep] :is(h1,h2,h3) em,[data-surface=support] :is(h1,h2,h3) em{color:var(--s-accent)!important}
+/* Cards inside a coloured surface go back to paper */
+[data-surface]:is([data-surface=deep],[data-surface=support]) :is(.zone-panel,.route-pass,.c-lot-card,.lot-card,.space-summary,.c-form,.showroom,.home-stage,.destination-story,.territory-map-wrap,.final-section-link,.zone-explorer,.regional-map-panel,.c-destination,.media-thumbs button,.lot-gallery-card){--s-bg:var(--c-paper);--s-fg:var(--c-ink);--s-muted:var(--c-muted);--s-line:var(--c-line);--s-accent:var(--c-accent-text)}
+
+/* ---------- Home sections ---------- */
+/* Introducción (support) */
+.project-introduction[data-surface] :is(p,li,h2,h3){color:var(--s-fg)!important}
+.project-introduction[data-surface] p+p,.project-introduction[data-surface] p:not(:first-child){color:var(--s-muted)!important}
+.project-introduction[data-surface] :is(a,button):not(.btn){background:var(--c-btn)!important;color:var(--c-on-accent)!important;border-color:var(--c-btn)!important}
+/* Lotes (paper): map frame bar uses the deep role */
+#lotes .zone-top{background:var(--c-deep)!important;color:var(--c-on-deep)!important}
+#lotes .zone-top :is(button,a){color:var(--c-on-deep)!important;border-color:color-mix(in srgb,var(--c-on-deep) 45%,transparent)!important;background:transparent!important}
+#lotes :is(.zone-mode,.zone-tools,.zone-modes){background:var(--c-paper-tint)!important}
+#lotes :is(.zone-mode button,.zone-modes button)[aria-pressed=true]{background:var(--c-btn)!important;color:var(--c-on-accent)!important;border-color:var(--c-btn)!important}
+#lotes .zone-bottom,#lotes .zone-bottom *{color:var(--c-muted)!important}
+#lotes .lot-chooser button,#lotes .zone-lot-buttons button{background:var(--c-paper-2)!important;color:var(--c-ink)!important;border-color:var(--c-line-mid)!important}
+#lotes .lot-chooser button[aria-pressed=true],#lotes .zone-lot-buttons button[aria-pressed=true]{background:var(--c-deep)!important;color:var(--c-on-deep)!important}
+/* Entorno (support) */
+#entorno[data-surface] .territory-opening :is(p,span,small),#entorno[data-surface] .c-heading :is(p,span){color:var(--s-fg)!important}
+#entorno[data-surface] .territory-opening :is(p+p),#entorno[data-surface] .territory-opening aside p:last-child{color:var(--s-muted)!important}
+#entorno[data-surface] .territory-opening aside,#entorno[data-surface] .territory-opening>div+div{border-color:var(--s-line)!important}
+#entorno[data-surface] .territory-map-wrap{background:var(--c-paper)!important;color:var(--c-ink)}
+#entorno[data-surface] .territory-footnote :is(p,a,span){color:var(--s-fg)!important}
+/* Viviendas (support): the showroom card stays paper */
+#viviendas[data-surface] .homes-intro :is(p,h2,span),#viviendas[data-surface]>:is(header,div)>:is(p,h2,span){color:var(--s-fg)!important}
+#viviendas[data-surface]>:is(p,.fine),#viviendas[data-surface]>p :is(a,span){color:var(--s-fg)!important}
+#viviendas[data-surface] .showroom{background:var(--c-paper)!important;color:var(--c-ink)!important;border-color:var(--c-line)!important}
+#viviendas[data-surface] .home-selector button{background:var(--c-paper-2)!important;color:var(--c-ink)!important;border-color:var(--c-line-mid)!important}
+#viviendas[data-surface] .home-selector button[aria-pressed=true]{background:var(--c-deep)!important;color:var(--c-on-deep)!important;border-color:var(--c-deep)!important}
+#viviendas[data-surface] .home-selector button[aria-pressed=true] *{color:inherit!important}
+#viviendas[data-surface] :is(.home-actions a,.home-actions button,.showroom .primary){background:var(--c-btn)!important;color:var(--c-on-accent)!important;border-color:var(--c-btn)!important}
+/* Contacto (deep) */
+#contacto[data-surface] :is(h2,p,li){color:var(--s-fg)!important}
+#contacto[data-surface] h2 em{color:var(--s-accent)!important}
+#contacto[data-surface] form,#contacto[data-surface] .contact-form{background:var(--c-paper)!important;color:var(--c-ink)!important;border-color:transparent!important}
+#contacto[data-surface] form :is(label,p,small,span){color:var(--c-ink)!important}
+#contacto[data-surface] form :is(.form-note,.form-status,small){color:var(--c-muted)!important}
+#contacto[data-surface] form :is(input,select,textarea){background:var(--c-paper-2)!important;color:var(--c-ink)!important;border-color:var(--c-line-mid)!important}
+#contacto[data-surface] form button[type=submit]{background:var(--c-btn)!important;color:var(--c-on-accent)!important;border-color:var(--c-btn)!important}
+footer[data-surface] :is(a,p,span,small,li,strong){color:inherit!important}
+footer[data-surface] :is(p,small){color:var(--s-muted)!important}
+footer[data-surface]{border-color:var(--s-line)!important}
+footer[data-surface] .final-fraga,footer[data-surface] img[src*=fraga]{filter:brightness(0) invert(1)}
+
+/* ---------- Inner pages ---------- */
+main[data-surface] .c-heading :is(h1,h2,p,span){color:var(--s-fg)!important}
+main[data-surface] .c-heading p{color:var(--s-muted)!important}
+main[data-surface=support] .regional-tour :is(h2,h3,p):not(.route-pass *):not(.territory-map-wrap *){color:var(--s-fg)!important}
+main[data-surface] .c-next :is(h2,p,a){color:var(--s-fg)!important}
+main[data-surface] .c-next a:not(.c-button){border-color:currentColor!important;background:transparent!important}
+html body .c-button{background:var(--c-btn)!important;color:var(--c-on-accent)!important;border-color:var(--c-btn)!important}
+html body .c-button:hover{background:var(--c-btn-hover)!important}
+.contact-page main[data-surface] .c-form{background:var(--c-paper-2)!important;color:var(--c-ink)!important;border-color:var(--c-line)!important}
+.contact-page .c-form :is(input,select,textarea){background:var(--c-paper)!important;color:var(--c-ink)!important;border-color:var(--c-line-mid)!important}
+#lot-gallery[data-surface] :is(h2,h3,p,span):not(figure *){color:var(--s-fg)!important}
+/* Investment: the dossier sits on support, its index reads the surface */
+.idos[data-surface]{--inv-gold-deep:var(--s-accent);--c-muted:var(--s-muted);color:var(--s-fg)}
+.idos[data-surface] :is(.idos-title,.idos-row-title,.idos-kicker,.idos-grid dt,.idos-grid dd,.idos-grid a){color:var(--s-fg)}
+.idos[data-surface] .idos-list li,.idos[data-surface] .idos-side{border-color:var(--s-line)}
+.idos[data-surface] :is(.idos-n,.idos-meta){border-color:var(--s-line)}
+.idos-foot{background:var(--c-deep)!important;color:var(--c-on-deep)!important}
+.imap[data-surface] .imap-head{background:transparent!important}
+
+/* ---------- Floating palette selector (test hosts only, see palettes.js) ---------- */
+.rp-palette{position:fixed;z-index:2147483000;left:16px;bottom:16px;font:500 13px/1.3 var(--font-sans,system-ui);color:#1d1d1f;letter-spacing:0;text-transform:none}
+.rp-palette-toggle{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border:1px solid #0000002e;border-radius:999px;background:#fffffff2;color:#1d1d1f;
+  box-shadow:0 4px 18px #0000002e;cursor:pointer;font:inherit;font-weight:600}
+.rp-palette-toggle .rp-palette-current{font-weight:400;color:#4a4a4f}
+.rp-palette-dot{width:14px;height:14px;border-radius:50%;background:conic-gradient(var(--c-deep) 0 25%,var(--c-accent) 0 50%,var(--c-support) 0 75%,var(--c-paper) 0);border:1px solid #00000040}
+.rp-palette-chev{font-size:10px;color:#4a4a4f}
+.rp-palette-list{position:absolute;left:0;bottom:calc(100% + 8px);width:min(290px,calc(100vw - 32px));display:grid;gap:4px;padding:6px;border-radius:14px;background:#fff;
+  border:1px solid #0000001f;box-shadow:0 10px 40px #00000038}
+.rp-palette-list[hidden]{display:none}
+.rp-palette-list button{display:grid;grid-template-columns:74px 1fr;align-items:center;gap:12px;width:100%;min-height:48px;padding:8px 10px;border:1px solid transparent;border-radius:10px;
+  background:transparent;color:#1d1d1f;text-align:left;cursor:pointer;font:inherit}
+.rp-palette-list button:hover{background:#f2f2f4}
+.rp-palette-list button[aria-checked=true]{border-color:#1d1d1f;background:#f6f6f7}
+.rp-palette-list button:focus-visible,.rp-palette-toggle:focus-visible{outline:2px solid #1a5fd0;outline-offset:2px}
+.rp-palette-swatches{display:flex;height:26px;border-radius:6px;overflow:hidden;border:1px solid #00000026}
+.rp-palette-swatches i{flex:1}
+.rp-palette-name{display:grid;gap:2px;font-weight:600}
+.rp-palette-name small{font-weight:400;font-size:12px;color:#55555b}
+@media(max-width:760px){.rp-palette{left:10px;bottom:10px}.rp-palette-toggle .rp-palette-current{display:none}}
+@media print{.rp-palette{display:none}}
+
+#lotes .mobile-lot-controls,#lotes .mobile-lot-controls label{color:var(--c-ink)!important}
+/* Phone: the selector collapses to a 44px swatch button (label stays for assistive tech) */
+@media(max-width:760px){.rp-palette-toggle{width:44px;padding:0;justify-content:center}.rp-palette-toggle>span:not(.rp-palette-dot){position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}.rp-palette-dot{width:20px;height:20px}}
+#lot-gallery .media-thumbs button[aria-pressed=true]{--s-fg:var(--c-on-deep)}
