@@ -18,6 +18,7 @@ document.querySelectorAll('[data-region-mode]').forEach(b=>b.onclick=()=>{map.re
 document.querySelector('.region-reset').onclick=reset;
 new ResizeObserver(()=>map.invalidateSize({pan:false})).observe(host);
 const areas=window.addRegionalAreas(map,key=>document.querySelector('[data-place="'+key+'"]')?.click());
+(window.rpSurroundingsQueue=window.rpSurroundingsQueue||[]).push({map,container:host,side:card,card,buttons:'[data-place]',buttonKey:'place',select:choose});window.rpSurroundings?.flush();
 document.querySelectorAll('[data-place]').forEach(b=>b.addEventListener('click',()=>{
  const key=b.dataset.place;
  card.hidden=false;map.invalidateSize({pan:false});

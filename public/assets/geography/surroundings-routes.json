@@ -1,0 +1,25 @@
+{
+  "asOf": "2026-11-18",
+  "status": "pending-verification",
+  "verificationNote": "Road distance and drive time from OSRM (OpenStreetMap data, car profile, fastest route, no live traffic). To be checked against Google Maps before publication.",
+  "source": {
+    "name": "OSRM routing service (Project OSRM demo server), OpenStreetMap contributors",
+    "url": "https://router.project-osrm.org/route/v1/driving/",
+    "crossCheck": "https://routing.openstreetmap.de/routed-car/route/v1/driving/ (identical results)",
+    "retrieved": "2026-11-18"
+  },
+  "origin": {
+    "key": "rainbow",
+    "name": "Rainbow Park",
+    "lat": 29.15,
+    "lon": -82.373,
+    "basis": "Rainbow Park pin used by the existing surroundings maps (neighbourhood reference, not an individual lot). OSRM snapped it 33 m to SW 38th Place."
+  },
+  "destinations": [
+    { "key": "wec", "name": "World Equestrian Center", "lat": 29.200286, "lon": -82.259861, "roadKm": 13.90, "driveMin": 17.2, "snapNote": "Destination snapped 4 m to the nearest road." },
+    { "key": "downtown", "name": "Downtown Ocala", "lat": 29.1878, "lon": -82.1367, "roadKm": 24.50, "driveMin": 24.2, "snapNote": "Destination snapped 6 m to NE 1st Street." },
+    { "key": "nature", "name": "Rainbow Springs", "lat": 29.1025, "lon": -82.4375, "roadKm": 11.72, "driveMin": 15.4, "snapNote": "Destination snapped 91 m to the nearest road." },
+    { "key": "classic", "name": "Classic Mile Training Center", "lat": 29.152725, "lon": -82.34334, "roadKm": 4.44, "driveMin": 8.0, "snapNote": "Destination snapped 149 m to the nearest road." },
+    { "key": "airport", "name": "Ocala International Airport", "lat": 29.1717, "lon": -82.2242, "roadKm": 17.48, "driveMin": 17.4, "snapNote": "Destination snapped 363 m to SW 67th Avenue Road (airport access)." }
+  ]
+}

@@ -11,6 +11,8 @@ Object.assign(catalog,{"POR NEXT FRAGA REAL ESTATE":["BY NEXT FRAGA REAL ESTATE"
 Object.assign(catalog,{"Desde la calle":["From the street","Da rua"],"hasta tu puerta.":["to your door.","até a sua porta."],"La puerta":["The door","A porta"],"está abierta.":["is open.","está aberta."],"Desliza para llegar":["Scroll to arrive","Role para chegar"],"MODELO 3D SEGÚN PLANOS · ACABADOS PROPUESTOS":["3D MODEL BASED ON PLANS · PROPOSED FINISHES","MODELO 3D CONFORME PLANTAS · ACABAMENTOS PROPOSTOS"],"Casa Utah en un lote de Rainbow Park al atardecer, modelo 3D según los planos arquitectónicos":["Casa Utah on a Rainbow Park lot at sunset, 3D model based on the architectural plans","Casa Utah em um lote de Rainbow Park ao entardecer, modelo 3D conforme as plantas arquitetônicas"]});
 // PROPOSAL · Lots chapter title
 Object.assign(catalog,{"Encuentra tu":["Find your","Encontre o seu"],"lugar":["place","lugar"]});
+// PROPOSAL · Surroundings routes
+Object.assign(catalog,{"Cerca de lo":["Close to the","Perto do"],"extraordinario":["extraordinary","extraordinário"],"RUTA DE ENTORNO · RAINBOW PARK":["SURROUNDINGS ROUTE · RAINBOW PARK","ROTA DO ENTORNO · RAINBOW PARK"]});
 // PROPOSAL · Surroundings portal intro
 Object.assign(catalog,{"a tu alrededor.":["all around.","ao seu redor."],"Tierra de caballos, manantiales y una ciudad que crece alrededor de Rainbow Park.":["Horse country, natural springs and a growing city around Rainbow Park.","Terra de cavalos, nascentes e uma cidade em crescimento ao redor de Rainbow Park."],"Descubre el entorno":["Discover the surroundings","Descubra o entorno"],"ENTORNO":["SURROUNDINGS","ENTORNO"],"02 / ENTORNO":["02 / SURROUNDINGS","02 / ENTORNO"]});
 const byKey=new Map();

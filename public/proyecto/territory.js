@@ -37,6 +37,7 @@ function initMap(){
  });
  const reset=()=>map.fitBounds(Object.values(places).map(p=>p.point),{padding:[48,48],maxZoom:12,animate:false});
  areas=window.addRegionalAreas(map,select);
+  (window.rpSurroundingsQueue=window.rpSurroundingsQueue||[]).push({map,container:map.getContainer(),side:document.getElementById('destination-story'),card:document.getElementById('destination-story'),buttons:'[data-destination]',buttonKey:'destination',select});window.rpSurroundings?.flush();
  setBase();reset();updateMap();
  const resetButton=document.createElement('button');resetButton.type='button';resetButton.className='territory-reset';resetButton.textContent='Ver todos los lugares';resetButton.addEventListener('click',reset);document.querySelector('[data-territory-map]')?.parentElement.append(resetButton);
  if(!resetButton.isConnected)host.parentElement.insertBefore(resetButton,host);
