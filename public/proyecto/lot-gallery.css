@@ -1,7 +1,7 @@
 #lot-gallery{margin:clamp(2rem,5vw,5rem) auto 2rem;color:#30291f}
 #lot-gallery[hidden]{display:none}
 #lot-gallery header,#lot-gallery footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
-#lot-gallery h2{font:400 clamp(2rem,4vw,3.5rem)/1.1 Italiana,Georgia,serif;margin:.25em 0}
+#lot-gallery h2{font:400 clamp(2rem,4vw,3.5rem)/1.1 var(--font-display);margin:.25em 0}
 #lot-gallery small{letter-spacing:.09em;text-transform:uppercase}
 .media-tabs,.media-thumbs{display:flex;gap:.5rem}
 #lot-gallery button{cursor:pointer;border:1px solid #a7987a;border-radius:6px;color:#30291f;background:#f7f3ea;font:inherit}

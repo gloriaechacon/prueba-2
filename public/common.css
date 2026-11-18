@@ -1,5 +1,5 @@
 /* Local concepts only. Existing interaction code and source assets are retained. */
-:root{--sans:'DM Sans',sans-serif;--reading:1.0625rem;--caption:.875rem;--section-title:clamp(2.2rem,4.3vw,3.75rem)}
+:root{--sans:var(--font-sans);--reading:1.0625rem;--caption:.875rem;--section-title:clamp(2.2rem,4.3vw,3.75rem)}
 body.proposal{font-size:17px;line-height:1.6;background:var(--surface);color:var(--text)}
 .proposal ::selection{background:var(--accent);color:white}
 .proposal :focus-visible{outline:3px solid var(--accent);outline-offset:5px}

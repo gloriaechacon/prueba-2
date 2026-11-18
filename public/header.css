@@ -4,7 +4,7 @@
 .unified-header.menu-open{background:#f0eee5;backdrop-filter:blur(20px)}
 .unified-header>.dock-home{display:flex;align-items:center;gap:10px;flex-shrink:0;text-decoration:none;color:inherit;padding:0;border:0}
 .unified-header .dock-home svg{width:28px;height:32px;stroke:currentColor;stroke-width:1.5;fill:none}
-.unified-header .dock-title{display:block;font-family:Italiana,Georgia,serif;font-size:25px;line-height:1.1}
+.unified-header .dock-title{display:block;font-family:var(--font-display);font-size:25px;line-height:1.1}
 .unified-header .dock-title small{display:block;font-family:var(--sans);font-size:8px;letter-spacing:3px;margin-top:6px;text-transform:uppercase}
 .unified-header .dock-byline{display:flex;align-items:center;gap:8px;border-left:1px solid currentColor;padding-left:12px}
 .unified-header .dock-byline em{font:10px var(--sans)}

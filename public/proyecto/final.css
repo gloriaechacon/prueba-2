@@ -1,4 +1,4 @@
-:root{--final-paper:#f4efe4;--final-ink:#292a2d;--final-gold:#d2b77e;--final-muted:#605b52;--final-line:#c4b89f;--sans:'DM Sans',sans-serif;--serif:'Italiana',Georgia,serif}
+:root{--final-paper:#f4efe4;--final-ink:#292a2d;--final-gold:#d2b77e;--final-muted:#605b52;--final-line:#c4b89f;--sans:var(--font-sans);--serif:var(--font-display)}
 html{scroll-padding-top:100px}body{font-family:var(--sans);background:var(--final-paper);color:var(--final-ink)}
 .final-home>.topbar{display:none!important}
 .final-nav{box-sizing:border-box;position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:24px;width:100%;padding:17px 4vw;background:#f4efe4f5;color:#292a2d;border-bottom:1px solid #c4b89f;backdrop-filter:blur(16px);font-family:var(--sans);min-height:86px}
@@ -178,17 +178,17 @@ body.final-detail[data-page=lotes] .parcel-frame{display:block;border:0;width:10
 @media(max-width:1000px){body.final-detail[data-page=lotes] .c-lot-workspace{grid-template-columns:minmax(0,1fr)!important}body.final-detail[data-page=lotes] .c-lot-card{grid-column:1;grid-row:1}body.final-detail[data-page=lotes] #c-map{grid-column:1;grid-row:2}}
 /* One persistent regional map; selection changes markers, never the map document. */
 .final-home #territory-live-map{height:560px;width:100%;background:#e8e1d3;z-index:0}
-.final-home .territory-location{background:#f4efe4;border:2px solid #705b2b;border-radius:50%;display:grid;place-items:center;color:#292a2d;font:600 13px 'DM Sans',sans-serif;box-shadow:0 2px 8px #0004;transition:background .25s,color .25s,box-shadow .25s}
+.final-home .territory-location{background:#f4efe4;border:2px solid #705b2b;border-radius:50%;display:grid;place-items:center;color:#292a2d;font:600 13px var(--font-sans);box-shadow:0 2px 8px #0004;transition:background .25s,color .25s,box-shadow .25s}
 .final-home .territory-location.is-selected{background:#705b2b;color:#fff;border-color:#fff;box-shadow:0 0 0 6px #d2b77e88,0 2px 8px #0004}
 .final-home .territory-location:focus-visible{outline:3px solid #292a2d;outline-offset:5px}
-.final-home .territory-place-label{font:500 14px 'DM Sans',sans-serif;background:#fffaf0;color:#292a2d;border:1px solid #c4b89f;padding:8px 12px;box-shadow:0 2px 8px #0002}
-.final-home .territory-reset{padding:10px 14px;min-height:44px;margin:8px 12px;background:#f4efe4;color:#292a2d;border:1px solid #b7aa8f;font:500 13px 'DM Sans',sans-serif}
+.final-home .territory-place-label{font:500 14px var(--font-sans);background:#fffaf0;color:#292a2d;border:1px solid #c4b89f;padding:8px 12px;box-shadow:0 2px 8px #0002}
+.final-home .territory-reset{padding:10px 14px;min-height:44px;margin:8px 12px;background:#f4efe4;color:#292a2d;border:1px solid #b7aa8f;font:500 13px var(--font-sans)}
 .final-home #territory-live-map .leaflet-control-attribution{font-size:11px}
 @media(max-width:760px){.final-home #territory-live-map{height:420px}}
 /* A clear closing invitation for the surroundings page. */
 body.final-detail[data-page=entorno] .entorno-next{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:32px;margin:48px 0 0;padding:36px 0 8px;border-top:1px solid #c4b89f66;background:transparent}
-body.final-detail[data-page=entorno] .entorno-next h2{font-family:'DM Sans',sans-serif!important;font-size:clamp(26px,2.6vw,38px)!important;font-weight:500!important;line-height:1.25!important;letter-spacing:-.025em!important;max-width:28ch;margin:0;color:inherit}
-body.final-detail[data-page=entorno] .entorno-next .c-button{display:inline-flex;align-items:center;justify-content:center;width:auto;min-width:250px;min-height:60px;padding:18px 26px;margin:0;background:#d2b77e!important;color:#292a2d!important;font:600 17px/1.4 'DM Sans',sans-serif;text-align:center;text-decoration:none;white-space:normal;border:1px solid transparent;border-radius:12px}
+body.final-detail[data-page=entorno] .entorno-next h2{font-family:var(--font-sans)!important;font-size:clamp(26px,2.6vw,38px)!important;font-weight:500!important;line-height:1.25!important;letter-spacing:-.025em!important;max-width:28ch;margin:0;color:inherit}
+body.final-detail[data-page=entorno] .entorno-next .c-button{display:inline-flex;align-items:center;justify-content:center;width:auto;min-width:250px;min-height:60px;padding:18px 26px;margin:0;background:#d2b77e!important;color:#292a2d!important;font:600 17px/1.4 var(--font-sans);text-align:center;text-decoration:none;white-space:normal;border:1px solid transparent;border-radius:12px}
 body.final-detail[data-page=entorno] .entorno-next .c-button:hover{background:#e4cc98!important}
 body.final-detail[data-page=entorno] .entorno-next .c-button:focus-visible{outline:3px solid #f4efe4;outline-offset:5px}
 @media(max-width:750px){body.final-detail[data-page=entorno] .entorno-next{grid-template-columns:1fr;gap:24px;margin-top:32px;padding-top:28px}body.final-detail[data-page=entorno] .entorno-next h2{font-size:28px!important;max-width:25ch}body.final-detail[data-page=entorno] .entorno-next .c-button{width:100%;min-width:0;font-size:17px}}
@@ -231,12 +231,12 @@ body.final-detail[data-page=entorno] .c-destinations[hidden]{display:none!import
 .regional-map-heading{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
 .regional-map-heading h2{font-size:30px!important;margin:0!important}
 .regional-map-heading [role=group]{display:flex;gap:6px}
-.regional-map-heading button,.region-reset{border:1px solid #bbac90;border-radius:10px;padding:11px 14px;background:transparent;color:#292a2d;font:500 15px 'DM Sans',sans-serif;cursor:pointer}
+.regional-map-heading button,.region-reset{border:1px solid #bbac90;border-radius:10px;padding:11px 14px;background:transparent;color:#292a2d;font:500 15px var(--font-sans);cursor:pointer}
 .regional-map-heading button[aria-pressed=true]{background:#6b5733;color:white;border-color:#6b5733}
 #region-map{height:520px;border-radius:12px;isolation:isolate;background:#e6e4d8}
 #region-map[data-mode=sketch] .leaflet-tile-pane{filter:grayscale(.8) sepia(.15) saturate(.65)}
 .region-place{background:none;border:0}
-.region-place span{display:block;background:#f7f2e7;color:#292a2d;border:1px solid #6b5733;border-radius:9px;padding:10px 6px;text-align:center;font:600 13px/1.3 'DM Sans',sans-serif;box-shadow:0 3px 8px #0002}
+.region-place span{display:block;background:#f7f2e7;color:#292a2d;border:1px solid #6b5733;border-radius:9px;padding:10px 6px;text-align:center;font:600 13px/1.3 var(--font-sans);box-shadow:0 3px 8px #0002}
 .region-place.selected span{background:#6b5733;color:white}
 .region-place::after{content:'';display:block;margin:auto;width:8px;height:8px;border-radius:50%;background:#6b5733;border:2px solid white}
 .regional-map-note{font-size:13px!important;line-height:1.5;margin-bottom:0}
@@ -254,12 +254,12 @@ body.final-detail[data-page=entorno] .c-destinations[hidden]{display:none!import
 .region-place::after{position:absolute;left:-5px;top:-5px;margin:0}
 .region-wec span{transform:translate(-95%,-135%)}
 .region-airport span{transform:translate(-20%,25%)}
-.region-origin{background:#a33e32;color:white;border:0;font:600 12px 'DM Sans',sans-serif}
+.region-origin{background:#a33e32;color:white;border:0;font:600 12px var(--font-sans)}
 @media(max-width:600px){.region-place span{min-width:105px;padding:8px 5px}.region-wec span{transform:translate(-90%,-150%)}.region-airport span{transform:translate(-35%,35%)}}
 @media(max-width:600px){.region-downtown span{transform:translate(-45%,-140%)}.region-nature span{transform:translate(-35%,25%)}.region-origin{font-size:10px}.region-place span{min-width:90px;max-width:105px;font-size:11px}.region-airport span{transform:translate(-25%,30%)}}
 .region-rainbow-pin{background:none;border:0;cursor:pointer}
 .region-rainbow-pin svg{display:block;width:28px;height:38px;filter:drop-shadow(0 2px 3px #0005)}
-.region-rainbow-pin>span{position:absolute;right:36px;top:5px;width:max-content;background:#fffaf0;color:#52302a;border-radius:6px;padding:4px 7px;font:600 12px/1.4 'DM Sans',sans-serif}
+.region-rainbow-pin>span{position:absolute;right:36px;top:5px;width:max-content;background:#fffaf0;color:#52302a;border-radius:6px;padding:4px 7px;font:600 12px/1.4 var(--font-sans)}
 #region-map .leaflet-control-zoom a,#territory-live-map .leaflet-control-zoom a{width:44px;height:44px;line-height:44px;font-size:25px;background:#fffaf0;color:#292a2d}
 .region-rainbow-pin:focus-visible{outline:3px solid #6b5733;outline-offset:5px}
 @media(max-width:600px){.region-rainbow-pin>span{font-size:11px;right:30px}}
@@ -379,7 +379,7 @@ body.final-home.proposal-a #viviendas .home-cta:hover{background:#50412d!importa
 .final-home #viviendas .home-selector button{position:relative;display:flex;flex-direction:column-reverse;align-items:flex-start;justify-content:center;gap:4px;padding-right:35px;text-align:left}
 .final-home #viviendas .home-selector button:after{content:"";position:absolute;right:12px;top:15px;width:12px;height:12px;border:1px solid currentColor;border-radius:50%}
 .final-home #viviendas .home-selector button[aria-pressed=true]:after{background:radial-gradient(circle,currentColor 40%,transparent 45%)}
-.final-home #viviendas .home-selector button span{font:400 clamp(24px,3vw,32px)/1.1 Italiana,Georgia,serif}
+.final-home #viviendas .home-selector button span{font:400 clamp(24px,3vw,32px)/1.1 var(--font-display)}
 .final-home #viviendas .home-selector button small{font-size:11px;line-height:1.3}
 .home-rotate-tip{position:absolute;left:50%;top:30%;transform:translateX(-50%);z-index:3;background:#30291fe8;color:white;border-radius:6px;padding:7px 12px;pointer-events:none;white-space:nowrap}
 .home-stage:has(#home-scene[hidden]) .home-rotate-tip,.home-rotate-tip[hidden]{display:none}
@@ -500,7 +500,7 @@ body.final-home.proposal-a #contacto footer{margin-top:1.5rem;padding-block:1.5r
 }
 
 /* Contact selection uses the same readable type as the form labels. */
-.consultation .consultation-title{display:block;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:600;letter-spacing:0;text-transform:none;line-height:1.5;margin-bottom:10px}
+.consultation .consultation-title{display:block;font-family:var(--font-sans);font-size:16px;font-weight:600;letter-spacing:0;text-transform:none;line-height:1.5;margin-bottom:10px}
 #consultation-interest{width:100%;min-height:48px;padding:12px 14px;margin-bottom:22px;font:inherit;color:inherit;background:transparent;border:1px solid currentColor;border-radius:6px}
 #consultation-interest option{color:#292a2b;background:#f6f0e3}
 .consultation .consultation-fields input{box-sizing:border-box;width:100%;min-height:48px;padding:12px 14px;font:inherit;border:1px solid #a89778;border-radius:6px;background:#fff9ee;color:#292a2b}
@@ -514,7 +514,7 @@ body.final-home.proposal-a #contacto footer{margin-top:1.5rem;padding-block:1.5r
 dialog.finish-dialog{box-sizing:border-box;width:min(94vw,1050px,calc(138dvh - 108px));max-width:94vw;max-height:96dvh;margin:auto;padding:0;border:0;overflow:auto;background:#f6efe3;color:#30291f;scrollbar-gutter:auto}
 .finish-dialog::backdrop{background:#201c17c9}
 .finish-dialog .finish-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 16px}
-.finish-dialog #finish-title{font:400 clamp(1.35rem,3vw,2.1rem)/1.1 'Italiana',Georgia,serif;margin:0;letter-spacing:normal}
+.finish-dialog #finish-title{font:400 clamp(1.35rem,3vw,2.1rem)/1.1 var(--font-display);margin:0;letter-spacing:normal}
 .finish-dialog .finish-bar form{margin:0}
 dialog.finish-dialog img{display:block;width:100%;height:auto;max-height:none;aspect-ratio:3/2;margin:0;object-fit:contain}
 body:has(.finish-dialog[open]){overflow:hidden}

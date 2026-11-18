@@ -1,0 +1,65 @@
+/* Rainbow Park Collection — design system (redesign, phase 1).
+   Fonts: Cormorant Garamond 300/400/500 + italics, Manrope variable (SIL OFL 1.1,
+   see /assets/fonts/*-LICENSE.txt). Latin subset covers EN, ES and PT. */
+
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:300;font-display:swap;src:url('/assets/fonts/cormorant-garamond-latin-300-normal.woff2') format('woff2')}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:300;font-display:swap;src:url('/assets/fonts/cormorant-garamond-latin-300-italic.woff2') format('woff2')}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:400;font-display:swap;src:url('/assets/fonts/cormorant-garamond-latin-400-normal.woff2') format('woff2')}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:400;font-display:swap;src:url('/assets/fonts/cormorant-garamond-latin-400-italic.woff2') format('woff2')}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:500;font-display:swap;src:url('/assets/fonts/cormorant-garamond-latin-500-normal.woff2') format('woff2')}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:500;font-display:swap;src:url('/assets/fonts/cormorant-garamond-latin-500-italic.woff2') format('woff2')}
+@font-face{font-family:'Manrope';font-style:normal;font-weight:200 800;font-display:swap;src:url('/assets/fonts/manrope-latin-wght-normal.woff2') format('woff2-variations'),url('/assets/fonts/manrope-latin-wght-normal.woff2') format('woff2')}
+
+:root{
+  /* Families */
+  --font-display:'Cormorant Garamond','Cormorant',Georgia,'Times New Roman',serif;
+  --font-sans:'Manrope',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
+  /* Legacy aliases used throughout the existing stylesheets */
+  --serif:var(--font-display);
+  --sans:var(--font-sans);
+
+  /* Fluid type scale (min @375px → max @1440px) */
+  --step--2:clamp(.6875rem,.66rem + .12vw,.75rem);   /* 11–12  labels   */
+  --step--1:clamp(.8125rem,.79rem + .12vw,.875rem);  /* 13–14  captions */
+  --step-0:clamp(1rem,.96rem + .19vw,1.125rem);      /* 16–18  body     */
+  --step-1:clamp(1.25rem,1.15rem + .47vw,1.5rem);    /* 20–24  lead     */
+  --step-2:clamp(1.625rem,1.4rem + 1vw,2.25rem);     /* 26–36  h3       */
+  --step-3:clamp(2.25rem,1.8rem + 2vw,3.5rem);       /* 36–56  h2       */
+  --step-4:clamp(3rem,2.2rem + 3.6vw,5.5rem);        /* 48–88  section  */
+  --step-5:clamp(3.5rem,2.2rem + 6vw,8.5rem);        /* 56–136 hero     */
+
+  /* Line heights */
+  --lh-display:.94;
+  --lh-heading:1.06;
+  --lh-body:1.65;
+
+  /* Tracking */
+  --track-display:-.02em;
+  --track-label:.18em;      /* uppercase eyebrows/labels */
+  --track-label-tight:.1em;
+
+  /* Weights */
+  --w-display:300;
+  --w-heading:400;
+  --w-label:600;
+
+  /* Motion */
+  --ease-out-expo:cubic-bezier(.16,1,.3,1);
+  --ease-in-out:cubic-bezier(.65,0,.35,1);
+}
+
+/* Base roles */
+body{font-family:var(--font-sans);font-optical-sizing:auto}
+.t-display{font-family:var(--font-display);font-weight:var(--w-display);font-size:var(--step-5);line-height:var(--lh-display);letter-spacing:var(--track-display)}
+.t-heading{font-family:var(--font-display);font-weight:var(--w-heading);font-size:var(--step-3);line-height:var(--lh-heading);letter-spacing:var(--track-display)}
+.t-label,.eyebrow{font-family:var(--font-sans);font-weight:var(--w-label);letter-spacing:var(--track-label);text-transform:uppercase}
+em,i{font-synthesis:none}
+
+/* Motion system helpers: hide pre-animation states only when JS motion is active */
+.motion-ready [data-reveal]{will-change:transform,opacity}
+.motion-line{display:block;overflow:hidden;padding-bottom:.08em;margin-bottom:-.08em}
+.motion-line>span{display:inline-block;will-change:transform}
+@media (prefers-reduced-motion:reduce){.motion-ready [data-reveal]{will-change:auto}}
+
+/* Carried over from the former editorial.css */
+.zone-top-actions #zone-expand span{display:inline}
