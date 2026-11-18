@@ -8,8 +8,10 @@ if(motion.matches)video.pause();video.addEventListener('play',syncVideo);video.a
 let manuallyPaused=false;toggle.addEventListener('click',()=>{manuallyPaused=!video.paused;if(video.paused)video.play().catch(syncVideo);else video.pause()});new IntersectionObserver(entries=>{if(entries[0].isIntersecting&&!manuallyPaused&&!motion.matches)video.play().catch(syncVideo);else if(!entries[0].isIntersecting)video.pause()},{threshold:.15}).observe(video);
 const dock=document.querySelector('.unified-header');
 // Use the actual sticky header height once, rather than adding two offsets.
-const syncHeaderHeight=()=>document.documentElement.style.setProperty('--nav-height',Math.ceil(dock.getBoundingClientRect().height)+'px');
-new ResizeObserver(syncHeaderHeight).observe(dock);syncHeaderHeight();
+// Measure whichever header is rendered: the home hides this legacy dock behind .final-nav.
+const visibleHeader=()=>[document.querySelector('.final-nav'),dock].find(el=>el&&el.getClientRects().length)||dock;
+const syncHeaderHeight=()=>document.documentElement.style.setProperty('--nav-height',Math.ceil(visibleHeader().getBoundingClientRect().height)+'px');
+const headerSize=new ResizeObserver(syncHeaderHeight);[dock,document.querySelector('.final-nav')].forEach(el=>el&&headerSize.observe(el));syncHeaderHeight();
 const alignInitialAnchor=()=>{syncHeaderHeight();const target=document.getElementById(decodeURIComponent(location.hash.slice(1)));if(target)target.scrollIntoView({behavior:'instant',block:'start'})};
 window.addEventListener('load',()=>document.fonts.ready.then(alignInitialAnchor),{once:true});
 const chapters=[...document.querySelectorAll('.chapter')];
