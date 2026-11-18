@@ -11,6 +11,8 @@ Object.assign(catalog,{"POR NEXT FRAGA REAL ESTATE":["BY NEXT FRAGA REAL ESTATE"
 Object.assign(catalog,{"Desde la calle":["From the street","Da rua"],"hasta tu puerta.":["to your door.","até a sua porta."],"La puerta":["The door","A porta"],"está abierta.":["is open.","está aberta."],"Desliza para llegar":["Scroll to arrive","Role para chegar"],"MODELO 3D SEGÚN PLANOS · ACABADOS PROPUESTOS":["3D MODEL BASED ON PLANS · PROPOSED FINISHES","MODELO 3D CONFORME PLANTAS · ACABAMENTOS PROPOSTOS"],"Casa Utah en un lote de Rainbow Park al atardecer, modelo 3D según los planos arquitectónicos":["Casa Utah on a Rainbow Park lot at sunset, 3D model based on the architectural plans","Casa Utah em um lote de Rainbow Park ao entardecer, modelo 3D conforme as plantas arquitetônicas"]});
 // PROPOSAL · Lots chapter title
 Object.assign(catalog,{"Encuentra tu":["Find your","Encontre o seu"],"lugar":["place","lugar"]});
+// PROPOSAL · Contact intro (split of the existing title)
+Object.assign(catalog,{"Hablemos de":["Let's talk about","Vamos conversar sobre"],"tu idea.":["your plans.","seus planos."],"Desliza":["Scroll","Role"]});
 // PROPOSAL · Surroundings routes
 Object.assign(catalog,{"Cerca de lo":["Close to the","Perto do"],"extraordinario":["extraordinary","extraordinário"],"RUTA DE ENTORNO · RAINBOW PARK":["SURROUNDINGS ROUTE · RAINBOW PARK","ROTA DO ENTORNO · RAINBOW PARK"]});
 // PROPOSAL · Surroundings portal intro

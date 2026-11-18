@@ -1,0 +1,34 @@
+/* Full-screen intro for inner pages (phase 5/6): image or render + large split title + scroll cue.
+   Markup: section.page-intro > picture.page-intro-media + .page-intro-shade
+           + .page-intro-copy(.page-intro-kicker, h1.page-intro-title) + a.page-intro-scroll */
+.page-intro{--pi-cream:#f7f2e7;position:relative;height:100svh;min-height:520px;max-height:1100px;overflow:hidden;color:var(--pi-cream);background:#26272b;
+  isolation:isolate}
+/* The nav floats over the intro (transparent, light) and turns solid once past it */
+.has-page-intro>.final-nav{position:fixed!important;top:0;left:0;right:0;width:100%;transition:background .5s,color .5s,border-color .5s}
+.has-page-intro>.final-nav.is-over-media:not(.menu-open){background:transparent!important;border-color:transparent!important;color:#f7f2e7!important;backdrop-filter:none!important}
+.has-page-intro>.final-nav.is-over-media:not(.menu-open) .final-fraga{filter:brightness(0) invert(1)}
+.has-page-intro>.final-nav.is-over-media:not(.menu-open) .rpc-language-control,.has-page-intro>.final-nav.is-over-media:not(.menu-open) select{color:inherit!important;border-color:currentColor!important;background:transparent!important}
+.has-page-intro main{padding-top:0}
+.page-intro-media,.page-intro-media img{position:absolute;inset:0;width:100%;height:100%;display:block}
+.page-intro-media img{object-fit:cover;object-position:center 45%;transform-origin:50% 40%;will-change:transform}
+.page-intro-shade{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(0deg,rgb(23 24 25 / .72),rgb(23 24 25 / .2) 45%,rgb(23 24 25 / .05) 70%),linear-gradient(180deg,rgb(23 24 25 / .35),transparent 30%)}
+.page-intro-copy{position:absolute;z-index:2;left:clamp(16px,5vw,88px);right:clamp(16px,5vw,88px);bottom:calc(84px + 5vh);display:grid;gap:18px}
+.page-intro-kicker{font:600 var(--step--1)/1.3 var(--font-sans);letter-spacing:var(--track-label);text-transform:uppercase;color:#e9d6a8}
+.page-intro-title{margin:0;font:300 var(--step-5)/var(--lh-display) var(--font-display)!important;letter-spacing:var(--track-display)!important;color:inherit!important;max-width:14ch}
+.page-intro-title em{font-style:italic;font-weight:300}
+.page-intro-scroll{position:absolute;z-index:2;left:clamp(16px,5vw,88px);bottom:22px;display:inline-flex;gap:14px;align-items:center;min-height:44px;color:inherit;text-decoration:none;
+  font:600 var(--step--2)/1 var(--font-sans);letter-spacing:var(--track-label);text-transform:uppercase}
+.page-intro-scroll i{position:relative;display:block;width:1px;height:34px;background:rgb(247 242 231 / .35);overflow:hidden}
+.page-intro-scroll i::after{content:"";position:absolute;left:0;top:-40%;width:1px;height:40%;background:currentColor;animation:page-intro-cue 2.2s var(--ease-in-out) infinite}
+@keyframes page-intro-cue{to{top:100%}}
+.page-intro-scroll:focus-visible{outline:2px solid #d2b77e;outline-offset:4px}
+.page-intro-credit{position:absolute;z-index:2;right:clamp(16px,5vw,88px);bottom:30px;font:600 10px/1.3 var(--font-sans);letter-spacing:.12em;text-transform:uppercase;opacity:.8;text-align:right;max-width:46%}
+@media(max-width:760px){.page-intro-title{font-size:clamp(3rem,13vw,4.2rem)!important}.page-intro-copy{bottom:96px}}
+@media(prefers-reduced-motion:reduce){.page-intro-scroll i::after{animation:none;top:30%}}
+
+/* Contact page body in the new system (form behaviour unchanged) */
+.contact-page .c-heading p{font-size:var(--step-1)!important;line-height:1.5!important;max-width:34ch}
+.contact-page .c-form label{font:600 var(--step--2)/1.3 var(--font-sans);letter-spacing:var(--track-label-tight);text-transform:uppercase}
+.contact-page .c-form input,.contact-page .c-form select,.contact-page .c-form textarea{font:400 var(--step-0)/1.4 var(--font-sans);text-transform:none;letter-spacing:0;border-radius:var(--radius-btn,10px)!important}
+.contact-page .c-form button[type=submit].btn{width:auto;justify-self:start}

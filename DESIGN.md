@@ -19,13 +19,13 @@ colors:
   muted: "#56634f"
 typography:
   display:
-    fontFamily: "Barlow, Manrope, sans-serif"
+    fontFamily: "Cormorant Garamond, Georgia, serif"
     fontSize: "clamp(80px,8.3vw,96px)"
     fontWeight: 500
     lineHeight: 0.86
     letterSpacing: "-0.02em"
   headline:
-    fontFamily: "Barlow, Manrope, sans-serif"
+    fontFamily: "Cormorant Garamond, Georgia, serif"
     fontSize: "48px"
     fontWeight: 500
     lineHeight: 1.02

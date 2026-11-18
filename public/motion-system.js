@@ -216,6 +216,25 @@
     });
   }
 
+  /* Inner-page intro: nav over media + gentle parallax (parallax only with motion). */
+  function pageIntroNav() {
+    const intro = document.querySelector('.page-intro');
+    const nav = document.querySelector('.final-nav');
+    if (!intro || !nav) return;
+    document.body.classList.add('has-page-intro');
+    const update = () => nav.classList.toggle('is-over-media', intro.getBoundingClientRect().bottom > nav.offsetHeight * 2);
+    addEventListener('scroll', () => requestAnimationFrame(update), { passive: true });
+    addEventListener('resize', update);
+    update();
+  }
+  function pageIntroMotion() {
+    const intro = document.querySelector('.page-intro');
+    const img = intro?.querySelector('.page-intro-media img');
+    if (!img) return;
+    gsap.fromTo(img, { scale: 1.12 }, { scale: 1, duration: 2.4, ease: 'power2.out' });
+    gsap.to(img, { yPercent: 10, ease: 'none', scrollTrigger: { trigger: intro, start: 'top top', end: 'bottom top', scrub: true } });
+  }
+
   /* Film controls for portals: work with and without motion. */
   function portalFilms() {
     document.querySelectorAll('[data-portal]').forEach(portal => {
@@ -327,6 +346,7 @@
 
   async function start() {
     portalFilms();
+    pageIntroNav();
     if (reduce.matches) { finish(); return; }
     try {
       if (!window.gsap) await load('/vendor/gsap.min.js');
@@ -337,6 +357,7 @@
       root.classList.add('motion-ready');
       initArrival();
       document.querySelectorAll('[data-portal]').forEach(initPortal);
+      pageIntroMotion();
       initReveals();
       finish();
       document.addEventListener('toggle', () => ScrollTrigger.refresh(), true);
