@@ -65,3 +65,16 @@
   .portal-utility .media-note{max-width:60%;font-size:10px}
 }
 @media(max-height:620px) and (min-width:761px){.portal-footer{bottom:70px}.portal-line--left{top:26%}}
+
+/* Legibility over the film: a soft dark veil behind each title line and a gentle shadow.
+   Both follow --portal-tint, so they only appear once the title turns light over the film. */
+.portal-title::before,.portal-title::after{content:"";position:absolute;z-index:0;pointer-events:none;height:2.2em;opacity:var(--portal-tint,1);
+  background:radial-gradient(closest-side,rgb(var(--c-shade) / .6),rgb(var(--c-shade) / .28) 60%,transparent)}
+.portal-title::before{left:calc(var(--portal-gutter) - .6em);top:calc(30% - .62em);width:min(7em,80vw)}
+.portal-title::after{right:calc(var(--portal-gutter) - .6em);top:calc(30% + .98em - .62em);width:min(8.5em,84vw)}
+.portal-line>span{text-shadow:0 .04em .45em rgb(var(--c-shade) / calc(.5 * var(--portal-tint,1)))}
+@media(max-width:760px){
+  .portal-title::before{top:calc(27% - .66em)}
+  .portal-title::after{top:calc(27% + 1em - .66em)}
+}
+.portal-title .portal-line{z-index:1}

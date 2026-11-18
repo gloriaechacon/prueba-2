@@ -14,7 +14,9 @@
  // Keep the current page visible until native navigation commits.
  let state={};try{state=JSON.parse(sessionStorage.getItem('rpc-choice')||'{}');}catch{}
  if(page==="contacto" && ["utah","bell"].includes(query.get("house"))) state.house=query.get("house");
- function save(){sessionStorage.setItem('rpc-choice',JSON.stringify(state));const form=document.querySelector('#c-consultation');if(form){form.elements.lot.value=state.lot||'';form.elements.house.value=state.house||'';}}
+ // ?lot= uses the public number (1–6); old RP-xx bookmarks still work. Sold or unknown values are ignored.
+ if(page==="contacto" && query.get("lot")){const id=window.rpcLots?.fromURL(query.get("lot"));if(id&&window.rpcLots.available(id))state.lot=id;}
+ function save(){sessionStorage.setItem('rpc-choice',JSON.stringify(state));const n=state.lot&&window.rpcLots?.number(state.lot);document.querySelectorAll('.lot-actions a[href^="/proyecto/contacto/"]').forEach(a=>a.setAttribute('href','/proyecto/contacto/'+(n?'?lot='+n:'')));const form=document.querySelector('#c-consultation');if(form){form.elements.lot.value=state.lot||'';form.elements.house.value=state.house||'';}}
  async function lotData(){const response=await fetch('/assets/geography/collection-lots.json');if(!response.ok)throw Error('Datos no disponibles');return response.json();}
  if(document.querySelector('#c-map')){
   lotData().then(data=>{

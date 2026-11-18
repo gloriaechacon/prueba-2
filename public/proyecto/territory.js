@@ -9,7 +9,7 @@ const data={
 };
 let selected='rainbow',mode='satellite';const $=id=>document.getElementById(id);
 // Regional reference points; these markers are not parcel boundaries or access directions.
-const places={rainbow:{point:[29.15,-82.373],name:'Rainbow Park'},classic:{point:[29.152725,-82.34334],name:'Classic Mile'},wec:{point:[29.200286,-82.259861],name:'World Equestrian Center'},downtown:{point:[29.1878,-82.1367],name:'Downtown Ocala'},nature:{point:[29.1025,-82.4375],name:'Rainbow Springs'},airport:{point:[29.1717,-82.2242],name:'Aeropuerto de Ocala'}};
+const places={rainbow:{point:[29.148212,-82.379192],name:'Rainbow Park'},classic:{point:[29.152725,-82.34334],name:'Classic Mile'},wec:{point:[29.200286,-82.259861],name:'World Equestrian Center'},downtown:{point:[29.1878,-82.1367],name:'Downtown Ocala'},nature:{point:[29.1025,-82.4375],name:'Rainbow Springs'},airport:{point:[29.1717,-82.2242],name:'Aeropuerto de Ocala'}};
 let map,baseLayer,areas;const markers={};
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 function updateMap(){

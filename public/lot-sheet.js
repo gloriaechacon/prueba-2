@@ -7,12 +7,12 @@
  *   proyecto/lotes: .c-lot-card (detail.js + iframe) — listens to #c-lot change,
  *                   selects by setting #c-lot and dispatching `change`.
  * Data: /assets/geography/collection-lots.json (MLS area as supplied by the client;
- * county GIS area only where MLS is missing, and labelled as such). */
+ * without MLS the area reads "Superficie por confirmar"; no GIS-derived value is shown). */
 (() => {
   const T = {
-    en: { lot: 'Lot', sold: 'Sold lot', collection: 'The collection', area: 'Area', status: 'Status', available: 'Available', soldState: 'Sold', photos: 'View photos & 360°', prev: 'Previous', next: 'Next', active: 'Active', mls: 'MLS · supplied by the client', gis: 'County GIS · MLS not supplied', pick: 'Select a number on the map, or start with the first lot.', count: n => `${n} available lots`, nav: 'Lot navigation' },
-    es: { lot: 'Lote', sold: 'Lote vendido', collection: 'La colección', area: 'Superficie', status: 'Estado', available: 'Disponible', soldState: 'Vendido', photos: 'Ver fotos y 360°', prev: 'Anterior', next: 'Siguiente', active: 'Activo', mls: 'MLS · aportado por el cliente', gis: 'Catastro (GIS) · sin ficha MLS', pick: 'Selecciona un número en el mapa o empieza por el primer lote.', count: n => `${n} lotes disponibles`, nav: 'Navegación de lotes' },
-    pt: { lot: 'Lote', sold: 'Lote vendido', collection: 'A coleção', area: 'Área', status: 'Status', available: 'Disponível', soldState: 'Vendido', photos: 'Ver fotos e 360°', prev: 'Anterior', next: 'Próximo', active: 'Ativo', mls: 'MLS · fornecido pelo cliente', gis: 'Cadastro (GIS) · sem ficha MLS', pick: 'Selecione um número no mapa ou comece pelo primeiro lote.', count: n => `${n} lotes disponíveis`, nav: 'Navegação de lotes' }
+    en: { lot: 'Lot', sold: 'Sold lot', collection: 'The collection', area: 'Area', status: 'Status', available: 'Available', soldState: 'Sold', photos: 'View photos & 360°', prev: 'Previous', next: 'Next', active: 'Active', mls: 'MLS · supplied by the client', gis: 'County GIS · MLS not supplied', tbc: 'Area to be confirmed', pick: 'Select a number on the map, or start with the first lot.', count: n => `${n} available lots`, nav: 'Lot navigation' },
+    es: { lot: 'Lote', sold: 'Lote vendido', collection: 'La colección', area: 'Superficie', status: 'Estado', available: 'Disponible', soldState: 'Vendido', photos: 'Ver fotos y 360°', prev: 'Anterior', next: 'Siguiente', active: 'Activo', mls: 'MLS · aportado por el cliente', gis: 'Catastro (GIS) · sin ficha MLS', tbc: 'Superficie por confirmar', pick: 'Selecciona un número en el mapa o empieza por el primer lote.', count: n => `${n} lotes disponibles`, nav: 'Navegación de lotes' },
+    pt: { lot: 'Lote', sold: 'Lote vendido', collection: 'A coleção', area: 'Área', status: 'Status', available: 'Disponível', soldState: 'Vendido', photos: 'Ver fotos e 360°', prev: 'Anterior', next: 'Próximo', active: 'Ativo', mls: 'MLS · fornecido pelo cliente', gis: 'Cadastro (GIS) · sem ficha MLS', tbc: 'Área a confirmar', pick: 'Selecione um número no mapa ou comece pelo primeiro lote.', count: n => `${n} lotes disponíveis`, nav: 'Navegação de lotes' }
   };
   const lang = () => (window.rpcI18n?.language || new URLSearchParams(location.search).get('lang') || 'en').slice(0, 2);
   const t = () => T[lang()] || T.en;
@@ -64,9 +64,11 @@
     let area = '';
     if (lot) {
       const mls = lot.mlsReported && typeof lot.mlsReported.acres === 'number';
-      const acres = mls ? lot.mlsReported.acres : lot.gisAreaAcres ?? lot.countyAcres;
-      const sqft = mls ? lot.mlsReported.areaSqFt : lot.gisAreaSqFt;
-      area = `<div class="lot-sheet-block"><span class="lot-sheet-label">${s.area}</span>
+      // Without the client's MLS figure the area stays open (lot 02 · RP-14): no derived value is shown.
+      if (!mls) area = `<div class="lot-sheet-block"><span class="lot-sheet-label">${s.area}</span><strong class="lot-sheet-tbc">${s.tbc}</strong></div>`;
+      const acres = mls ? lot.mlsReported.acres : null;
+      const sqft = mls ? lot.mlsReported.areaSqFt : null;
+      if (mls) area = `<div class="lot-sheet-block"><span class="lot-sheet-label">${s.area}</span>
         <strong class="lot-sheet-figure">${fmt(acres, 2)} <small>ACRES</small></strong>
         ${sqft ? `<span class="lot-sheet-sub">${fmt(Math.round(sqft))} FT²</span>` : ''}
         <span class="lot-sheet-source">${mls ? s.mls : s.gis}</span></div>`;
