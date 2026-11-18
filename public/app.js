@@ -4,8 +4,8 @@ document.querySelectorAll('.topbar nav a').forEach(a=>a.addEventListener('click'
 const video=document.querySelector('#hero-video'),toggle=document.querySelector('#video-toggle');
 const motion=matchMedia('(prefers-reduced-motion: reduce)');
 function syncVideo(){toggle.textContent=video.paused?'Reproducir ▶':'Pausar II';toggle.setAttribute('aria-label',video.paused?'Reproducir video':'Pausar video')}
-if(motion.matches)video.pause();video.addEventListener('play',syncVideo);video.addEventListener('pause',syncVideo);syncVideo();
-let manuallyPaused=false;toggle.addEventListener('click',()=>{manuallyPaused=!video.paused;if(video.paused)video.play().catch(syncVideo);else video.pause()});new IntersectionObserver(entries=>{if(entries[0].isIntersecting&&!manuallyPaused&&!motion.matches)video.play().catch(syncVideo);else if(!entries[0].isIntersecting)video.pause()},{threshold:.15}).observe(video);
+if(video&&toggle){if(motion.matches)video.pause();video.addEventListener('play',syncVideo);video.addEventListener('pause',syncVideo);syncVideo();
+let manuallyPaused=false;toggle.addEventListener('click',()=>{manuallyPaused=!video.paused;if(video.paused)video.play().catch(syncVideo);else video.pause()});new IntersectionObserver(entries=>{if(entries[0].isIntersecting&&!manuallyPaused&&!motion.matches)video.play().catch(syncVideo);else if(!entries[0].isIntersecting)video.pause()},{threshold:.15}).observe(video);}
 const dock=document.querySelector('.unified-header');
 // Use the actual sticky header height once, rather than adding two offsets.
 // Measure whichever header is rendered: the home hides this legacy dock behind .final-nav.

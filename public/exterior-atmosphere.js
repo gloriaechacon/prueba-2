@@ -1,10 +1,11 @@
-export function attachSky(scene, renderer, host) {
+// `gradient` is optional; the default keeps every existing viewer unchanged.
+export function attachSky(scene, renderer, host, gradient = 'linear-gradient(#c9e0ec 0%,#e8eef0 55%,#e8e8e1 85%)') {
   scene.background = null;
   renderer.setClearColor(0, 0);
   if (getComputedStyle(host).position === 'static') host.style.position = 'relative';
   const layer = document.createElement('div');
   layer.setAttribute('aria-hidden', 'true');
-  layer.style.cssText = 'position:absolute;inset:0;overflow:hidden;pointer-events:none;background:linear-gradient(#c9e0ec 0%,#e8eef0 55%,#e8e8e1 85%);z-index:0';
+  layer.style.cssText = 'position:absolute;inset:0;overflow:hidden;pointer-events:none;background:' + gradient + ';z-index:0';
   host.prepend(layer);
   renderer.domElement.style.position = 'relative';
   renderer.domElement.style.zIndex = 'auto';

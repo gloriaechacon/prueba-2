@@ -63,3 +63,73 @@ em,i{font-synthesis:none}
 
 /* Carried over from the former editorial.css */
 .zone-top-actions #zone-expand span{display:inline}
+
+/* ===================================================================
+   Navigation — one style on every page and state (transparent, over
+   media, solid): spaced uppercase labels with a sliding underline.
+   Only one link is marked: the hovered one while hovering, otherwise
+   the active page/section ([aria-current]).
+   =================================================================== */
+.final-nav .final-brand span{font-family:var(--font-display);font-weight:400;letter-spacing:-.01em}
+.final-nav .final-brand small{font-family:var(--font-sans);font-weight:600;letter-spacing:var(--track-label)}
+#final-links a{position:relative;background:none!important;color:inherit!important;border:0!important;border-radius:0!important;box-shadow:none!important;
+  font:600 var(--step--2)/1.2 var(--font-sans)!important;letter-spacing:var(--track-label-tight)!important;text-transform:uppercase;
+  padding:12px!important;text-decoration:none}
+#final-links a::after{content:"";position:absolute;left:12px;right:12px;bottom:6px;height:1px;background:currentColor;
+  transform:scaleX(0);transform-origin:right;transition:transform .5s var(--ease-out-expo)}
+#final-links a[aria-current]::after,#final-links a:hover::after,#final-links a:focus-visible::after{transform:scaleX(1);transform-origin:left}
+#final-links:hover a[aria-current]:not(:hover)::after{transform:scaleX(0);transform-origin:right}
+#final-links a:focus-visible{outline:2px solid #b08a3e;outline-offset:2px}
+.final-nav .final-menu{font:600 var(--step--2)/1 var(--font-sans)!important;letter-spacing:var(--track-label-tight);text-transform:uppercase;
+  background:transparent!important;color:inherit!important;border:1px solid currentColor!important;border-radius:var(--radius-btn,10px)!important;padding:12px 16px!important;min-height:44px}
+/* Mobile drawer: same language, larger targets */
+.site-drawer{background:var(--paper-warm,#f4efe4)!important;color:#26272b!important;padding:20px 24px!important}
+.site-drawer .drawer-close{border:1px solid currentColor!important;border-radius:var(--radius-btn,10px)!important;font:300 26px/1 var(--font-sans)!important}
+.site-drawer #final-links{gap:0!important}
+.site-drawer #final-links a{display:block;padding:18px 0!important;font-size:var(--step--1)!important;letter-spacing:var(--track-label)!important;border-bottom:1px solid #d6cbb4!important}
+.site-drawer #final-links a::after{left:0;right:auto;width:44px;bottom:-1px;height:2px}
+@media(prefers-reduced-motion:reduce){#final-links a::after{transition:none}}
+
+/* ===================================================================
+   Buttons — one system, coherent with the nav labels and the gold
+   lot-sheet action.
+   .btn.btn--primary    dark gold, cream label
+   .btn.btn--secondary  outlined, inherits the surrounding colour
+   .btn--light          variant for buttons over images / video
+   .link-line           text link with the nav's sliding underline
+   Optional trailing <b aria-hidden="true">→</b> slides on hover.
+   =================================================================== */
+:root{
+  --gold:#8b6914;--gold-deep:#6f5310;--gold-soft:#d2b77e;
+  --ink:#26272b;--paper-warm:#f4efe4;--cream:#fffaf0;
+  --radius-btn:10px
+}
+:root{--hairline:#cbbfa6}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:16px;min-height:52px;padding:0 28px;
+  border-radius:var(--radius-btn);border:1px solid transparent;cursor:pointer;text-decoration:none;
+  font:600 var(--step--1)/1.1 var(--font-sans);letter-spacing:var(--track-label-tight);text-transform:uppercase;
+  transition:background .35s var(--ease-out-expo),color .35s var(--ease-out-expo),border-color .35s var(--ease-out-expo)}
+.btn b{font-weight:400;font-size:1.15em;letter-spacing:0;transition:transform .5s var(--ease-out-expo)}
+.btn:hover b{transform:translateX(5px)}
+.btn:focus-visible{outline:2px solid var(--gold-soft);outline-offset:3px}
+.btn--primary{background:var(--gold);color:var(--cream)}
+.btn--primary:hover{background:var(--gold-deep);color:var(--cream)}
+.btn--secondary{background:transparent;color:inherit;border-color:currentColor}
+.btn--secondary:hover{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.btn--light.btn--primary{background:var(--cream);color:var(--ink)}
+.btn--light.btn--primary:hover{background:var(--gold-soft);color:var(--ink)}
+.btn--light.btn--secondary{color:var(--cream);border-color:rgb(255 250 240 / .7)}
+.btn--light.btn--secondary:hover{background:var(--cream);color:var(--ink);border-color:var(--cream)}
+.btn--block{width:100%;justify-content:space-between}
+.link-line{position:relative;display:inline-flex;align-items:center;gap:10px;color:inherit;text-decoration:none;padding:8px 0;
+  font:600 var(--step--2)/1.3 var(--font-sans);letter-spacing:var(--track-label-tight);text-transform:uppercase}
+.link-line::after{content:"";position:absolute;left:0;right:0;bottom:2px;height:1px;background:currentColor;transform:scaleX(1);transform-origin:left;transition:transform .5s var(--ease-out-expo)}
+.link-line:hover::after{animation:link-line-sweep .7s var(--ease-out-expo)}
+@keyframes link-line-sweep{0%{transform:scaleX(1);transform-origin:right}45%{transform:scaleX(0);transform-origin:right}46%{transform:scaleX(0);transform-origin:left}100%{transform:scaleX(1);transform-origin:left}}
+.link-line:focus-visible{outline:2px solid var(--gold-soft);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){.btn,.btn b,.link-line::after{transition:none;animation:none}}
+
+/* Shared editorial chapter title: "Find your *place*" + spaced subtitle */
+.chapter-title{font-family:var(--font-display);font-weight:300;font-size:var(--step-4);line-height:var(--lh-heading);letter-spacing:var(--track-display);margin:0}
+.chapter-title em{font-style:italic;font-weight:300}
+.chapter-kicker{display:block;margin-top:14px;font:500 var(--step--1)/1.4 var(--font-sans);letter-spacing:var(--track-label);text-transform:uppercase}

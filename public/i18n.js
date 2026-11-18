@@ -7,6 +7,10 @@ Object.assign(catalog,{"Modelos de vivienda": ["House Models", "Modelos de casas
 Object.assign(catalog,{'Centro de entrenamiento ecuestre sobre W Highway 40, al este de los lotes de la colección.':['Equestrian training center on W Highway 40, east of the collection’s lots.','Centro de treinamento equestre na W Highway 40, a leste dos lotes da coleção.'],'Entrenamiento ecuestre':['Equestrian training','Treinamento equestre']});
 // Redesign (rediseno branch). Entries tagged PROPOSAL are new copy awaiting approval.
 Object.assign(catalog,{"POR NEXT FRAGA REAL ESTATE":["BY NEXT FRAGA REAL ESTATE","POR NEXT FRAGA REAL ESTATE"]});
+// PROPOSAL · 3D arrival hero
+Object.assign(catalog,{"Desde la calle":["From the street","Da rua"],"hasta tu puerta.":["to your door.","até a sua porta."],"La puerta":["The door","A porta"],"está abierta.":["is open.","está aberta."],"Desliza para llegar":["Scroll to arrive","Role para chegar"],"MODELO 3D SEGÚN PLANOS · ACABADOS PROPUESTOS":["3D MODEL BASED ON PLANS · PROPOSED FINISHES","MODELO 3D CONFORME PLANTAS · ACABAMENTOS PROPOSTOS"],"Casa Utah en un lote de Rainbow Park al atardecer, modelo 3D según los planos arquitectónicos":["Casa Utah on a Rainbow Park lot at sunset, 3D model based on the architectural plans","Casa Utah em um lote de Rainbow Park ao entardecer, modelo 3D conforme as plantas arquitetônicas"]});
+// PROPOSAL · Surroundings portal intro
+Object.assign(catalog,{"a tu alrededor.":["all around.","ao seu redor."],"Tierra de caballos, manantiales y una ciudad que crece alrededor de Rainbow Park.":["Horse country, natural springs and a growing city around Rainbow Park.","Terra de cavalos, nascentes e uma cidade em crescimento ao redor de Rainbow Park."],"Descubre el entorno":["Discover the surroundings","Descubra o entorno"],"ENTORNO":["SURROUNDINGS","ENTORNO"],"02 / ENTORNO":["02 / SURROUNDINGS","02 / ENTORNO"]});
 const byKey=new Map();
 for(const [es,[en,pt]] of Object.entries(catalog).reverse())for(const value of [en,pt,es])if(!byKey.has(normalize(value).toLowerCase()))byKey.set(normalize(value).toLowerCase(),{es,en,pt});
 const escape=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');

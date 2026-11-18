@@ -1,0 +1,65 @@
+/* Portal intro component (extracted from the phase-1 arrival, same geometry and timing).
+   An arched frame with a looping film grows with scroll to full screen while a split
+   headline moves from beside the frame into place.
+   Markup: .portal[data-portal] > .portal-stage > .portal-frame(video) + .portal-shade
+           + .portal-meta + .portal-title(.portal-line--left/right > span) + .portal-footer + .portal-utility
+   Default (no JS / reduced motion) = final state: full-screen film, headline in place.
+   .portal.is-live (motion-system.js) = pinned, scroll-driven version. */
+
+.portal{
+  --portal-gutter:clamp(16px,5vw,88px);
+  --portal-paper:#f4efe4;
+  --portal-ink:#26272b;
+  --portal-cream:#f7f2e7;
+  position:relative;height:100svh;min-height:560px;
+  background:var(--portal-paper);color:var(--portal-cream);
+  isolation:isolate
+}
+.portal.is-live{height:290svh}
+.portal-stage{position:relative;height:100svh;min-height:560px;overflow:hidden}
+.portal.is-live .portal-stage{position:sticky;top:0}
+
+.portal-frame{position:absolute;inset:0;overflow:hidden;background:#26272b;will-change:clip-path}
+.portal-frame video,.portal-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 55%;transform-origin:50% 50%}
+.portal-shade{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(90deg,rgb(23 24 25 / .55),rgb(23 24 25 / .08) 60%),linear-gradient(0deg,rgb(23 24 25 / .62),transparent 55%)}
+
+.portal-meta{position:absolute;z-index:2;top:calc(var(--nav-height,86px) + 2.5vh);left:var(--portal-gutter);right:var(--portal-gutter);
+  display:flex;justify-content:space-between;gap:24px;font:600 var(--step--2)/1.4 var(--font-sans);letter-spacing:var(--track-label);text-transform:uppercase}
+
+.portal-title{position:absolute;z-index:2;inset:0;margin:0;pointer-events:none;
+  font-family:var(--font-display);font-weight:300;font-size:var(--step-5);line-height:var(--lh-display);letter-spacing:var(--track-display)}
+.portal-line{position:absolute;display:block;overflow:hidden;padding:.04em .06em .14em;margin:-.04em -.06em -.14em;white-space:nowrap;will-change:transform}
+.portal-line>span{display:block;will-change:transform}
+.portal-line--left{left:var(--portal-gutter);top:30%}
+.portal-line--right{right:var(--portal-gutter);top:calc(30% + .98em);text-align:right}
+.portal-line em{font-style:italic;font-weight:300}
+
+.portal-footer{position:absolute;z-index:2;left:var(--portal-gutter);right:var(--portal-gutter);bottom:calc(64px + 4vh);
+  display:flex;justify-content:space-between;align-items:flex-end;gap:32px}
+.portal-footer p{margin:0;max-width:30ch;font-size:var(--step-0);line-height:1.55}
+.portal-actions{display:flex;flex-direction:column;align-items:flex-end;gap:14px}
+
+.portal-utility{position:absolute;z-index:2;left:var(--portal-gutter);right:var(--portal-gutter);bottom:22px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  font:600 var(--step--2)/1.4 var(--font-sans);letter-spacing:var(--track-label-tight);text-transform:uppercase}
+.portal-utility a{color:inherit;text-decoration:none;display:inline-flex;gap:10px;align-items:center;min-height:44px}
+.portal-utility .media-note{opacity:.75;position:static;font:inherit}
+.portal-utility [data-portal-toggle]{font:inherit;letter-spacing:inherit;color:inherit;background:none;border:0;border-bottom:1px solid currentColor;padding:8px 0;min-height:44px;cursor:pointer}
+.portal-utility :focus-visible{outline:2px solid #d2b77e;outline-offset:4px}
+
+@media(max-width:760px){
+  .portal,.portal-stage{min-height:520px}
+  .portal-meta{flex-direction:column;gap:6px}
+  .portal-meta span:last-child{display:none}
+  .portal-title{font-size:clamp(3.1rem,15vw,4.5rem)}
+  .portal-line--left{top:27%}
+  .portal-line--right{top:calc(27% + 1em)}
+  .portal-footer{flex-direction:column;align-items:stretch;gap:22px;bottom:84px}
+  .portal-footer p{font-size:1rem}
+  .portal-actions{align-items:flex-start}
+  .portal-utility{bottom:14px}
+  .portal-utility .scroll-link{display:none}
+  .portal-utility .media-note{max-width:60%;font-size:10px}
+}
+@media(max-height:620px) and (min-width:761px){.portal-footer{bottom:70px}.portal-line--left{top:26%}}
