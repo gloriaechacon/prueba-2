@@ -141,7 +141,7 @@
       </article>`;
     };
     root.innerHTML = `<div class="ifig-inner" role="region" data-role-desc="carousel" aria-label="Indicadores" tabindex="0">
-        <header class="ifig-head"><span class="ifig-kicker">Rainbow Park / Inversión</span>
+        <header class="ifig-head"><span class="ifig-kicker">Inversión</span>
           <h2 class="ifig-title" data-reveal="lines">El valor del <em>tiempo</em></h2></header>
         <div class="ifig-stagewrap">
           <div class="ifig-viewport"><div class="ifig-track" aria-live="polite">${items.map(card).join('')}</div></div>

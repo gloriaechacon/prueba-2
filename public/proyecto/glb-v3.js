@@ -39,6 +39,7 @@ export async function loadV3(url) {
       if (m.isMeshBasicMaterial) m.toneMapped = false;
       if (m.aoMap) m.aoMapIntensity = .65;
       if (/teja|roof/i.test(m.name)) m.color.multiplyScalar(1.2);
+      if (/puerta.*caoba/i.test(m.name)) m.color.setRGB(1.35, 1.18, .95);
       if (/garaje.*oscuro/i.test(m.name)) m.color.set('#8e877a');
     }
     const transparent = [].concat(o.material).some(m => m.transparent || m.transmission > 0);

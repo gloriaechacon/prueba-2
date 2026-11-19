@@ -106,12 +106,12 @@
           <div><dt>${s.from}</dt><dd>${data.origin.name}</dd></div>
           <div><dt>${s.to}</dt><dd>${d ? d.name : `<em>${s.choose}</em>`}</dd></div>
         </dl>
+        ${passHost ? `<p class="t-small route-pass-desc">${document.querySelector('#c-place-description')?.textContent || ''}</p>` : ''}
         <div class="route-pass-perforation" aria-hidden="true"></div>
         <div class="route-pass-stats">
           <div>${ICON.clock}<strong>${has ? min(d.driveMin) : '—'}</strong><small>${s.time}</small></div>
           <div>${ICON.pin}<strong>${has ? km(d.roadKm) : '—'}</strong><small>${s.dist}</small></div>
         </div>
-        ${passHost ? `<p class="t-small route-pass-desc">${document.querySelector('#c-place-description')?.textContent || ''}</p>` : ''}
         ${passHost ? `<a class="btn btn--primary btn--block route-pass-go" href="${MAPS[active] || MAPS.rainbow}" target="_blank" rel="noopener"><span>${GM[lang()] || GM.en}</span><b aria-hidden="true">↗</b></a>` : `<button type="button" class="btn btn--primary btn--block route-pass-go"><span>${s.explore}</span><b aria-hidden="true">→</b></button>`}
         `;
     }

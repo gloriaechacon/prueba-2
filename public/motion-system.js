@@ -208,12 +208,17 @@
     }).then(() => { sceneEl.classList.add('is-live'); window.__arrivalReady = true; })
       .catch(error => { console.info('Hero sequence unavailable; showing the poster.', error?.message || ''); posterZoom = true; sceneEl.classList.remove('is-live'); });
 
+    const showBeat = p => beats.forEach((b,i) => { b.style.visibility = (i === 0 ? p < .25 : i === 1 ? p >= .29 && p < .63 : p >= .82) ? 'visible' : 'hidden'; });
+    showBeat(0);
     const tl = gsap.timeline({
       defaults: { ease: 'power2.inOut' },
       scrollTrigger: {
-        trigger: arrival, start: 'top top', end: 'bottom bottom', scrub: 1,
+        trigger: arrival, start: 'top top', end: 'bottom bottom', scrub: .25, invalidateOnRefresh: true,
         onUpdate: self => {
           progress = self.progress;
+          showBeat(progress);
+          arrival.dataset.progress = progress;
+          arrival.dispatchEvent(new Event('arrival-progress'));
           ctrl?.setProgress(progress);
           // Golden light at the open door, then a soft hand-off to the next section.
           arrival.style.setProperty('--arrival-end', Math.max(0, (progress - 0.9) / 0.1).toFixed(3));

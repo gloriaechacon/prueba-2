@@ -87,7 +87,7 @@ function renderRegionalAreas(){
 }
 
 function anchor(){const ray=camera.getPickRay(new C.Cartesian2(scene.canvas.clientWidth/2,scene.canvas.clientHeight/2));return scene.globe.show?scene.globe.pick(ray,scene):scene.pickPosition(new C.Cartesian2(scene.canvas.clientWidth/2,scene.canvas.clientHeight/2))}
-function flyToPoint(target,range,heading=0,pitch=-.68,duration){camera.cancelFlight();camera.flyToBoundingSphere(new C.BoundingSphere(target,1),{offset:new C.HeadingPitchRange(heading,pitch,range),duration:duration??(reduced?0:1.35),complete:()=>scene.requestRender()});scene.requestRender()}
+function flyToPoint(target,range,heading=0,pitch=-.68,duration){camera.cancelFlight();camera.flyToBoundingSphere(new C.BoundingSphere(target,1),{offset:new C.HeadingPitchRange(heading,pitch,range),duration:duration??(reduced?0:.85),complete:()=>scene.requestRender()});scene.requestRender()}
 function overview(duration){flyToPoint(collectionSphere.center,Math.max(1800,collectionSphere.radius*2.8)*(scene.canvas.clientWidth<600?1.35:1),0,-.78,duration)}
 const collectionPin=document.createElement('button');collectionPin.type='button';collectionPin.className='zone-collection-pin';collectionPin.setAttribute('aria-label','Lotes Rainbow Park');collectionPin.innerHTML='<svg viewBox="0 0 24 32" aria-hidden="true"><path d="M12 30S2 18 2 12a10 10 0 0 1 20 0c0 6-10 18-10 18Z" fill="#6b5733" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.5" fill="#fff"/></svg><span>Lotes de Rainbow Park</span>';collectionPin.hidden=true;document.querySelector('#zone-pins').append(collectionPin);collectionPin.addEventListener('click',()=>overview());
 const clusterButtons=new Map();
@@ -199,7 +199,7 @@ function entrance(){const order=lots.filter(l=>window.rpcLots.available(l.id)).s
  if(reduced){overview(0);document.body.classList.add('lots-entered');return}
  flyToPoint(collectionSphere.center,26000,0,-1.35,0);
  for(const l of order){const e=polygons.get(l.id);e.polyline.positions=new C.CallbackProperty(()=>[],false)}
- setTimeout(()=>{overview(2.6);setTimeout(()=>{document.body.classList.add('lots-entered');order.forEach((l,i)=>drawOutline(l,650,i*260))},2300)},350)}
+ setTimeout(()=>{if(activeLot){document.body.classList.add("lots-entered");order.forEach(l=>drawOutline(l,400));return;}overview(2.6);setTimeout(()=>{document.body.classList.add('lots-entered');order.forEach((l,i)=>drawOutline(l,650,i*260))},2300)},350)}
 let moveTimer;camera.moveStart.addEventListener(()=>{clearTimeout(moveTimer);container.classList.add('is-moving')});camera.moveEnd.addEventListener(()=>{moveTimer=setTimeout(()=>container.classList.remove('is-moving'),900)});
 {const hov=new C.ScreenSpaceEventHandler(scene.canvas);hov.setInputAction(m=>{const hit=scene.drillPick(m.endPosition,4).find(h=>h.id?.sampleLot!=null);hover(hit?hit.id.sampleLot:null);scene.canvas.style.cursor=hit?'pointer':''},C.ScreenSpaceEventType.MOUSE_MOVE)}
 function focus(lot,range){let h=heightLocal(lot.x,lot.z)*factor;if(photoMode){try{h=scene.sampleHeight(C.Cartographic.fromDegrees(...lot.coordinates))||h}catch{}}flyToPoint(point(lot.x,lot.z,h),range*(scene.canvas.clientWidth<600?1.4:1),((lot.front?.frontBearingDegrees||0)-180)*rad,-.7)}

@@ -21,7 +21,7 @@
 (() => {
   const stage = document.querySelector('.arrival-stage');
   const lines = [...document.querySelectorAll('.arrival-beat[data-beat="0"] .arrival-line')];
-  if (stage && lines.length && window.rpClouds) window.rpClouds.mount(stage, { lines, track: document.querySelector('.arrival'), from: .13, to: .42 });
+  if (stage && lines.length && window.rpClouds) window.rpClouds.mount(stage, { lines, track: document.querySelector('.arrival'), from: .04, to: .34 });
 })();
 
 /* Populate the home inquiry with the same stable parcel IDs as Contact. */
@@ -53,3 +53,5 @@
   };
   update(); document.addEventListener('rpc:language', update);
 })();
+
+{const diagram=document.querySelector('.area-diagram');if(diagram)new IntersectionObserver(([e],o)=>{if(e.isIntersecting){diagram.classList.add('is-visible');o.disconnect();}},{threshold:.35}).observe(diagram);}

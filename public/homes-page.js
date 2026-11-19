@@ -129,7 +129,7 @@ function renderViewer(dir = 0) {
   if (dir) slide(stage, dir, () => mountTab());
   let plan = viewerEl.querySelector('.hm-plan-section');
   if (!plan) { plan = document.createElement('section'); plan.className = 'hm-plan-section'; plan.dataset.noTranslate = ''; viewerEl.append(plan); }
-  plan.innerHTML = `<header><h3 class="t-title">${s.plan(HOMES[house].name)}</h3><a class="btn btn--secondary" href="${HOMES[house].planPdf}" target="_blank" rel="noopener">${s.pdf}</a></header><img src="${HOMES[house].plan}" alt="${s.plan(HOMES[house].name)}" loading="lazy" decoding="async">`;
+  plan.innerHTML = `<header><h3 class="t-title">${s.plan(HOMES[house].name)}</h3><a class="btn btn--secondary" href="${HOMES[house].planPdf}" target="_blank" rel="noopener">${s.pdf}</a></header><figure class="hm-plan-paper"><img src="${HOMES[house].plan}" alt="${s.plan(HOMES[house].name)}" loading="lazy" decoding="async"></figure>`;
   closeCta.href = '/proyecto/contacto/?house=' + house;
   const u = new URL(location.href); u.searchParams.set('house', house); history.replaceState(null, '', u);
 }
@@ -157,7 +157,7 @@ async function mountTab() {
   pane.innerHTML = ''; pane.dataset.tab = tab;
   pane.innerHTML = `<div class="hm-3d" aria-busy="true"><p class="hm-loading t-small">${s.loading}</p></div>`;
   try {
-    const { createViewer } = await import('/proyecto/viewer.js?v=review2');
+    const { createViewer } = await import('/proyecto/viewer.js?v=review3');
     if (token !== viewerToken) return;
     const host = pane.querySelector('.hm-3d');
     const v = await createViewer(host, id, { model: tab === 2 ? HOMES[id].floor3d : HOMES[id].model3d });

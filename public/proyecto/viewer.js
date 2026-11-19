@@ -4,7 +4,7 @@ import {loadHouse, daylight} from '/utah/model-loader.js';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {createSceneRenderer, addHouseStage} from '/exterior-atmosphere.js';
 import {compileInSlices} from '/three-compile.js';
-import {isV3, loadV3, balanceLights} from '/proyecto/glb-v3.js?v=review2';
+import {isV3, loadV3, balanceLights} from '/proyecto/glb-v3.js?v=review3';
 
 export async function createViewer(host, id, opts = {}) {
   const scene = new THREE.Scene();
@@ -13,10 +13,18 @@ export async function createViewer(host, id, opts = {}) {
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = false;
   controls.maxPolarAngle = Math.PI * .49;
-  controls.minDistance = 8;
+  controls.enablePan = false;
+  controls.minDistance = 18;
   controls.maxDistance = 85;
   const ground = addHouseStage(THREE,scene);
-  ground.material.color.set('#718b48');
+  ground.material.color.set('#b5b393');
+  const lawn=document.createElement('canvas'); lawn.width=lawn.height=256;
+  const gx=lawn.getContext('2d'); gx.fillStyle='#828064'; gx.fillRect(0,0,256,256);
+  let seed=71; const random=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+  for(let i=0;i<22000;i++){const x=random()*256,y=random()*256;gx.strokeStyle=['#939376','#6e7559','#a0a080','#7c8261'][i%4];gx.lineWidth=.5;gx.beginPath();gx.moveTo(x,y);gx.lineTo(x+random()*2-1,y-1-random()*3);gx.stroke();}
+  const lawnMap=new THREE.CanvasTexture(lawn); lawnMap.colorSpace=THREE.SRGBColorSpace;
+  lawnMap.wrapS=lawnMap.wrapT=THREE.RepeatWrapping; lawnMap.repeat.set(32,32); lawnMap.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());
+  ground.material.map=lawnMap; ground.material.needsUpdate=true;
   scene.background = new THREE.Color('#d8e8ed');
   let model, lit = false;
   try {
@@ -33,6 +41,7 @@ export async function createViewer(host, id, opts = {}) {
   scene.add(model);
   const box = new THREE.Box3().setFromObject(model);
   const size = box.getSize(new THREE.Vector3());
+  controls.minDistance = new THREE.Vector3(Math.max(Math.abs(box.min.x),Math.abs(box.max.x)),Math.max(Math.abs(box.min.y),Math.abs(box.max.y)),Math.max(Math.abs(box.min.z),Math.abs(box.max.z))).length() + 2.5;
   host.replaceChildren(renderer.domElement);
   renderer.domElement.setAttribute('aria-label', 'Modelo 3D de '+id+'. Arrastra para girar o usa los controles de cámara.');
   renderer.domElement.setAttribute('role', 'img');
