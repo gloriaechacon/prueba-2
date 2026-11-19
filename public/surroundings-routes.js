@@ -40,6 +40,8 @@
     return pts;
   }
 
+  const MAPS = {"rainbow":"https://www.google.com/maps/search/?api=1&query=29.148212%2C-82.379192","wec":"https://www.google.com/maps/search/?api=1&query=World+Equestrian+Center+Ocala+FL","downtown":"https://www.google.com/maps/search/?api=1&query=Downtown+Ocala+FL","nature":"https://www.google.com/maps/search/?api=1&query=Rainbow+Springs+State+Park+FL","classic":"https://www.google.com/maps/search/?api=1&query=Classic+Mile+Training+Center+Ocala+FL","airport":"https://www.google.com/maps/search/?api=1&query=Ocala+International+Airport+FL"};
+  const GM = { en: 'View on Google Maps', es: 'Ver en Google Maps', pt: 'Ver no Google Maps' };
   function attach(entry) {
     if (!data || entry.done) return;
     entry.done = true;
@@ -72,7 +74,11 @@
     pass.className = 'route-pass';
     pass.dataset.noTranslate = '';
     pass.setAttribute('aria-live', 'polite');
-    if (passHost) passHost.append(pass);
+    if (passHost) {
+      passHost.append(pass);
+      const descSrc = document.querySelector('#c-place-description');
+      if (descSrc) new MutationObserver(() => { const d = pass.querySelector('.route-pass-desc'); if (d && d.textContent !== descSrc.textContent) { d.textContent = descSrc.textContent; if (!reduce.matches && d.animate) d.animate([{ transform: 'translateY(12px)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 480, easing: 'cubic-bezier(.2,.8,.2,1)' }); } }).observe(descSrc, { childList: true, characterData: true, subtree: true });
+    }
     else if (side) {
       const wrap = document.createElement('div');
       wrap.className = 'route-side';
@@ -105,11 +111,13 @@
           <div>${ICON.clock}<strong>${has ? min(d.driveMin) : '—'}</strong><small>${s.time}</small></div>
           <div>${ICON.pin}<strong>${has ? km(d.roadKm) : '—'}</strong><small>${s.dist}</small></div>
         </div>
-        <button type="button" class="btn btn--primary btn--block route-pass-go"><span>${s.explore}</span><b aria-hidden="true">→</b></button>
+        ${passHost ? `<p class="t-small route-pass-desc">${document.querySelector('#c-place-description')?.textContent || ''}</p>` : ''}
+        ${passHost ? `<a class="btn btn--primary btn--block route-pass-go" href="${MAPS[active] || MAPS.rainbow}" target="_blank" rel="noopener"><span>${GM[lang()] || GM.en}</span><b aria-hidden="true">↗</b></a>` : `<button type="button" class="btn btn--primary btn--block route-pass-go"><span>${s.explore}</span><b aria-hidden="true">→</b></button>`}
         <p class="route-pass-note">${s.note(date(data.asOf))}</p>`;
     }
     function wire() {
       notch();
+      if (passHost) return;   // the pass button is a Google Maps link on proyecto/entorno
       pass.querySelector('.route-pass-go').onclick = () => {
         const link = card?.querySelector('#c-place-link');
         if (passHost && link && active !== 'rainbow') { link.click(); return; }

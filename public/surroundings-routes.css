@@ -194,3 +194,25 @@
 @media(min-width:861px){.rt-list button{grid-template-columns:1fr!important;row-gap:3px!important}.rt-list .rt-n{grid-row:auto!important;padding-top:0!important}.rt-list .rt-name{overflow-wrap:anywhere}}
 html body .rt-info--below,html body .rt-info--below :is(h3,a){color:var(--s-fg)!important}
 html body .rt-info--below p{color:var(--s-muted)!important}
+
+/* ---------- Round 8 ---------- */
+/* Destinations bar: number + name only */
+.rt-list .rt-meta{display:none!important}
+.rt-list button{padding:12px 12px 14px!important}
+/* Map controls: small map-type group (top left) and a separate 'View the whole area' (top right of the zoom) */
+.rt-seg{top:12px!important;bottom:auto!important;left:12px!important;padding:2px!important}
+.rt-seg button{min-height:30px!important;padding:0 10px!important;font-size:10px!important}
+.rt-whole{position:absolute;z-index:2;left:12px;bottom:12px;min-height:32px;padding:0 12px;border-radius:999px;border:1px solid var(--c-line-mid);background:color-mix(in srgb,var(--c-paper) 92%,transparent);color:var(--c-ink);cursor:pointer;font:var(--t-label);letter-spacing:var(--t-label-track);text-transform:uppercase;font-size:10px;box-shadow:0 2px 10px rgb(var(--c-shade) / .15)}
+.rt-whole:focus-visible{outline:2px solid var(--c-focus);outline-offset:2px}
+/* Right column: compact From / To, the short description under time and distance, nothing loose below */
+.rt-pass-slot .route-pass-trip dd{font:var(--t-title)!important;font-size:clamp(1.05rem,.9rem + .4vw,1.3rem)!important;line-height:1.15!important}
+.rt-pass-slot .route-pass-kicker{padding-bottom:8px}
+.route-pass-desc{margin:0;color:var(--c-muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.rt-info--below,.rt .rt-info{display:none!important}
+/* 'Want to understand what's changing…' on its own deep band */
+html body main .entorno-next[data-surface]{margin:var(--section-y) calc(-1 * var(--section-x)) 0;padding:clamp(40px,7vh,72px) var(--section-x)!important;border-radius:0}
+html body main .entorno-next[data-surface] h2{font:var(--t-title)!important;font-size:clamp(1.4rem,1.1rem + 1vw,2rem)!important;color:var(--c-on-deep)!important;max-width:30ch}
+@media(max-width:860px){.rt-whole{bottom:auto;top:52px}}
+html body .route-pass-go.btn{display:flex!important;align-items:center!important;justify-content:space-between!important;text-decoration:none!important}
+@media(min-width:861px){html[lang] body:not(#rp-type) .rt-list .rt-name{letter-spacing:.08em!important;overflow-wrap:normal!important;word-break:normal!important;hyphens:auto}}
+html body main .entorno-next[data-surface] .t-title{font-size:clamp(1.4rem,1.1rem + 1vw,2rem)!important}

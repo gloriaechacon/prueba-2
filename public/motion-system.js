@@ -127,7 +127,7 @@
       .fromTo(portal, { '--portal-p': 0 }, { '--portal-p': 1, duration: 0.7, ease: 'power2.inOut' }, 0)
       .fromTo(portal, { '--portal-tint': 0 }, { '--portal-tint': 1, duration: 0.22 }, 0.3)
       .fromTo(portal, { '--portal-shade': 0 }, { '--portal-shade': 1, duration: 0.3 }, 0.35)
-      .fromTo(portal, { '--portal-foot': 0 }, { '--portal-foot': 1, duration: 0.16 }, 0.7)
+      .fromTo(portal, { '--portal-foot': 0 }, { '--portal-foot': 1, duration: 0.2 }, 0.56)
       .to({}, { duration: 0.12 });
   }
   const portalStatic = () => document.querySelectorAll('[data-portal]').forEach(p => p.classList.add('portal--static'));
