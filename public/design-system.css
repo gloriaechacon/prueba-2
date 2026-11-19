@@ -117,8 +117,11 @@ html[data-palette=tierra-ecuestre]{
   --c-paper-tint:color-mix(in srgb,var(--c-ink) 7%,var(--c-paper));
   --c-line-mid:color-mix(in srgb,var(--c-ink) 40%,transparent);
   --c-btn-hover:color-mix(in srgb,var(--c-btn) 84%,var(--c-ink));
-  --c-focus:var(--c-accent)
+  --c-focus:var(--c-accent);
+  --c-arrow:var(--c-deep)          /* arrow on an accent circle */
 }
+/* AA (non-text 3:1): champana deep on accent is 2.93, so its arrow uses paper (4.56) */
+html[data-palette=champana],:root:not([data-palette]){--c-arrow:var(--c-paper)}
 /* Surfaces: a section declares data-surface=deep|paper|support and its
    content reads --s-* (bg, fg, muted, line, accent, card). */
 [data-surface=paper],:root{--s-bg:var(--c-paper);--s-fg:var(--c-ink);--s-muted:var(--c-muted);--s-line:var(--c-line);--s-accent:var(--c-accent-text);--s-card:var(--c-paper-2);--s-card-fg:var(--c-ink)}

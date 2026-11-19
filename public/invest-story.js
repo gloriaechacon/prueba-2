@@ -72,6 +72,19 @@
     return { go, reset() { index = 0; }, get index() { return index; }, set count(n) { count = n; } };
   }
 
+  /* Arrow helpers shared by both carousels: "Siguiente · <next item>" label and a two-beat nudge
+     the first time the section is seen (none with reduced motion). */
+  function nextLabel(el, name) {
+    if (!el) return;
+    el.innerHTML = `<span>Siguiente</span> · <span>${esc(name)}</span>`;
+    document.dispatchEvent(new CustomEvent('rpc:content'));
+  }
+  function nudge(btn) {
+    if (!btn || reduce.matches) return;
+    btn.classList.add('is-nudging');
+    btn.addEventListener('animationend', () => btn.classList.remove('is-nudging'), { once: true });
+  }
+
   /* ---------------- Act 1 · figures (carousel) ---------------- */
   // One schematic visual per figure. They illustrate the kind of figure, never a series or a proportion.
   const VISUAL_BY_NAME = { 'Precios de vivienda': 'trend', 'Población y construcción': 'dots', 'Empleo': 'bars', 'Turismo': 'ring', 'Actividad empresarial': 'blocks' };
@@ -125,12 +138,14 @@
     root.innerHTML = `<div class="ifig-inner" role="region" data-role-desc="carousel" aria-label="Indicadores" tabindex="0">
         <header class="ifig-head"><span class="ifig-kicker">Rainbow Park / Inversión</span>
           <h2 class="ifig-title">El valor del <em>tiempo</em></h2></header>
-        <div class="ifig-viewport"><div class="ifig-track" aria-live="polite">${items.map(card).join('')}</div></div>
+        <div class="ifig-stagewrap">
+          <div class="ifig-viewport"><div class="ifig-track" aria-live="polite">${items.map(card).join('')}</div></div>
+          <button type="button" class="ifig-side ifig-side--prev rp-arrow" data-dir="-1" aria-label="Anterior"><span class="rp-arrow-ico" aria-hidden="true">←</span></button>
+          <button type="button" class="ifig-side ifig-side--next rp-arrow" data-dir="1" aria-label="Siguiente"><span class="rp-arrow-ico" aria-hidden="true">→</span><span class="rp-arrow-label" aria-hidden="true"></span></button>
+        </div>
         <nav class="ifig-nav" aria-label="Indicadores">
-          <button type="button" class="ifig-arrowbtn" data-dir="-1" aria-label="Anterior">←</button>
-          <span class="ifig-count" data-no-translate>01 / ${pad(n)}</span>
+          <div class="rp-progress-wrap"><span class="ifig-count" data-no-translate>01 / ${pad(n)}</span><span class="rp-progress" aria-hidden="true"><i></i></span></div>
           <div class="ifig-dots">${items.map((it, i) => `<button type="button" class="ifig-dotbtn" data-go="${i}"><span class="ifig-sr" data-no-translate>${pad(i + 1)} / ${pad(n)}</span></button>`).join('')}</div>
-          <button type="button" class="ifig-arrowbtn" data-dir="1" aria-label="Siguiente">→</button>
         </nav>
         ${short ? `<a class="link-line ifig-more" href="/proyecto/inversion/">Ver la evidencia completa <span aria-hidden="true">↗</span></a>` : ''}
       </div>`;
@@ -169,6 +184,8 @@
         if (on) c.removeAttribute('aria-hidden'); else c.setAttribute('aria-hidden', 'true');
       });
       count.textContent = `${pad(i + 1)} / ${pad(n)}`;
+      root.querySelector('.rp-progress i').style.transform = `scaleX(${(i + 1) / n})`;
+      nextLabel(root.querySelector('.ifig-side--next .rp-arrow-label'), items[(i + 1) % n].name);
       dots.forEach((d, k) => d.setAttribute('aria-current', k === i ? 'true' : 'false'));
     }
     function show(i, prev, dir) {
@@ -187,7 +204,7 @@
     layout(0, 1);
     cards.forEach(c => { if (c.dataset.visual === 'trend') placeArrow(c, 0); const v = c.querySelector('.ifig-val'); if (!isNaN(+v.dataset.n)) v.textContent = fmt(0, +v.dataset.dec); });
     // Start the first figure once the act is on screen.
-    new IntersectionObserver(([e], io) => { if (!e.isIntersecting) return; io.disconnect(); show(0, null, 1); }, { threshold: 0.35 }).observe(root);
+    new IntersectionObserver(([e], io) => { if (!e.isIntersecting) return; io.disconnect(); show(0, null, 1); nudge(root.querySelector('.ifig-side--next')); }, { threshold: 0.35 }).observe(root);
     document.addEventListener('rpc:language', () => cards.forEach((c, k) => { const v = c.querySelector('.ifig-val'); if (k === ctl.index && c.classList.contains('is-played')) v.textContent = fmt(+v.dataset.n, +v.dataset.dec); }));
   }
 
@@ -214,7 +231,7 @@
           <div class="imap-mapwrap"><div class="imap-map" aria-label="Mapa de proyectos"></div>
             <p class="imap-foot"><span class="imap-precision"></span><span class="imap-asof"></span></p></div>
           <aside class="imap-card"><div class="imap-stack" aria-live="polite"></div>
-            <nav class="imap-nav" aria-label="Proyectos"><button type="button" data-dir="-1" aria-label="Anterior">←</button><span class="imap-count" data-no-translate></span><button type="button" data-dir="1" aria-label="Siguiente">→</button></nav></aside>
+            <nav class="imap-nav" aria-label="Proyectos"><button type="button" class="imap-arrow imap-arrow--prev rp-arrow" data-dir="-1" aria-label="Anterior"><span class="rp-arrow-ico" aria-hidden="true">←</span></button><div class="rp-progress-wrap"><span class="imap-count" data-no-translate></span><span class="rp-progress" aria-hidden="true"><i></i></span></div><button type="button" class="imap-arrow imap-arrow--next rp-arrow" data-dir="1" aria-label="Siguiente"><span class="rp-arrow-ico" aria-hidden="true">→</span><span class="rp-arrow-label" aria-hidden="true"></span></button></nav></aside>
         </div>
       </div>`;
     const el = root.querySelector('.imap-map');
@@ -259,6 +276,8 @@
       root.querySelector('.imap-precision').textContent = loc.precision;
       root.querySelector('.imap-asof').innerHTML = `<span>Archivo:</span> ${asOf}`;
       counter.textContent = `${pad(i + 1)} / ${pad(steps.length)}`;
+      root.querySelector('.imap .rp-progress i, .rp-progress i').style.transform = `scaleX(${(i + 1) / steps.length})`;
+      nextLabel(root.querySelector('.imap-arrow--next .rp-arrow-label'), steps[(i + 1) % steps.length].loc.name);
       // Lateral swap of the card content: the old one leaves, the new one enters from the other side.
       const old = stack.querySelector('.imap-slide:not(.is-leaving)');
       const next = document.createElement('div');
@@ -289,7 +308,7 @@
       show(ctl.index, null, 1, true);
     });
     show(0, null, 1, true);
-    new IntersectionObserver(([e], io) => { if (!e.isIntersecting) return; io.disconnect(); map.invalidateSize(); show(ctl.index, null, 1, true); }, { threshold: 0.2 }).observe(root);
+    new IntersectionObserver(([e], io) => { if (!e.isIntersecting) return; io.disconnect(); map.invalidateSize(); show(ctl.index, null, 1, true); nudge(root.querySelector('.imap-arrow--next')); }, { threshold: 0.2 }).observe(root);
     rp.getElement()?.setAttribute('aria-hidden', 'true');
   }
 
