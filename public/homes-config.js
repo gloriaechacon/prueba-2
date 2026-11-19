@@ -13,7 +13,7 @@ export const HOMES = {
     image: '/assets/homes-utah-tall',
     thumb: '/assets/home-utah',
     turntable: '/assets/turntable/utah/',
-    finishes: '/utah/acabados-concepto.png'
+    finishes: '/assets/utah-finishes.webp'   // swatches; the full-size concept opens in the Finish concept modal
   },
   bell: {
     name: 'Bell',

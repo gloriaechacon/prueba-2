@@ -86,6 +86,7 @@ function enter(id, card) {
     house = id; tab = 0;
     renderViewer(0);
     viewerEl.scrollIntoView({ block: 'start', behavior: 'instant' });
+    window.__hmMount?.();
     viewerEl.querySelector('.hm-stage').style.viewTransitionName = 'hm-shared';
     if (!changed) mountTab();
   });
@@ -211,6 +212,11 @@ function renderCompare() {
 
 /* ---------- Boot ---------- */
 Promise.all(ids.map(id => fetch(HOMES[id].metadata).then(r => r.json()).then(m => { META[id] = m; }))).then(() => {
-  renderCards(); renderViewer(0); mountTab(); renderCompare();
-  document.addEventListener('rpc:language', () => { renderCards(); renderViewer(0); renderCompare(); mountTab(); });
+  renderCards(); renderViewer(0); renderCompare();
+  // The GLB (several MB) loads only when the viewer approaches the viewport.
+  let mounted = false;
+  const mountOnce = () => { if (!mounted) { mounted = true; mountTab(); } };
+  new IntersectionObserver(([e], io) => { if (e.isIntersecting) { io.disconnect(); mountOnce(); } }, { rootMargin: "300px 0px" }).observe(viewerEl);
+  window.__hmMount = mountOnce;
+  document.addEventListener('rpc:language', () => { renderCards(); renderViewer(0); renderCompare(); if (mounted) mountTab(); });
 });
