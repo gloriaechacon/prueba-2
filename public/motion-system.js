@@ -199,18 +199,14 @@
     root.classList.add('motion-arrival');
     let ctrl = null, posterZoom = false, progress = 0;
 
-    const use3D = (() => { try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch { return false; } })();
-    // The 3D scene starts once the page has loaded and the main thread is idle (the poster shows
-    // meanwhile), so the first taps and clicks are not delayed by model parsing / GPU warm-up.
-    const afterLoad = () => new Promise(r => { const go = () => (window.requestIdleCallback || setTimeout)(r, { timeout: 1500 }); document.readyState === 'complete' ? go() : addEventListener('load', go, { once: true }); });
-    if (use3D) {
-      afterLoad().then(() => import('/arrival-3d.js')).then(m => {
-        ctrl = m.mountArrival(sceneEl, { mobile, debug });
-        ctrl.setProgress(progress);
-        return ctrl.ready;
-      }).then(() => { sceneEl.classList.add('is-live'); window.__arrivalReady = true; })
-        .catch(error => { console.info('3D arrival unavailable; showing the poster.', error?.message || ''); posterZoom = true; sceneEl.classList.remove('is-live'); });
-    } else posterZoom = true;
+    // Blender image sequence (hero-sequence.js); the three.js hero stays in the repo unloaded.
+    const portrait = innerHeight > innerWidth * 1.1;
+    const variant = mobile || portrait ? 'mobile' : 'desktop';
+    import('/hero-sequence.js').then(m => m.mountSequence(sceneEl, { variant })).then(c => {
+      ctrl = c; ctrl.setProgress(progress);
+      return ctrl.ready;
+    }).then(() => { sceneEl.classList.add('is-live'); window.__arrivalReady = true; })
+      .catch(error => { console.info('Hero sequence unavailable; showing the poster.', error?.message || ''); posterZoom = true; sceneEl.classList.remove('is-live'); });
 
     const tl = gsap.timeline({
       defaults: { ease: 'power2.inOut' },
@@ -219,6 +215,9 @@
         onUpdate: self => {
           progress = self.progress;
           ctrl?.setProgress(progress);
+          // Golden light at the open door, then a soft hand-off to the next section.
+          arrival.style.setProperty('--arrival-end', Math.max(0, (progress - 0.9) / 0.1).toFixed(3));
+          arrival.classList.toggle('is-end', progress > 0.9);
           if (posterZoom && poster) gsap.set(poster, { scale: 1 + 0.22 * progress });
           if (debug && !ctrl) debug.textContent = `progress ${progress.toFixed(3)}\n(poster — 3D not loaded)`;
         }
@@ -232,8 +231,8 @@
       .fromTo(inners(beats[1]), { y: 0, yPercent: 110 }, { yPercent: 0, duration: 0.07, stagger: 0.02 }, 0.30)
       .to(lines(beats[1]), { y: -30, autoAlpha: 0, duration: 0.07 }, 0.55);
     if (beats[2]) tl
-      .fromTo(inners(beats[2]), { y: 0, yPercent: 110 }, { yPercent: 0, duration: 0.07, stagger: 0.02 }, 0.68);
-    tl.fromTo(footer, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.06 }, 0.86);
+      .fromTo(inners(beats[2]), { y: 0, yPercent: 110 }, { yPercent: 0, duration: 0.06, stagger: 0.02 }, 0.84);   // manifest: door opens from 0.85
+    tl.fromTo(footer, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.05 }, 0.9);
     if (nav) nav.dataset.tone = 'ink';
 
     /* Intro wordmark: once per session, then the first headline rises. */

@@ -1,0 +1,92 @@
+{
+ "source": "utah-exterior-v2.glb + hero-path.js (Blender Cycles render)",
+ "progress_formula": "frame i (1-based) shows scroll progress (i-1)/(frames-1)",
+ "door": {
+  "opens_from": 0.85,
+  "fully_open_at": 1.0
+ },
+ "variants": {
+  "desktop": {
+   "frames": 150,
+   "width": 1920,
+   "height": 1080,
+   "path": "desktop/frame_0001.webp ... desktop/frame_0150.webp",
+   "quality": 58,
+   "total_bytes": 15312010,
+   "total_mb": 14.6,
+   "budget_mb": 15,
+   "within_budget": true,
+   "quality_notes": [],
+   "keyframes": [
+    {
+     "label": "Wide, high view of the lot and the house",
+     "progress": 0.0,
+     "frame": 1
+    },
+    {
+     "label": "At driveway height, facing the facade",
+     "progress": 0.25,
+     "frame": 38
+    },
+    {
+     "label": "In front of the house, centred",
+     "progress": 0.5,
+     "frame": 75
+    },
+    {
+     "label": "On the porch, facing the front door",
+     "progress": 0.75,
+     "frame": 113
+    },
+    {
+     "label": "Close-up of the front door",
+     "progress": 1.0,
+     "frame": 150
+    }
+   ]
+  },
+  "mobile": {
+   "frames": 100,
+   "width": 1080,
+   "height": 1920,
+   "path": "mobile/frame_0001.webp ... mobile/frame_0100.webp",
+   "quality": 65,
+   "total_bytes": 10252400,
+   "total_mb": 9.78,
+   "budget_mb": 10,
+   "within_budget": true,
+   "quality_notes": [
+    "q80: 15.23 MB > budget",
+    "q75: 11.62 MB > budget",
+    "q70: 10.67 MB > budget"
+   ],
+   "keyframes": [
+    {
+     "label": "Wide, high view of the lot and the house",
+     "progress": 0.0,
+     "frame": 1
+    },
+    {
+     "label": "At driveway height, facing the facade",
+     "progress": 0.25,
+     "frame": 26
+    },
+    {
+     "label": "In front of the house, centred",
+     "progress": 0.5,
+     "frame": 51
+    },
+    {
+     "label": "On the porch, facing the front door",
+     "progress": 0.75,
+     "frame": 75
+    },
+    {
+     "label": "Close-up of the front door",
+     "progress": 1.0,
+     "frame": 100
+    }
+   ]
+  }
+ }
+}
