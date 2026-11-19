@@ -47,7 +47,7 @@
   function carousel(region, { count, onChange }) {
     let index = 0;
     const go = (i, dir) => {
-      const next = (i + count) % count;
+      const next = Math.max(0, Math.min(count - 1, i));   // no wrap: 1 → N, never back to 1
       if (next === index && dir !== 0) return;
       const d = dir ?? (next > index ? 1 : -1);
       const prev = index;
@@ -74,10 +74,15 @@
 
   /* Arrow helpers shared by both carousels: "Siguiente · <next item>" label and a two-beat nudge
      the first time the section is seen (none with reduced motion). */
-  function nextLabel(el, name) {
+  function nextLabel(el, name, word = 'Siguiente') {
     if (!el) return;
-    el.innerHTML = `<span>Siguiente</span> · <span>${esc(name)}</span>`;
+    el.innerHTML = name ? `<span>${word}</span> · <span>${esc(name)}</span>` : '';
     document.dispatchEvent(new CustomEvent('rpc:content'));
+  }
+  // At the ends the arrow (and its label) disappears.
+  function edges(prevBtn, nextBtn, i, n) {
+    prevBtn?.classList.toggle('is-off', i <= 0); prevBtn?.setAttribute('aria-disabled', String(i <= 0));
+    nextBtn?.classList.toggle('is-off', i >= n - 1); nextBtn?.setAttribute('aria-disabled', String(i >= n - 1));
   }
   function nudge(btn) {
     if (!btn || reduce.matches) return;
@@ -140,7 +145,7 @@
           <h2 class="ifig-title" data-reveal="lines">El valor del <em>tiempo</em></h2></header>
         <div class="ifig-stagewrap">
           <div class="ifig-viewport"><div class="ifig-track" aria-live="polite">${items.map(card).join('')}</div></div>
-          <button type="button" class="ifig-side ifig-side--prev rp-arrow" data-dir="-1" aria-label="Anterior"><span class="rp-arrow-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M11 6l-6 6 6 6"/></svg></span></button>
+          <button type="button" class="ifig-side ifig-side--prev rp-arrow" data-dir="-1" aria-label="Anterior"><span class="rp-arrow-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M11 6l-6 6 6 6"/></svg></span><span class="rp-arrow-label rp-arrow-label--prev" aria-hidden="true"></span></button>
           <button type="button" class="ifig-side ifig-side--next rp-arrow" data-dir="1" aria-label="Siguiente"><span class="rp-arrow-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span><span class="rp-arrow-label" aria-hidden="true"></span></button>
         </div>
         <nav class="ifig-nav" aria-label="Indicadores">
@@ -177,15 +182,16 @@
     }
     function layout(i, dir) {
       cards.forEach((c, k) => {
-        const rel = (k - i + n) % n;                 // 0 active, 1 next (peeks), n-1 previous
-        const pos = rel === 0 ? 'active' : rel === 1 ? 'next' : rel === n - 1 ? 'prev' : (dir > 0 ? 'after' : 'after');
+        const pos = k === i ? 'active' : k === i + 1 ? 'next' : k === i - 1 ? 'prev' : k > i ? 'after' : 'before';
         c.dataset.pos = pos;
         const on = pos === 'active';
         if (on) c.removeAttribute('aria-hidden'); else c.setAttribute('aria-hidden', 'true');
       });
       count.textContent = `${pad(i + 1)} / ${pad(n)}`;
       root.querySelector('.rp-progress i').style.transform = `scaleX(${(i + 1) / n})`;
-      nextLabel(root.querySelector('.ifig-side--next .rp-arrow-label'), items[(i + 1) % n].name);
+      nextLabel(root.querySelector('.ifig-side--next .rp-arrow-label'), items[i + 1]?.name);
+      nextLabel(root.querySelector('.ifig-side--prev .rp-arrow-label'), items[i - 1]?.name, 'Anterior');
+      edges(root.querySelector('.ifig-side--prev'), root.querySelector('.ifig-side--next'), i, n);
       dots.forEach((d, k) => d.setAttribute('aria-current', k === i ? 'true' : 'false'));
     }
     function show(i, prev, dir) {
@@ -231,7 +237,7 @@
           <div class="imap-mapwrap"><div class="imap-map" aria-label="Mapa de proyectos"></div>
             <p class="imap-foot"><span class="imap-precision"></span><span class="imap-asof"></span></p></div>
           <aside class="imap-card"><div class="imap-stack" aria-live="polite"></div>
-            <nav class="imap-nav" aria-label="Proyectos"><button type="button" class="imap-arrow imap-arrow--prev rp-arrow" data-dir="-1" aria-label="Anterior"><span class="rp-arrow-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M11 6l-6 6 6 6"/></svg></span></button><div class="rp-progress-wrap"><span class="imap-count" data-no-translate></span><span class="rp-progress" aria-hidden="true"><i></i></span></div><button type="button" class="imap-arrow imap-arrow--next rp-arrow" data-dir="1" aria-label="Siguiente"><span class="rp-arrow-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span><span class="rp-arrow-label" aria-hidden="true"></span></button></nav></aside>
+            <nav class="imap-nav" aria-label="Proyectos"><button type="button" class="imap-arrow imap-arrow--prev rp-arrow" data-dir="-1" aria-label="Anterior"><span class="rp-arrow-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M11 6l-6 6 6 6"/></svg></span><span class="rp-arrow-label rp-arrow-label--prev" aria-hidden="true"></span></button><div class="rp-progress-wrap"><span class="imap-count" data-no-translate></span><span class="rp-progress" aria-hidden="true"><i></i></span></div><button type="button" class="imap-arrow imap-arrow--next rp-arrow" data-dir="1" aria-label="Siguiente"><span class="rp-arrow-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span><span class="rp-arrow-label" aria-hidden="true"></span></button></nav></aside>
         </div>
       </div>`;
     const el = root.querySelector('.imap-map');
@@ -277,7 +283,10 @@
       root.querySelector('.imap-asof').innerHTML = `<span>Archivo:</span> ${asOf}`;
       counter.textContent = `${pad(i + 1)} / ${pad(steps.length)}`;
       root.querySelector('.imap .rp-progress i, .rp-progress i').style.transform = `scaleX(${(i + 1) / steps.length})`;
-      nextLabel(root.querySelector('.imap-arrow--next .rp-arrow-label'), steps[(i + 1) % steps.length].loc.name);
+      nextLabel(root.querySelector('.imap-arrow--next .rp-arrow-label'), steps[i + 1]?.loc.name);
+      nextLabel(root.querySelector('.imap-arrow--prev .rp-arrow-label'), steps[i - 1]?.loc.name, 'Anterior');
+      edges(root.querySelector('.imap-arrow--prev'), root.querySelector('.imap-arrow--next'), i, steps.length);
+      root.querySelectorAll('.imap-cat-row').forEach(r => r.setAttribute('aria-current', String(r.dataset.key === step.p.id + '|' + loc.id)));
       // Lateral swap of the card content: the old one leaves, the new one enters from the other side.
       const old = stack.querySelector('.imap-slide:not(.is-leaving)');
       const next = document.createElement('div');
@@ -302,8 +311,39 @@
       ctl.reset();
       show(0, null, 1);
     }));
+    /* Full catalogue under the map (same 13 projects, dossier style). A row sends you back to the
+       map and flies to that project. */
+    const cat = document.createElement('div');
+    cat.className = 'imap-catalog';
+    const catRows = () => all.map(({ loc, p }, i) => {
+      const src = p.sources.map(id => sources.get(id)).filter(Boolean)[0];
+      return `<li><button type="button" class="imap-cat-row" data-i="${i}" data-key="${esc(p.id + '|' + loc.id)}">
+        <span class="idos-n" data-no-translate>${pad(i + 1)}</span>
+        <span class="imap-cat-main"><span class="idos-row-title">${esc(loc.name)}</span><span class="t-label imap-cat-catg"><span data-no-translate>${esc(CATEGORY[p.category]?.[lang()] || p.category)}</span> · <span>${esc(p.status)}</span></span></span>
+        <span class="imap-cat-fig"><strong class="t-title" data-no-translate>${esc(p.metric)}</strong><span class="t-small">${esc(p.unit)}</span></span>
+        <span class="imap-cat-src t-small"><span>${esc(p.date)}</span>${src ? ` · <span data-no-translate>${esc(src.publisher)}</span>` : ''}</span></button></li>`;
+    }).join('');
+    cat.innerHTML = `<button type="button" class="btn btn--secondary imap-cat-toggle" aria-expanded="false" aria-controls="imap-cat-list"><span>Ver catálogo completo</span><b aria-hidden="true">↓</b></button>
+      <div class="imap-cat-panel" id="imap-cat-list" hidden><ol class="imap-cat-list">${catRows()}</ol></div>`;
+    root.append(cat);
+    const toggle = cat.querySelector('.imap-cat-toggle'), panel = cat.querySelector('.imap-cat-panel');
+    toggle.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') !== 'true';
+      toggle.setAttribute('aria-expanded', String(open));
+      if (open) { panel.hidden = false; if (!reduce.matches) panel.animate([{ height: '0px', opacity: 0 }, { height: panel.scrollHeight + 'px', opacity: 1 }], { duration: 520, easing: 'cubic-bezier(.2,.8,.2,1)' }); }
+      else if (reduce.matches) panel.hidden = true;
+      else panel.animate([{ height: panel.scrollHeight + 'px', opacity: 1 }, { height: '0px', opacity: 0 }], { duration: 380, easing: 'cubic-bezier(.65,.05,.25,1)' }).onfinish = () => { panel.hidden = true; };
+    });
+    cat.addEventListener('click', e => {
+      const row = e.target.closest('.imap-cat-row'); if (!row) return;
+      if (filter !== 'all') root.querySelector('.imap-filter [data-cat=all]').click();
+      const i = Number(row.dataset.i);
+      root.querySelector('.imap-inner').scrollIntoView({ behavior: reduce.matches ? 'auto' : 'smooth', block: 'start' });
+      setTimeout(() => ctl.go(i, i > ctl.index ? 1 : -1), reduce.matches ? 0 : 450);
+    });
     new ResizeObserver(() => map.invalidateSize({ pan: false })).observe(el);
     document.addEventListener('rpc:language', () => {
+      cat.querySelector('.imap-cat-list').innerHTML = catRows();
       root.querySelectorAll('.imap-filter [data-cat]:not([data-cat=all])').forEach(b => { b.textContent = CATEGORY[b.dataset.cat]?.[lang()] || b.dataset.cat; });
       show(ctl.index, null, 1, true);
     });
@@ -323,11 +363,13 @@
     const field = (k, v, cls = '') => v ? `<div class="${cls}"><dt>${k}</dt><dd>${v}</dd></div>` : '';
     const linkHtml = s => `<a class="link-line" href="${esc(s.url)}" target="_blank" rel="noopener" data-no-translate>${esc(host(s))} <span aria-hidden="true">↗</span></a>`;
     const rows = [];
+    let firstProject = -1;
     indicators.forEach(ind => {
       const s = sources.get(ind.source);
       if (!s) return;
       rows.push({ title: s.title, meta: [s.publisher, s.date], body: `<dl class="idos-grid">${field('Publicador', `<span data-no-translate>${esc(s.publisher)}</span>`)}${field('Tipo', esc(s.type))}${field('Período', esc(s.date))}${field('Enlace', linkHtml(s))}${field('Revisión', esc(ind.status))}</dl>` });
     });
+    firstProject = rows.length;
     data.locations.forEach(loc => loc.projects.forEach(p => {
       const list = p.sources.map(id => sources.get(id)).filter(Boolean);
       if (!list.length) return;
@@ -339,7 +381,7 @@
     root.classList.add('idos');
     root.innerHTML = `
       <div class="idos-side"><h2 class="idos-title" data-reveal="lines">Detrás de cada <em>cifra</em></h2><span class="idos-kicker">Dossier de fuentes</span></div>
-      <ol class="idos-list">${rows.map((r, i) => `<li><details ${i === 0 ? 'open' : ''}><summary><span class="idos-n" data-no-translate>${pad(i + 1)}</span><span class="idos-row-title">${r.html ? r.title : esc(r.title)}</span><span class="idos-meta"><span data-no-translate>${esc(r.meta[0])}</span> · <span>${esc(r.meta[1])}</span></span><i aria-hidden="true"></i></summary><div class="idos-body">${r.body}</div></details></li>`).join('')}</ol>
+      <ol class="idos-list">${rows.map((r, i) => `${i === 0 ? `<li class="idos-group t-label" aria-hidden="true"><span>Fuentes de las cifras</span> · <span data-no-translate>${firstProject}</span></li>` : ''}${i === firstProject ? `<li class="idos-group t-label" aria-hidden="true"><span>Fuentes de los proyectos del mapa</span> · <span data-no-translate>${rows.length - firstProject}</span></li>` : ''}<li><details ${i === 0 ? 'open' : ''}><summary><span class="idos-n" data-no-translate>${pad(i + 1)}</span><span class="idos-row-title">${r.html ? r.title : esc(r.title)}</span><span class="idos-meta"><span data-no-translate>${esc(r.meta[0])}</span> · <span>${esc(r.meta[1])}</span></span><i aria-hidden="true"></i></summary><div class="idos-body">${r.body}</div></details></li>`).join('')}</ol>
       <p class="idos-foot"><span>Indicadores: revisión</span> ${esc(latest)} · <span>Archivo de proyectos:</span> ${esc(archive)}</p>`;
   }
 

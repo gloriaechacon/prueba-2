@@ -13,6 +13,8 @@ Object.assign(catalog,{"Desde la calle":["From the street","Da rua"],"hasta tu p
 Object.assign(catalog,{"Encuentra tu":["Find your","Encontre o seu"],"lugar":["place","lugar"]});
 // PROPOSAL · Contact intro (split of the existing title)
 Object.assign(catalog,{"Hablemos de":["Let's talk about","Vamos conversar sobre"],"tu idea.":["your plans.","seus planos."],"Desliza":["Scroll","Role"]});
+// PROPOSAL · Investment catalogue (round 7)
+Object.assign(catalog,{"Ver catálogo completo":["View full catalog","Ver catálogo completo"],"Fuentes de las cifras":["Sources of the figures","Fontes dos números"],"Fuentes de los proyectos del mapa":["Sources of the map projects","Fontes dos projetos do mapa"]});
 // PROPOSAL · House models page (round 5)
 Object.assign(catalog,{"Modelos de vivienda":["House models","Modelos de casas"],"Dos casas,":["Two homes,","Duas casas,"],"un lugar.":["one place.","um lugar."],"Utah y Bell · Ocala, Florida":["Utah & Bell · Ocala, Florida","Utah e Bell · Ocala, Flórida"],"Explorar las casas":["Explore the homes","Explorar as casas"],"Encuentra la casa que":["Find the home that","Encontre a casa que"],"te hace sentir en casa.":["feels right.","faz você se sentir em casa."],"Preparar mi consulta":["Prepare my inquiry","Preparar minha consulta"]});
 // PROPOSAL · Lots page (round 5)
