@@ -146,24 +146,51 @@ function crossfade() {
   pane.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 220, easing: 'ease' }).onfinish = () => { mountTab(); pane.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 420, easing: 'ease' }); };
 }
 async function turntable(pane, id) {
-  // Blender sequence (when it exists): manifest.json → { frames, desktop: "desktop/frame-%03d.webp", mobile: … }
+  // Blender 360° sequence: manifest.json + desktop|mobile/frame_0001.webp… (frame i = angle (i-1)·step; 1 = front).
   if (!HOMES[id].turntableReady) return false;
   try {
-    const r = await fetch(HOMES[id].turntable + 'manifest.json', { cache: 'no-store' });
+    const r = await fetch(HOMES[id].turntable + 'manifest.json');
     if (!r.ok) return false;
-    const m = await r.json();
-    const set = matchMedia('(max-width:760px)').matches ? (m.mobile || m.desktop) : m.desktop;
-    if (!m.frames || !set) return false;
-    const src = i => HOMES[id].turntable + set.replace(/%0?(\d)d/, (x, n) => String(i).padStart(Number(n), '0'));
-    const img = new Image(); img.className = 'hm-turntable'; img.alt = HOMES[id].name; img.draggable = false; img.src = src(0);
+    const m = await r.json(), n = m.frames;
+    const variant = matchMedia('(max-width:760px)').matches && m.variants?.mobile ? 'mobile' : 'desktop';
+    const src = i => HOMES[id].turntable + variant + '/frame_' + String(i + 1).padStart(4, '0') + '.webp';
+    const angle = i => m.angles_deg?.[i] ?? i * (m.step_deg || 360 / n);
+    const cache = new Array(n);
+    const load = i => cache[i] || (cache[i] = new Promise(res => { const im = new Image(); im.decoding = 'async'; im.onload = () => im.decode().catch(() => {}).then(() => res(im)); im.onerror = () => res(null); im.src = src(i); }));
+    const ok = new Array(n).fill(false);
+    const nearest = i => { for (let d = 0; d < n; d++) { if (ok[(i + d) % n]) return (i + d) % n; if (ok[(i - d + n) % n]) return (i - d + n) % n; } return 0; };
+    const first = await load(0);
+    if (!first) return false;
+    ok[0] = true;
+    const img = new Image(); img.className = 'hm-turntable'; img.alt = HOMES[id].name + ' · 360°'; img.draggable = false; img.src = src(0);
+    img.tabIndex = 0; img.setAttribute('role', 'img');
     pane.append(img);
-    let frame = 0, x0 = null;
-    const set_ = f => { frame = (f + m.frames) % m.frames; img.src = src(frame); pane.querySelector('.hm-compass i')?.style.setProperty('--az', (frame / m.frames * 360) + 'deg'); };
-    img.addEventListener('pointerdown', e => { x0 = e.clientX; img.setPointerCapture(e.pointerId); });
-    img.addEventListener('pointermove', e => { if (x0 == null) return; const d = Math.round((e.clientX - x0) / 12); if (d) { set_(frame - d); x0 = e.clientX; } });
-    img.addEventListener('pointerup', () => { x0 = null; });
-    img.tabIndex = 0; img.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') set_(frame - 1); if (e.key === 'ArrowRight') set_(frame + 1); });
-    for (let i = 1; i < m.frames; i++) { const p = new Image(); p.src = src(i); }
+    const needle = pane.closest('.hm-pane')?.querySelector('.hm-compass i');
+    let pos = 0, shown = 0, vel = 0, raf = 0, drag = null, lastX = 0, lastT = 0;
+    const show = () => {
+      const i = ((Math.round(pos) % n) + n) % n, k = nearest(i);
+      if (k !== shown) { shown = k; img.src = src(k); }
+      needle?.style.setProperty('--az', -angle(i) + 'deg');
+    };
+    // drag right turns the house to the right (the Blender camera orbits clockwise as frames increase)
+    const PX = () => Math.max(8, pane.clientWidth / (n * 0.75));   // about one full turn per drag across the viewer
+    const glide = () => { raf = 0; if (Math.abs(vel) < 0.002) return; pos += vel * 16; vel *= 0.9; show(); raf = requestAnimationFrame(glide); };
+    img.addEventListener('pointerdown', e => { cancelAnimationFrame(raf); raf = 0; vel = 0; drag = e.clientX; lastX = e.clientX; lastT = e.timeStamp; img.setPointerCapture(e.pointerId); pane.classList.add('is-dragging'); });
+    img.addEventListener('pointermove', e => {
+      if (drag == null) return;
+      const dx = e.clientX - lastX, dt = Math.max(1, e.timeStamp - lastT);
+      pos += dx / PX(); vel = 0.8 * vel + 0.2 * (dx / PX() / dt); lastX = e.clientX; lastT = e.timeStamp; show();
+    });
+    const end = () => { if (drag == null) return; drag = null; pane.classList.remove('is-dragging'); if (!reduce.matches) raf = requestAnimationFrame(glide); };
+    img.addEventListener('pointerup', end); img.addEventListener('pointercancel', end);
+    img.addEventListener('keydown', e => { const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (!d) return; e.preventDefault(); cancelAnimationFrame(raf); pos += d * (e.shiftKey ? 9 : 2); show(); });
+    img.style.touchAction = 'pan-y';
+    show();
+    // progressive preload: every 6th frame first, then the rest
+    const order = []; for (let i = 6; i < n; i += 6) order.push(i); for (let i = 1; i < n; i++) if (i % 6) order.push(i);
+    let next = 0;
+    const worker = async () => { while (next < order.length && img.isConnected) { const i = order[next++]; if (await load(i)) { ok[i] = true; if (drag == null && !raf) show(); } } };
+    worker(); worker(); worker();
     return true;
   } catch { return false; }
 }
@@ -185,7 +212,7 @@ async function mountTab() {
     ${tab === 0 ? `<div class="hm-hint t-label"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 16 0M20 12l-3-3M20 12l3-3"/></svg>${s.drag}</div><div class="hm-compass" aria-hidden="true"><span class="t-label">N</span><i></i></div>` : ''}`;
   if (tab === 0 && await turntable(pane.querySelector('.hm-3d'), id)) { pane.querySelector('.hm-loading')?.remove(); return; }
   try {
-    const { createViewer } = await import('/proyecto/viewer.js?v=homes2');
+    const { createViewer } = await import('/proyecto/viewer.js?v=homes3');
     if (token !== viewerToken) return;
     const host = pane.querySelector('.hm-3d');
     const v = await createViewer(host, id, { model: tab === 2 ? HOMES[id].floor3d : HOMES[id].model3d });

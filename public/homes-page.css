@@ -166,3 +166,9 @@ html body .hm-houses button[aria-pressed=true],html body .hm-houses button[aria-
 .hm-plan-full{grid-template-rows:auto minmax(0,1fr)!important}
 @media(max-width:860px){.hm-controls{flex-direction:column-reverse;align-items:stretch}.hm-houses{align-self:flex-start}}
 @media(max-width:860px){.hm-controls{min-width:0}.hm-controls .hm-tabs{min-width:0;max-width:100%;overflow-x:auto}}
+/* Home view (Blender 360°): the stage takes the frame's proportions so the house is never cropped */
+html body .hm-stage:has(.hm-pane[data-tab="0"]){min-height:0;aspect-ratio:16/9}
+@media(max-width:760px){html body .hm-stage:has(.hm-pane[data-tab="0"]){aspect-ratio:4/5}}
+.hm-turntable{object-position:50% 50%;cursor:grab}
+.is-dragging .hm-turntable{cursor:grabbing}
+.hm-turntable:focus-visible{outline:2px solid var(--c-focus);outline-offset:-4px}

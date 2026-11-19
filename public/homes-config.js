@@ -8,15 +8,15 @@
 export const HOMES = {
   utah: {
     name: 'Utah',
-    model3d: '/utah/utah-exterior-v2.glb',
-    floor3d: '/utah/utah-exterior-v2.glb',
+    model3d: '/utah/utah-exterior-v3.glb',
+    floor3d: '/utah/utah-plan-v3.glb',            // furnished interior, baked without roof/ceilings
     plan: '/utah/floorplan-v3.png',
     planPdf: '/utah/utah-floor-plan.pdf',
     metadata: '/utah/metadata-plan-v3.json',
     photo: null,                       // PENDING: Blender frame (front or 3/4) for Utah
     image: '/assets/homes-utah-tall',
     thumb: '/assets/home-utah',
-    turntable: '/assets/turntable/utah/', turntableReady: false,   // set true when the Blender sequence is in place
+    turntable: '/assets/turntable/utah/', turntableReady: true,
     finishes: [                         // swatch crops + the two concept images, one gallery
       { src: '/assets/finishes/utah-exterior-concept', label: 'Finish concept · exterior', concept: true },
       { src: '/assets/finishes/utah-kitchen-concept', label: 'Finish concept · kitchen' }
@@ -24,15 +24,15 @@ export const HOMES = {
   },
   bell: {
     name: 'Bell',
-    model3d: '/bell/bell-exterior-v2.glb',
-    floor3d: '/bell/bell-exterior-v2.glb',
+    model3d: '/bell/bell-exterior-v3.glb',
+    floor3d: '/bell/bell-plan-v3.glb',
     plan: '/bell/floorplan.png',
     planPdf: '/bell/bell-model.pdf',
     metadata: '/bell/metadata.json',
     photo: null,                       // PENDING: Bell renders
     image: '/assets/homes-bell-tall',
     thumb: '/assets/home-bell',
-    turntable: '/assets/turntable/bell/', turntableReady: false,
+    turntable: '/assets/turntable/bell/', turntableReady: true,
     finishes: null
   }
 };

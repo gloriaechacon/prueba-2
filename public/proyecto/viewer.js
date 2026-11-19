@@ -4,6 +4,7 @@ import {loadHouse, daylight} from '/utah/model-loader.js';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {createSceneRenderer, addHouseStage} from '/exterior-atmosphere.js';
 import {compileInSlices} from '/three-compile.js';
+import {isV3, loadV3, balanceLights} from '/proyecto/glb-v3.js';
 
 export async function createViewer(host, id, opts = {}) {
   const scene = new THREE.Scene();
@@ -15,11 +16,13 @@ export async function createViewer(host, id, opts = {}) {
   controls.minDistance = 8;
   controls.maxDistance = 85;
   addHouseStage(THREE,scene);
-  let model;
+  let model, lit = false;
   try {
     const house = Object.values(houses).find(entry => entry.slug === id);
     if (!house) throw new Error('Modelo desconocido: '+id);
-    model = await loadHouse(opts.model || ('/'+house.model));
+    const url = opts.model || ('/'+house.model);
+    if (isV3(url)) ({model, lit} = await loadV3(url));
+    else model = await loadHouse(url);
   } catch(error) {
     controls.dispose();
     renderer.dispose();
@@ -32,6 +35,7 @@ export async function createViewer(host, id, opts = {}) {
   renderer.domElement.setAttribute('aria-label', 'Modelo 3D de '+id+'. Arrastra para girar o usa los controles de cámara.');
   renderer.domElement.setAttribute('role', 'img');
   const disposeDaylight = daylight(scene, renderer);
+  balanceLights(scene, lit);
   const roofNodes = [];
   model.traverse(node => {if(node.userData.roof === true) roofNodes.push(node)});
   let compiled = false;
