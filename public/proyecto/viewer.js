@@ -4,7 +4,7 @@ import {loadHouse, daylight} from '/utah/model-loader.js';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {createSceneRenderer, addHouseStage} from '/exterior-atmosphere.js';
 
-export async function createViewer(host, id) {
+export async function createViewer(host, id, opts = {}) {
   const scene = new THREE.Scene();
   const renderer = createSceneRenderer(THREE);
   const camera = new THREE.PerspectiveCamera(40, 1, .1, 250);
@@ -18,7 +18,7 @@ export async function createViewer(host, id) {
   try {
     const house = Object.values(houses).find(entry => entry.slug === id);
     if (!house) throw new Error('Modelo desconocido: '+id);
-    model = await loadHouse('/'+house.model);
+    model = await loadHouse(opts.model || ('/'+house.model));
   } catch(error) {
     controls.dispose();
     renderer.dispose();
@@ -59,8 +59,11 @@ export async function createViewer(host, id) {
   };
   setCamera('front');
   resize();
+  const listeners = new Set();
+  controls.addEventListener('change', () => listeners.forEach(fn => fn(controls.getAzimuthalAngle())));
   return {
     camera:setCamera,
+    onRotate:fn => { listeners.add(fn); return () => listeners.delete(fn); },
     roof:visible => {
       roofNodes.forEach(node => {node.visible=visible});
       renderer.shadowMap.needsUpdate=true;

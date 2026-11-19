@@ -13,6 +13,8 @@ Object.assign(catalog,{"Desde la calle":["From the street","Da rua"],"hasta tu p
 Object.assign(catalog,{"Encuentra tu":["Find your","Encontre o seu"],"lugar":["place","lugar"]});
 // PROPOSAL · Contact intro (split of the existing title)
 Object.assign(catalog,{"Hablemos de":["Let's talk about","Vamos conversar sobre"],"tu idea.":["your plans.","seus planos."],"Desliza":["Scroll","Role"]});
+// PROPOSAL · House models page (round 5)
+Object.assign(catalog,{"Modelos de vivienda":["House models","Modelos de casas"],"Dos casas,":["Two homes,","Duas casas,"],"un lugar.":["one place.","um lugar."],"Utah y Bell · Ocala, Florida":["Utah & Bell · Ocala, Florida","Utah e Bell · Ocala, Flórida"],"Explorar las casas":["Explore the homes","Explorar as casas"],"Encuentra la casa que":["Find the home that","Encontre a casa que"],"te hace sentir en casa.":["feels right.","faz você se sentir em casa."],"Preparar mi consulta":["Prepare my inquiry","Preparar minha consulta"]});
 // PROPOSAL · Lots page (round 5)
 Object.assign(catalog,{"Ver fuente":["View source","Ver fonte"],"Abrir en Google Maps":["Open in Google Maps","Abrir no Google Maps"],"Mover":["Pan","Mover"],"Rotar":["Rotate","Girar"],"Ver entorno":["Surroundings","Ver entorno"],"Controles del mapa":["Map controls","Controles do mapa"],"Mapa 3D de los lotes":["3D map of the lots","Mapa 3D dos lotes"],"Ficha del lote":["Lot details","Ficha do lote"],"Elige un lote":["Choose a lot","Escolha um lote"]});
 // PROPOSAL · Home previews + button labels (round 5)

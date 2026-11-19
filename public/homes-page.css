@@ -1,0 +1,114 @@
+/* proyecto/viviendas — House models */
+.homes-page main.hm{padding:0!important;margin:0!important;max-width:none!important}
+.hm-intro-sub{margin:0;color:inherit}
+.hm>section{padding:clamp(56px,10vh,120px) clamp(16px,5vw,88px)}
+.hm .t-display em{color:var(--s-accent)}
+
+/* Selector: two tall cards, information inside the image */
+.hm-select{display:grid;gap:clamp(20px,3vh,36px)}
+.hm-select-title{margin:0}
+.hm-cards{display:flex;gap:clamp(12px,1.6vw,22px);height:clamp(480px,74vh,760px)}
+.hm-card{position:relative;flex:1 1 0;min-width:0;overflow:hidden;border-radius:20px;cursor:pointer;background:var(--c-deep);
+  transition:flex-grow .8s cubic-bezier(.65,.05,.25,1),opacity .6s ease,filter .6s ease}
+.hm-card[data-active=true]{flex-grow:1.6}
+.hm-cards:has(.hm-card[data-active=true]) .hm-card[data-active=false] .hm-card-media{opacity:.55;filter:saturate(.7)}
+.hm-card-media,.hm-card-media img{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hm-card-media img{object-fit:cover;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.hm-card[data-active=true] .hm-card-media img{transform:scale(1.05)}
+.hm-card::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgb(var(--c-shade) / .82),rgb(var(--c-shade) / .35) 34%,transparent 58%);pointer-events:none}
+.hm-card-info{position:absolute;z-index:1;left:clamp(18px,2.4vw,36px);right:clamp(18px,2.4vw,36px);bottom:clamp(18px,3vh,34px);display:grid;gap:10px;justify-items:start;color:#fff}
+.hm-card-name{margin:0;color:#fff!important}
+.hm-card-info .t-label{color:#f1ece2}
+.hm-card-go{max-height:0;opacity:0;transform:translateY(16px);overflow:hidden;transition:opacity .5s ease,transform .6s cubic-bezier(.2,.8,.2,1),max-height .6s ease}
+.hm-card[data-active=true] .hm-card-go{max-height:80px;opacity:1;transform:none}
+.hm-card:focus-within{outline:2px solid var(--c-focus);outline-offset:4px}
+
+/* Viewer */
+.hm-viewer{display:grid;gap:18px;border-top:1px solid var(--c-line)}
+.hm-v-head{display:flex;flex-wrap:wrap;align-items:flex-end;gap:16px 32px}
+.hm-v-head h2{margin:0;margin-right:auto}
+.hm-houses{display:flex;gap:22px}
+.hm-houses button,.hm-tabs button{position:relative;min-height:44px;padding:0 2px;border:0;background:none;color:var(--c-muted);cursor:pointer}
+.hm-houses button::after,.hm-tabs button::after{content:"";position:absolute;left:0;right:0;bottom:4px;height:2px;background:var(--c-accent);transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease-out-expo)}
+.hm-houses button[aria-pressed=true],.hm-tabs button[aria-selected=true]{color:var(--c-ink)}
+.hm-houses button[aria-pressed=true]::after,.hm-tabs button[aria-selected=true]::after{transform:scaleX(1)}
+.hm-houses button:hover::after,.hm-tabs button:hover::after{transform:scaleX(1);opacity:.4}
+.hm-houses button[aria-pressed=true]:hover::after,.hm-tabs button[aria-selected=true]:hover::after{opacity:1}
+.hm-change{padding-left:24px!important;border-left:1px solid var(--c-line)!important}
+.hm-tabs{display:flex;gap:clamp(18px,2.6vw,40px);border-bottom:1px solid var(--c-line)}
+.hm-tabs button:focus-visible,.hm-houses button:focus-visible{outline:2px solid var(--c-focus);outline-offset:2px}
+.hm-body{display:grid;grid-template-columns:minmax(0,2.2fr) minmax(300px,1fr);gap:clamp(18px,2.4vw,40px);align-items:stretch}
+.hm-stage{position:relative;min-height:clamp(420px,62vh,640px);border-radius:16px;overflow:hidden;background:var(--c-paper-tint)}
+.hm-pane{position:absolute;inset:0}
+.hm-3d{position:absolute;inset:0}
+.hm-3d canvas{display:block;width:100%!important;height:100%!important}
+.hm-turntable{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;cursor:grab;touch-action:pan-y}
+.hm-loading{position:absolute;inset:0;display:grid;place-items:center;margin:0;color:var(--c-muted)}
+.hm-hint{position:absolute;left:16px;bottom:16px;display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:color-mix(in srgb,var(--c-paper) 90%,transparent);color:var(--c-ink);pointer-events:none}
+.hm-hint svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round}
+.hm-compass{position:absolute;right:16px;bottom:16px;display:grid;justify-items:center;gap:2px;pointer-events:none;color:var(--c-ink)}
+.hm-compass i{position:relative;width:34px;height:34px;border-radius:50%;border:1.5px solid currentColor;background:color-mix(in srgb,var(--c-paper) 85%,transparent)}
+.hm-compass i::after{content:"";position:absolute;left:50%;top:5px;width:0;height:0;margin-left:-5px;border:5px solid transparent;border-bottom:12px solid var(--c-accent);transform-origin:50% 12px;transform:rotate(var(--az,0deg))}
+.hm-plan{position:absolute;inset:0 0 56px;overflow:auto;background:#fff;display:grid;place-items:center}
+.hm-plan img{max-width:100%;max-height:100%;object-fit:contain;transform-origin:center;transition:transform .4s var(--ease-out-expo)}
+.hm-plan.is-zoomed{place-items:start}
+.hm-plan-bar{position:absolute;left:0;right:0;bottom:0;height:56px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 16px;background:#fff;border-top:1px solid var(--c-line);color:var(--c-ink)}
+.hm-plan-tools{display:flex;gap:8px}
+.hm-plan-tools button{width:40px;height:40px;border:1px solid var(--c-line-mid);border-radius:8px;background:#fff;color:var(--c-ink);cursor:pointer}
+.hm-sheet{display:flex;flex-direction:column;gap:14px;padding-left:clamp(0px,2vw,32px);border-left:1px solid var(--c-line)}
+.hm-sheet-name{margin:0}
+.hm-rooms{list-style:none;margin:0;padding:0 0 12px;display:grid;gap:6px;border-bottom:1px solid var(--c-line)}
+.hm-areas{margin:0;display:grid}
+.hm-areas div{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--c-line)}
+.hm-areas dd{margin:0}
+.hm-total :is(dt,dd){color:var(--c-accent-text)!important}
+.hm-finishes{display:grid;gap:10px}
+.hm-swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.hm-swatches i{aspect-ratio:1;border-radius:6px;background-size:900% auto;background-position:var(--sx) 60%;border:1px solid var(--c-line)}
+.hm-finishes .finish-trigger{justify-self:start}
+.hm-note{margin:0;color:var(--c-muted)}
+
+/* Comparison */
+.hm-compare{display:grid;gap:clamp(20px,3vh,36px);background:var(--c-paper)}
+.hm-compare h2{margin:0}
+.hm-cmp{display:grid}
+.hm-cmp-head,.hm-cmp-row{display:grid;grid-template-columns:minmax(150px,1fr) minmax(0,2fr) minmax(0,2fr);gap:clamp(14px,2.4vw,40px);align-items:center}
+.hm-cmp-head{padding-bottom:18px;border-bottom:1px solid var(--c-line-strong)}
+.hm-cmp-head figure{margin:0;display:flex;align-items:center;gap:14px}
+.hm-cmp-img img{display:block;width:clamp(72px,9vw,128px);aspect-ratio:3/2;object-fit:cover;border-radius:10px}
+.hm-cmp-head figcaption{margin:0}
+.hm-cmp-row{padding:14px 0;border-bottom:1px solid var(--c-line)}
+.hm-cmp-row>.t-label{color:var(--c-muted)}
+.hm-cmp-cell{display:grid;gap:6px}
+.hm-cmp-cell strong{color:var(--c-ink)}
+.hm-cmp-cell.is-max strong{color:var(--c-accent-text)!important}
+.hm-bar{display:block;height:6px;border-radius:6px;background:var(--c-line);overflow:hidden}
+.hm-bar i{display:block;height:100%;width:var(--w);border-radius:6px;background:var(--c-line-strong);transform:scaleX(0);transform-origin:left;transition:transform 1.2s cubic-bezier(.65,0,.35,1)}
+.hm-cmp-cell.is-max .hm-bar i{background:var(--c-accent)}
+.hm-compare.is-drawn .hm-bar i{transform:scaleX(1)}
+.hm-cmp-src{margin:0;color:var(--c-muted);max-width:80ch}
+
+/* Closing */
+.hm-close{display:grid;justify-items:start;gap:24px}
+.hm-close h2{margin:0;max-width:16ch}
+
+::view-transition-group(hm-shared){animation-duration:.6s;animation-timing-function:cubic-bezier(.2,.8,.2,1)}
+
+@media(max-width:860px){
+  .hm-cards{flex-direction:column;height:auto}
+  .hm-card{flex:none;height:220px;transition:height .7s cubic-bezier(.65,.05,.25,1),opacity .5s}
+  .hm-card[data-active=true]{height:420px}
+  .hm-body{grid-template-columns:1fr}
+  .hm-sheet{padding-left:0;border-left:0}
+  .hm-tabs{overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;gap:22px}
+  .hm-tabs button{flex:0 0 auto;scroll-snap-align:start;white-space:nowrap}
+  .hm-stage{min-height:62vw}
+  .hm-v-head{align-items:center}
+  .hm-cmp-head,.hm-cmp-row{grid-template-columns:1fr 1fr;column-gap:14px}
+  .hm-cmp-head>span:first-child{display:none}
+  .hm-cmp-row>.t-label{grid-column:1/-1}
+  .hm-cmp-head figure{flex-direction:column;align-items:flex-start;gap:8px}
+}
+@media(prefers-reduced-motion:reduce){.hm-card,.hm-card-media img,.hm-card-go,.hm-bar i,.hm-plan img{transition:none!important}}
+.hm .btn--block{box-sizing:border-box;width:100%!important}
+.hm-select-title{min-height:1em}
