@@ -232,7 +232,7 @@
     root.classList.add('imap');
     root.innerHTML = `<div class="imap-inner" role="region" data-role-desc="carousel" aria-label="Mapa de proyectos" tabindex="0">
         <header class="imap-head"><h2 class="imap-title" data-reveal="lines">El mapa de la <em>inversión</em></h2><p>${esc(data.mapNote)}</p>
-          <div class="imap-filter" role="group" aria-label="Filtrar por categoría"><button type="button" data-cat="all" aria-pressed="true">Todos</button>${cats.map(c => `<button type="button" data-cat="${esc(c)}" aria-pressed="false" data-no-translate>${esc(CATEGORY[c]?.[lang()] || c)}</button>`).join('')}</div></header>
+          <p class="imap-guide" data-no-translate></p><div class="imap-filter" role="group" aria-label="Filtrar por categoría"><button type="button" data-cat="all" aria-pressed="true">Todos</button>${cats.map(c => `<button type="button" data-cat="${esc(c)}" aria-pressed="false" data-no-translate>${esc(CATEGORY[c]?.[lang()] || c)}</button>`).join('')}</div></header>
         <div class="imap-body">
           <div class="imap-mapwrap"><div class="imap-map" aria-label="Mapa de proyectos"></div>
             <p class="imap-foot"><span class="imap-precision"></span><span class="imap-asof"></span></p></div>
@@ -283,6 +283,12 @@
       root.querySelector('.imap-precision').textContent = loc.precision;
       root.querySelector('.imap-asof').innerHTML = `<span>Archivo:</span> ${asOf}`;
       counter.textContent = `${pad(i + 1)} / ${pad(steps.length)}`;
+      const labels = {en:['All projects','projects','Choose a category, then use Previous / Next to explore each project. Several projects may share one location.'],es:['Todos los proyectos','proyectos','Elige una categoría y usa Anterior / Siguiente para recorrer cada proyecto. Varios proyectos pueden compartir una ubicación.'],pt:['Todos os projetos','projetos','Escolha uma categoria e use Anterior / Próximo para explorar cada projeto. Vários projetos podem compartilhar uma localização.']}[lang()] || ['All projects','projects','Choose a category to explore.'];
+      root.querySelector('.imap-guide').textContent = labels[2];
+      root.querySelectorAll('.imap-filter [data-cat]').forEach(b => {
+        const key=b.dataset.cat, count=key==='all'?all.length:all.filter(x=>x.p.category===key).length;
+        b.dataset.noTranslate=''; b.textContent=(key==='all'?labels[0]:(CATEGORY[key]?.[lang()]||key))+' · '+count;
+      });
       root.querySelector('.imap .rp-progress i, .rp-progress i').style.transform = `scaleX(${(i + 1) / steps.length})`;
       nextLabel(root.querySelector('.imap-arrow--next .rp-arrow-label'), steps[i + 1]?.loc.name);
       nextLabel(root.querySelector('.imap-arrow--prev .rp-arrow-label'), steps[i - 1]?.loc.name, 'Anterior');

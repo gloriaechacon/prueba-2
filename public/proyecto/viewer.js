@@ -4,7 +4,7 @@ import {loadHouse, daylight} from '/utah/model-loader.js';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {createSceneRenderer, addHouseStage} from '/exterior-atmosphere.js';
 import {compileInSlices} from '/three-compile.js';
-import {isV3, loadV3, balanceLights} from '/proyecto/glb-v3.js';
+import {isV3, loadV3, balanceLights} from '/proyecto/glb-v3.js?v=review2';
 
 export async function createViewer(host, id, opts = {}) {
   const scene = new THREE.Scene();
@@ -15,7 +15,9 @@ export async function createViewer(host, id, opts = {}) {
   controls.maxPolarAngle = Math.PI * .49;
   controls.minDistance = 8;
   controls.maxDistance = 85;
-  addHouseStage(THREE,scene);
+  const ground = addHouseStage(THREE,scene);
+  ground.material.color.set('#718b48');
+  scene.background = new THREE.Color('#d8e8ed');
   let model, lit = false;
   try {
     const house = Object.values(houses).find(entry => entry.slug === id);
@@ -36,6 +38,7 @@ export async function createViewer(host, id, opts = {}) {
   renderer.domElement.setAttribute('role', 'img');
   const disposeDaylight = daylight(scene, renderer);
   balanceLights(scene, lit);
+  renderer.toneMappingExposure = 1.08;
   const roofNodes = [];
   model.traverse(node => {if(node.userData.roof === true) roofNodes.push(node)});
   let compiled = false;

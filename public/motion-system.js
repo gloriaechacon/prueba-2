@@ -122,7 +122,7 @@
     portal.classList.add('is-live');
     gsap.timeline({
       defaults: { ease: 'none' },
-      scrollTrigger: { trigger: portal, start: 'top top', end: 'bottom bottom', scrub: 0.6 }
+      scrollTrigger: { trigger: portal, start: 'top top', end: 'bottom bottom', scrub: 0.3 }
     })
       .fromTo(portal, { '--portal-p': 0 }, { '--portal-p': 1, duration: 0.7, ease: 'power2.inOut' }, 0)
       .fromTo(portal, { '--portal-tint': 0 }, { '--portal-tint': 1, duration: 0.22 }, 0.3)

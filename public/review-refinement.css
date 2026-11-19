@@ -1,0 +1,63 @@
+/* Full-width editorial sections with fluid internal gutters. */
+body:is(.final-home,.final-detail,.final-dossier,.homes-page){margin:0}
+body.final-detail[data-page=entorno] main#contenido{width:100%;max-width:none!important;box-sizing:border-box;margin:0!important;padding:clamp(40px,7vh,88px) clamp(20px,5vw,120px) 0!important}
+body.final-dossier main.invest-story{width:100%;max-width:none!important;margin:0!important;padding:0!important}
+.final-dossier .invest-story>div{max-width:none!important;width:100%;box-sizing:border-box}
+body.final-detail[data-page=entorno] .entorno-next{margin:clamp(40px,7vh,88px) calc(-1 * clamp(20px,5vw,120px)) 0!important;width:auto!important;padding:clamp(36px,6vh,72px) clamp(20px,5vw,120px)!important}
+.surroundings-portal.portal:not(.portal--static){height:190svh}
+.collection-footer{display:flex!important;flex-wrap:wrap;align-items:center;gap:24px 48px;width:100%;max-width:none!important;box-sizing:border-box;margin:0!important;padding:40px clamp(20px,5vw,120px)!important;background:var(--c-deep)!important;color:var(--c-on-deep)!important;border-top:1px solid color-mix(in srgb,var(--c-on-deep) 20%,transparent)}
+.collection-footer a{color:inherit;text-decoration:none}
+.collection-footer-name{font:var(--t-title);display:block}
+.collection-footer-name em{display:block;font:var(--t-label);font-style:normal;text-transform:uppercase;margin-top:8px}
+.collection-footer img{object-fit:contain;width:140px;height:auto;filter:brightness(0) invert(1)}
+.collection-footer p{margin:0 auto 0 0;font:var(--t-body);color:inherit!important}
+.collection-footer .btn{flex-shrink:0;color:var(--c-on-deep)}
+.final-home .teaser--contact{padding-bottom:64px!important}
+html body .btn b[aria-hidden],html body .btn:not(:has(b))::after{display:none!important;content:none!important}
+html[lang] body:not(#rp-type) .imap-filter button{font-size:15px!important;letter-spacing:.04em!important;min-height:52px;padding:12px 20px!important}
+html body .imap-filter{flex-wrap:wrap;width:fit-content;overflow:visible;border-radius:4px}
+html[lang] body:not(#rp-type) :is(.imap-cat,.ifig-kicker,.idos-group){font-size:15px!important;line-height:1.5!important}
+.imap-guide{max-width:80ch!important;color:var(--s-fg)!important}
+.imap-inner{max-height:none;grid-template-rows:auto auto}
+.imap-head{min-height:min-content}
+html body .imap-filter{height:auto;min-height:52px;flex-shrink:0}
+.imap-body{height:clamp(540px,68vh,820px)}
+.idos-fold{border:1px solid var(--s-line,var(--c-line));border-radius:4px}
+.idos-fold-sum{display:grid;grid-template-columns:1fr auto;gap:10px 24px;padding:24px 28px;align-items:center}
+.idos-fold-sum .t-small{grid-column:1;font-size:15px!important}
+.idos-fold-sum i{grid-column:2;grid-row:1/3}
+.idos-fold-body{padding:20px 28px 28px}
+.idos-fold-sum:hover{background:color-mix(in srgb,var(--s-fg) 5%,transparent)}
+/* Both photographs keep their color; only the caption area needs shading. */
+.hm-cards:has(.hm-card[data-active=true]) .hm-card[data-active=false] .hm-card-media{opacity:1;filter:none}
+.hm-card::after{background:linear-gradient(0deg,rgb(var(--c-shade) / .78),transparent 48%)}
+.hm-card-go{max-height:80px;opacity:1;transform:none}
+html body .hm-houses{border-radius:5px!important;align-self:center;overflow:hidden;align-items:center;padding:4px;gap:4px!important}
+html body .hm-houses button{border-radius:3px!important;margin:0!important;box-shadow:none!important}
+html body .hm-houses button[aria-pressed=true]{background:var(--c-btn)!important;color:var(--c-on-accent)!important}
+.hm-finish-card{box-sizing:border-box;grid-template-columns:72px minmax(0,1fr);max-width:100%;padding:8px;gap:12px}
+.hm-finish-card img{width:72px;height:64px}
+.hm-finish-ico{display:none}
+.hm-finish-txt{min-width:0}
+.hm-finish-txt small{display:none}
+.hm-plan-section{margin-top:40px;padding-top:28px;border-top:1px solid var(--c-line);min-width:0}
+.hm-plan-section header{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:24px}
+.hm-plan-section h3{margin:0}
+.hm-plan-section>img{display:block;width:100%;max-width:1200px;height:auto;max-height:none;margin:auto;object-fit:contain;background:white}
+dialog.hm-fin-gallery{width:min(1000px,92vw)!important;height:min(800px,88dvh)!important;max-height:88dvh!important;margin:auto!important;inset:0!important;box-sizing:border-box;overflow:auto;grid-template-rows:auto minmax(0,1fr) auto!important}
+.hm-fin-gallery .lxg-stage{min-height:0!important;height:auto!important;overflow:hidden}
+.hm-fin-gallery .lxg-foot{padding:12px 24px!important}
+.hm-fin-gallery .lxg-note{display:none}
+.hm-close [data-hm-close-cta]{opacity:1!important;visibility:visible!important;transform:none!important}
+@media(max-width:760px){
+ .imap-body{height:auto}
+ .collection-footer{align-items:flex-start;gap:24px}
+ .collection-footer p{flex-basis:100%}
+ .idos-fold-sum{padding:20px 16px}
+ .idos-fold-body{padding:16px}
+ html[lang] body:not(#rp-type) .imap-filter button{font-size:13px!important;padding:10px 12px!important}
+ .hm-fin-gallery .lxg-thumbs{display:none}
+}
+
+@media(max-width:860px){.imap-body{height:auto}}
+.hm-fin-gallery [data-gdir][hidden]{display:none!important}

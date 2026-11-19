@@ -1,7 +1,7 @@
-/* proyecto/viviendas — House models: selector (two tall cards), viewer with four tabs and a
-   spec sheet, light comparison with proportional bars. Real figures from the metadata files;
+/* proyecto/viviendas — House models: selector (two tall cards), viewer with two 3D tabs, a full floor plan and a
+   spec sheet, and an illustrative home comparison. Real figures from the metadata files;
    asset paths in /homes-config.js. ?house=utah|bell picks the initial home. */
-import { HOMES, facts } from '/homes-config.js';
+import { HOMES, facts } from '/homes-config.js?v=review2';
 
 const S = {
   en: { bed: n => `${n} bedrooms`, bedStudio: n => `${n} bedrooms + studio annex`, bath: n => `${n} bathrooms`, gar: n => `${n} garage space${n > 1 ? 's' : ''}`, livingL: 'living', explore: n => `Explore ${n}`,
@@ -50,7 +50,7 @@ const slide = (el, dir, swap) => {
 
 const META = {};
 let house = ids.includes(new URLSearchParams(location.search).get('house')) ? new URLSearchParams(location.search).get('house') : 'utah';
-let tab = 0, viewer = null, viewerToken = 0, planZoom = 1;
+let tab = 1, viewer = null, viewerToken = 0;
 
 const cardsEl = document.querySelector('[data-hm-cards]');
 const viewerEl = document.querySelector('[data-hm-viewer]');
@@ -69,7 +69,7 @@ function renderCards() {
   cardsEl.innerHTML = ids.map(id => `<article class="hm-card" data-id="${id}" data-active="${id === house}">
       ${HOMES[id].photo ? cardPic(HOMES[id]) : pic(HOMES[id].image, '', 'hm-card-media')}${HOMES[id].illustrative ? `<small class="t-small hm-illus">${s.illus}</small>` : ''}
       <div class="hm-card-info" data-no-translate><h3 class="t-display hm-card-name">${HOMES[id].name}</h3><span class="t-label">${specLine(id)}</span>
-        <a class="btn btn--primary hm-card-go" href="#visor" data-go="${id}"><span>${s.explore(HOMES[id].name)}</span><b aria-hidden="true">→</b></a></div>
+        <a class="btn btn--primary hm-card-go" href="#visor" data-go="${id}"><span>${s.explore(HOMES[id].name)}</span></a></div>
     </article>`).join('');
   cardsEl.querySelectorAll('.hm-card').forEach(card => {
     const id = card.dataset.id;
@@ -89,13 +89,11 @@ function enter(id, card) {
   if (media) media.style.viewTransitionName = 'hm-shared';
   const tr = vt(() => {
     if (media) media.style.viewTransitionName = '';
-    const changed = id !== house;
-    house = id; tab = 0;
+    house = id; tab = 1;
     renderViewer(0);
     viewerEl.scrollIntoView({ block: 'start', behavior: 'instant' });
     window.__hmMount?.();
     viewerEl.querySelector('.hm-stage').style.viewTransitionName = 'hm-shared';
-    if (!changed) mountTab();
   });
   const clear = () => { const st = viewerEl.querySelector('.hm-stage'); if (st) st.style.viewTransitionName = ''; };
   tr ? tr.finished.finally(clear) : clear();
@@ -112,8 +110,8 @@ function sheetHTML(id) {
     <dl class="hm-areas">${[[s.living, f.living], [s.entry, f.entry], [s.garage, f.garageArea]].map(([k, v]) => `<div><dt class="t-label">${k}</dt><dd class="t-label">${nf(v)} ft²</dd></div>`).join('')}
       <div class="hm-total"><dt class="t-label">${s.total}</dt><dd class="t-label">${nf(f.total)} ft²</dd></div></dl>
     ${sw}
-    <a class="btn btn--primary btn--block" href="/proyecto/contacto/?house=${id}#c-consultation"><span>${s.inquiry}</span><b aria-hidden="true">→</b></a>
-    <p class="t-small hm-note">${s.note}</p>`;
+    <a class="btn btn--primary btn--block" href="/proyecto/contacto/?house=${id}#c-consultation"><span>${s.inquiry}</span></a>
+    `;
 }
 function renderViewer(dir = 0) {
   const s = t();
@@ -125,10 +123,13 @@ function renderViewer(dir = 0) {
   }
   viewerEl.querySelector('#hm-viewer-title').innerHTML = `${s.title[0]}<em>${s.title[1]}</em>`;
   viewerEl.querySelector('.hm-houses').innerHTML = ids.map(id => `<button type="button" data-house="${id}" aria-pressed="${id === house}">${HOMES[id].name}</button>`).join('');
-  viewerEl.querySelector('.hm-tabs').innerHTML = s.tabs.map((n, i) => `<button type="button" role="tab" aria-selected="${i === tab}" data-tab="${i}">${n}</button>`).join('');
+  viewerEl.querySelector('.hm-tabs').innerHTML = s.tabs.map((n, i) => ({n, i})).filter(({i}) => i === 1 || i === 2).map(({n, i}) => `<button type="button" role="tab" aria-selected="${i === tab}" data-tab="${i}">${n}</button>`).join('');
   const sheet = viewerEl.querySelector('.hm-sheet'), stage = viewerEl.querySelector('.hm-stage');
   slide(sheet, dir, () => { sheet.innerHTML = sheetHTML(house); });
   if (dir) slide(stage, dir, () => mountTab());
+  let plan = viewerEl.querySelector('.hm-plan-section');
+  if (!plan) { plan = document.createElement('section'); plan.className = 'hm-plan-section'; plan.dataset.noTranslate = ''; viewerEl.append(plan); }
+  plan.innerHTML = `<header><h3 class="t-title">${s.plan(HOMES[house].name)}</h3><a class="btn btn--secondary" href="${HOMES[house].planPdf}" target="_blank" rel="noopener">${s.pdf}</a></header><img src="${HOMES[house].plan}" alt="${s.plan(HOMES[house].name)}" loading="lazy" decoding="async">`;
   closeCta.href = '/proyecto/contacto/?house=' + house;
   const u = new URL(location.href); u.searchParams.set('house', house); history.replaceState(null, '', u);
 }
@@ -149,74 +150,14 @@ function crossfade() {
   if (reduce.matches || !pane.animate) { mountTab(); return; }
   pane.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 220, easing: 'ease' }).onfinish = () => { mountTab(); pane.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 420, easing: 'ease' }); };
 }
-async function turntable(pane, id) {
-  // Blender 360° sequence: manifest.json + desktop|mobile/frame_0001.webp… (frame i = angle (i-1)·step; 1 = front).
-  if (!HOMES[id].turntableReady) return false;
-  try {
-    const r = await fetch(HOMES[id].turntable + 'manifest.json');
-    if (!r.ok) return false;
-    const m = await r.json(), n = m.frames;
-    const variant = matchMedia('(max-width:760px)').matches && m.variants?.mobile ? 'mobile' : 'desktop';
-    const src = i => HOMES[id].turntable + variant + '/frame_' + String(i + 1).padStart(4, '0') + '.webp';
-    const angle = i => m.angles_deg?.[i] ?? i * (m.step_deg || 360 / n);
-    const cache = new Array(n);
-    const load = i => cache[i] || (cache[i] = new Promise(res => { const im = new Image(); im.decoding = 'async'; im.onload = () => im.decode().catch(() => {}).then(() => res(im)); im.onerror = () => res(null); im.src = src(i); }));
-    const ok = new Array(n).fill(false);
-    const nearest = i => { for (let d = 0; d < n; d++) { if (ok[(i + d) % n]) return (i + d) % n; if (ok[(i - d + n) % n]) return (i - d + n) % n; } return 0; };
-    const first = await load(0);
-    if (!first) return false;
-    ok[0] = true;
-    const img = new Image(); img.className = 'hm-turntable'; img.alt = HOMES[id].name + ' · 360°'; img.draggable = false; img.src = src(0);
-    img.tabIndex = 0; img.setAttribute('role', 'img');
-    pane.append(img);
-    const needle = pane.closest('.hm-pane')?.querySelector('.hm-compass i');
-    let pos = 0, shown = 0, vel = 0, raf = 0, drag = null, lastX = 0, lastT = 0;
-    const show = () => {
-      const i = ((Math.round(pos) % n) + n) % n, k = nearest(i);
-      if (k !== shown) { shown = k; img.src = src(k); }
-      needle?.style.setProperty('--az', -angle(i) + 'deg');
-    };
-    // drag right turns the house to the right (the Blender camera orbits clockwise as frames increase)
-    const PX = () => Math.max(8, pane.clientWidth / (n * 0.75));   // about one full turn per drag across the viewer
-    const glide = () => { raf = 0; if (Math.abs(vel) < 0.002) return; pos += vel * 16; vel *= 0.9; show(); raf = requestAnimationFrame(glide); };
-    img.addEventListener('pointerdown', e => { cancelAnimationFrame(raf); raf = 0; vel = 0; drag = e.clientX; lastX = e.clientX; lastT = e.timeStamp; img.setPointerCapture(e.pointerId); pane.classList.add('is-dragging'); });
-    img.addEventListener('pointermove', e => {
-      if (drag == null) return;
-      const dx = e.clientX - lastX, dt = Math.max(1, e.timeStamp - lastT);
-      pos += dx / PX(); vel = 0.8 * vel + 0.2 * (dx / PX() / dt); lastX = e.clientX; lastT = e.timeStamp; show();
-    });
-    const end = () => { if (drag == null) return; drag = null; pane.classList.remove('is-dragging'); if (!reduce.matches) raf = requestAnimationFrame(glide); };
-    img.addEventListener('pointerup', end); img.addEventListener('pointercancel', end);
-    img.addEventListener('keydown', e => { const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (!d) return; e.preventDefault(); cancelAnimationFrame(raf); pos += d * (e.shiftKey ? 9 : 2); show(); });
-    img.style.touchAction = 'pan-y';
-    show();
-    // progressive preload: every 6th frame first, then the rest
-    const order = []; for (let i = 6; i < n; i += 6) order.push(i); for (let i = 1; i < n; i++) if (i % 6) order.push(i);
-    let next = 0;
-    const worker = async () => { while (next < order.length && img.isConnected) { const i = order[next++]; if (await load(i)) { ok[i] = true; if (drag == null && !raf) show(); } } };
-    worker(); worker(); worker();
-    return true;
-  } catch { return false; }
-}
 async function mountTab() {
   const s = t(), id = house, token = ++viewerToken;
   viewer?.dispose(); viewer = null;
   const pane = viewerEl.querySelector('.hm-pane');
   pane.innerHTML = ''; pane.dataset.tab = tab;
-  if (tab === 3) {
-    planZoom = 1;
-    pane.innerHTML = `<div class="hm-plan"><img src="${HOMES[id].plan}" alt="${s.plan(HOMES[id].name)}"></div>
-      <div class="hm-plan-bar"><span class="t-small">${facts(id, META[id]).source}</span><div class="hm-plan-tools"><button type="button" data-z="-1" aria-label="${s.zout}">−</button><button type="button" data-z="1" aria-label="${s.zin}">+</button><button type="button" data-z="full" aria-label="${s.full}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg></button></div><a class="link-line" href="${HOMES[id].planPdf}" target="_blank" rel="noopener">${s.pdf}</a></div>`;
-    const img = pane.querySelector('.hm-plan img');
-    const zp = panZoom(pane.querySelector('.hm-plan'), img);
-    pane.querySelectorAll('[data-z]').forEach(b => b.onclick = () => { if (b.dataset.z === 'full') openPlan(id); else zp.step(Number(b.dataset.z)); });
-    return;
-  }
-  pane.innerHTML = `<div class="hm-3d" aria-busy="true"><p class="hm-loading t-small">${s.loading}</p></div>
-    ${tab === 0 ? `<div class="hm-hint t-label"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 16 0M20 12l-3-3M20 12l3-3"/></svg>${s.drag}</div><div class="hm-compass" aria-hidden="true"><span class="t-label">N</span><i></i></div>` : ''}`;
-  if (tab === 0 && await turntable(pane.querySelector('.hm-3d'), id)) { pane.querySelector('.hm-loading')?.remove(); return; }
+  pane.innerHTML = `<div class="hm-3d" aria-busy="true"><p class="hm-loading t-small">${s.loading}</p></div>`;
   try {
-    const { createViewer } = await import('/proyecto/viewer.js?v=homes3');
+    const { createViewer } = await import('/proyecto/viewer.js?v=review2');
     if (token !== viewerToken) return;
     const host = pane.querySelector('.hm-3d');
     const v = await createViewer(host, id, { model: tab === 2 ? HOMES[id].floor3d : HOMES[id].model3d });
@@ -227,33 +168,6 @@ async function mountTab() {
     if (needle) v.onRotate(az => needle.style.setProperty('--az', (-az * 180 / Math.PI) + 'deg'));
   } catch (e) { pane.querySelector('.hm-3d').innerHTML = `<p class="hm-loading t-small">${s.fail}</p>`; }
 }
-
-/* ---------- Zoom + drag (floor plan inline and full screen) ---------- */
-function panZoom(frame, el) {
-  let z = 1, x = 0, y = 0, drag = null; const pts = new Map(); let d0 = 0, z0 = 1;
-  const apply = () => { const mx = (z - 1) * el.offsetWidth / 2, my = (z - 1) * el.offsetHeight / 2; x = Math.max(-mx, Math.min(mx, x)); y = Math.max(-my, Math.min(my, y)); el.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(' + z + ')'; frame.classList.toggle('is-zoomed', z > 1); };
-  const set = v => { z = Math.max(1, Math.min(5, v)); if (z === 1) { x = 0; y = 0; } apply(); };
-  frame.addEventListener('wheel', e => { e.preventDefault(); set(z * (e.deltaY < 0 ? 1.15 : 1 / 1.15)); }, { passive: false });
-  el.addEventListener('pointerdown', e => { pts.set(e.pointerId, [e.clientX, e.clientY]); el.setPointerCapture(e.pointerId); if (pts.size === 2) { const [a, b] = [...pts.values()]; d0 = Math.hypot(a[0] - b[0], a[1] - b[1]); z0 = z; drag = null; } else drag = [e.clientX - x, e.clientY - y]; });
-  el.addEventListener('pointermove', e => { if (!pts.has(e.pointerId)) return; pts.set(e.pointerId, [e.clientX, e.clientY]); if (pts.size === 2 && d0) { const [a, b] = [...pts.values()]; set(z0 * Math.hypot(a[0] - b[0], a[1] - b[1]) / d0); } else if (drag && z > 1) { x = e.clientX - drag[0]; y = e.clientY - drag[1]; apply(); } });
-  const up = e => { pts.delete(e.pointerId); if (pts.size < 2) d0 = 0; if (!pts.size) drag = null; };
-  el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
-  el.addEventListener('dblclick', () => set(z > 1 ? 1 : 2.2));
-  el.style.touchAction = 'none'; el.draggable = false;
-  return { step: d => set(z * (d > 0 ? 1.3 : 1 / 1.3)), reset: () => set(1) };
-}
-const planDlg = document.createElement('dialog');
-planDlg.className = 'lx-gallery hm-plan-full'; planDlg.dataset.noTranslate = '';
-document.body.append(planDlg);
-function openPlan(id) {
-  const s = t();
-  planDlg.innerHTML = '<header class="lxg-head"><h2 class="t-title">' + s.plan(HOMES[id].name) + '</h2><div class="hm-plan-tools"><button type="button" data-pz="-1" aria-label="' + s.zout + '">−</button><button type="button" data-pz="1" aria-label="' + s.zin + '">+</button></div><button type="button" class="lxg-close t-button">' + s.close + ' <span aria-hidden="true">✕</span></button></header><div class="lxg-stage hm-plan-stage"><img src="' + HOMES[id].plan + '" alt="' + s.plan(HOMES[id].name) + '"></div>';
-  const img = planDlg.querySelector('img'), zp = panZoom(planDlg.querySelector('.hm-plan-stage'), img);
-  planDlg.querySelectorAll('[data-pz]').forEach(b => b.onclick = () => zp.step(Number(b.dataset.pz)));
-  planDlg.querySelector('.lxg-close').onclick = () => planDlg.close();
-  planDlg.showModal();
-}
-planDlg.addEventListener('keydown', e => { if (e.key === '+' || e.key === '=') planDlg.querySelector('[data-pz="1"]')?.click(); if (e.key === '-') planDlg.querySelector('[data-pz="-1"]')?.click(); });
 
 /* ---------- Finishes gallery (same style as the Lots gallery) ---------- */
 const finDlg = document.createElement('dialog');
@@ -277,6 +191,7 @@ function openFinishes(i, from) {
   finDlg.innerHTML = '<header class="lxg-head"><h2 class="t-title">' + HOMES[house].name + ' · ' + s.gallery + '</h2><button type="button" class="lxg-close t-button">' + s.close + ' <span aria-hidden="true">✕</span></button></header>'
     + '<div class="lxg-stage"><div class="lxg-frame"></div><button type="button" class="rp-arrow lxg-prev" data-gdir="-1" aria-label="' + s.prev + '"><span class="rp-arrow-ico">' + ARR(-1) + '</span></button><button type="button" class="rp-arrow lxg-next" data-gdir="1" aria-label="' + s.next + '"><span class="rp-arrow-ico">' + ARR(1) + '</span></button></div>'
     + '<footer class="lxg-foot"><span class="lxg-count t-label"></span><div class="lxg-thumbs">' + list.map((x, k) => '<button type="button" class="lx-thumb" data-gi="' + k + '" aria-label="' + x.label + '"><img src="' + x.src + '.webp" alt="" loading="lazy"></button>').join('') + '</div><p class="t-small lxg-note">' + s.note2 + '</p></footer>';
+  finDlg.querySelectorAll('[data-gdir]').forEach(b => { b.hidden = list.length < 2; });
   const img = from && from.querySelector('img');
   if (img) img.style.viewTransitionName = 'hm-fin';
   const tr = vt(() => { if (img) img.style.viewTransitionName = ''; finDlg.showModal(); finShow(0); finDlg.querySelector('.lxg-frame').style.viewTransitionName = 'hm-fin'; });
@@ -299,7 +214,7 @@ function renderCompare() {
   const s = t(), F = Object.fromEntries(ids.map(id => [id, facts(id, META[id])]));
   const rows = [['living', 'ft2'], ['entry', 'ft2'], ['garageArea', 'ft2'], ['total', 'ft2'], ['bedrooms', 'n'], ['bathrooms', 'n'], ['garage', 'n']];
   compareEl.innerHTML = `<h2 class="t-display" id="hm-compare-title" data-no-translate>${s.cmpTitle[0]}<em>${s.cmpTitle[1]}</em></h2>
-    <div class="hm-cmp" data-no-translate><div class="hm-cmp-head"><span></span>${ids.map(id => `<figure>${pic(HOMES[id].cmp || HOMES[id].thumb, HOMES[id].name, 'hm-cmp-img', '(max-width:760px) 50vw, 40vw')}<figcaption class="t-display hm-cmp-name">${HOMES[id].name}</figcaption></figure>`).join('')}</div>
+    <div class="hm-cmp" data-no-translate><div class="hm-cmp-head"><span></span>${ids.map(id => `<figure>${pic(HOMES[id].photo || HOMES[id].thumb, HOMES[id].name, 'hm-cmp-img', '(max-width:760px) 50vw, 40vw')}<figcaption class="t-display hm-cmp-name">${HOMES[id].name}</figcaption></figure>`).join('')}</div>
     ${rows.map(([k, u], r) => {
       const vals = ids.map(id => F[id][k]), max = Math.max(...vals);
       return `<div class="hm-cmp-row"><span class="t-label">${s.rows[r]}</span>${ids.map((id, i) => {
@@ -321,6 +236,6 @@ Promise.all(ids.map(id => fetch(HOMES[id].metadata).then(r => r.json()).then(m =
   let mounted = false;
   const mountOnce = () => { if (!mounted) { mounted = true; mountTab(); } };
   new IntersectionObserver(([e], io) => { if (e.isIntersecting) { io.disconnect(); (window.requestIdleCallback || setTimeout)(mountOnce, { timeout: 600 }); } }, { rootMargin: "0px 0px -15% 0px" }).observe(viewerEl);
-  window.__hmMount = mountOnce;
+  window.__hmMount = () => { mounted = true; mountTab(); };
   document.addEventListener('rpc:language', () => { renderCards(); renderViewer(0); renderCompare(); if (mounted) mountTab(); });
 });

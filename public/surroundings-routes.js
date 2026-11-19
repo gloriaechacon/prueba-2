@@ -113,7 +113,7 @@
         </div>
         ${passHost ? `<p class="t-small route-pass-desc">${document.querySelector('#c-place-description')?.textContent || ''}</p>` : ''}
         ${passHost ? `<a class="btn btn--primary btn--block route-pass-go" href="${MAPS[active] || MAPS.rainbow}" target="_blank" rel="noopener"><span>${GM[lang()] || GM.en}</span><b aria-hidden="true">↗</b></a>` : `<button type="button" class="btn btn--primary btn--block route-pass-go"><span>${s.explore}</span><b aria-hidden="true">→</b></button>`}
-        <p class="route-pass-note">${s.note(date(data.asOf))}</p>`;
+        `;
     }
     function wire() {
       notch();

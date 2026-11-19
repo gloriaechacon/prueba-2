@@ -12,7 +12,7 @@ const getLoader = () => loader ||= new GLTFLoader().setDRACOLoader(new DRACOLoad
 /* Tuned against glb/_checks/*_lightmap.png with this site's light (ACES 0.9, studio IBL):
    the bake already carries sun + sky + bounce, so the real-time lights drop to LIGHTS and
    the lightmap goes in at the file's intensity × LM. */
-export const TUNE = { LIGHTS: 0.15, ENV: 0.6, LM: 1.3 };
+export const TUNE = { LIGHTS: 0.35, ENV: 0.85, LM: 1.3 };
 
 export const isV3 = url => /-v3\.glb(\?|$)/.test(url);
 
@@ -34,6 +34,13 @@ export async function loadV3(url) {
   }
   model.traverse(o => {
     if (!o.isMesh) return;
+    for (const m of [].concat(o.material)) {
+      // Baked color already contains illumination: do not filmically dim it a second time.
+      if (m.isMeshBasicMaterial) m.toneMapped = false;
+      if (m.aoMap) m.aoMapIntensity = .65;
+      if (/teja|roof/i.test(m.name)) m.color.multiplyScalar(1.2);
+      if (/garaje.*oscuro/i.test(m.name)) m.color.set('#8e877a');
+    }
     const transparent = [].concat(o.material).some(m => m.transparent || m.transmission > 0);
     o.castShadow = !transparent; o.receiveShadow = true;
   });

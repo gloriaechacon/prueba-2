@@ -41,7 +41,7 @@ export const HOMES = {
     image: '/assets/homes-bell-tall',
     thumb: '/assets/home-bell',
     turntable: '/assets/turntable/bell/', turntableReady: true,
-    finishes: null
+    finishes: [{ src: '/assets/homes/bell-real-1600', label: 'Finish concept · exterior', concept: true }]
   }
 };
 /* Official figures, normalised from each metadata file (Kimsa Construction LLC schedules). */
