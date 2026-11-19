@@ -88,7 +88,7 @@ footer[data-surface] .final-fraga,footer[data-surface] img[src*=fraga]{filter:br
 /* ---------- Inner pages ---------- */
 main[data-surface] .c-heading :is(h1,h2,p,span){color:var(--s-fg)!important}
 main[data-surface] .c-heading p{color:var(--s-muted)!important}
-main[data-surface=support] .regional-tour :is(h2,h3,p):not(.route-pass *):not(.territory-map-wrap *){color:var(--s-fg)!important}
+main[data-surface=support] .regional-tour :is(h2,h3,p):not(.route-pass *):not(.territory-map-wrap *):not(.rt-left *):not(.rt-card *){color:var(--s-fg)!important}
 main[data-surface] .c-next :is(h2,p,a){color:var(--s-fg)!important}
 main[data-surface] .c-next a:not(.c-button){border-color:currentColor!important;background:transparent!important}
 html body .c-button{background:var(--c-btn)!important;color:var(--c-on-accent)!important;border-color:var(--c-btn)!important}

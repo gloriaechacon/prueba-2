@@ -9,9 +9,9 @@
  * pending verification). Nothing is shown if a value is missing. */
 (() => {
   const T = {
-    en: { pass: 'Your pass to the area', from: 'From', to: 'To', choose: 'Choose a destination', explore: 'Explore destination', time: 'Drive time', dist: 'Road distance', note: d => `By road · OSRM / OpenStreetMap · ${d} · to be verified`, pending: 'To be verified' },
-    es: { pass: 'Tu pase al entorno', from: 'Desde', to: 'Hacia', choose: 'Elige un destino', explore: 'Explorar destino', time: 'Tiempo en coche', dist: 'Distancia por carretera', note: d => `Por carretera · OSRM / OpenStreetMap · ${d} · por validar`, pending: 'Por validar' },
-    pt: { pass: 'Seu passe para o entorno', from: 'De', to: 'Para', choose: 'Escolha um destino', explore: 'Explorar destino', time: 'Tempo de carro', dist: 'Distância por estrada', note: d => `Por estrada · OSRM / OpenStreetMap · ${d} · a validar`, pending: 'A validar' }
+    en: { start: 'Starting point', pass: 'Your pass to the area', from: 'From', to: 'To', choose: 'Choose a destination', explore: 'Explore destination', time: 'Drive time', dist: 'Road distance', note: d => `By road · OSRM / OpenStreetMap · ${d} · to be verified`, pending: 'To be verified' },
+    es: { start: 'Punto de partida', pass: 'Tu pase al entorno', from: 'Desde', to: 'Hacia', choose: 'Elige un destino', explore: 'Explorar destino', time: 'Tiempo en coche', dist: 'Distancia por carretera', note: d => `Por carretera · OSRM / OpenStreetMap · ${d} · por validar`, pending: 'Por validar' },
+    pt: { start: 'Ponto de partida', pass: 'Seu passe para o entorno', from: 'De', to: 'Para', choose: 'Escolha um destino', explore: 'Explorar destino', time: 'Tempo de carro', dist: 'Distância por estrada', note: d => `Por estrada · OSRM / OpenStreetMap · ${d} · a validar`, pending: 'A validar' }
   };
   const lang = () => (window.rpcI18n?.language || new URLSearchParams(location.search).get('lang') || 'en').slice(0, 2);
   const t = () => T[lang()] || T.en;
@@ -43,7 +43,7 @@
   function attach(entry) {
     if (!data || entry.done) return;
     entry.done = true;
-    const { map, container, side, select, card } = entry;
+    const { map, container, side, select, card, passHost } = entry;
     const origin = [data.origin.lat, data.origin.lon];
     const routes = {};
     container.classList.add('has-routes');
@@ -72,19 +72,29 @@
     pass.className = 'route-pass';
     pass.dataset.noTranslate = '';
     pass.setAttribute('aria-live', 'polite');
-    if (side) {
+    if (passHost) passHost.append(pass);
+    else if (side) {
       const wrap = document.createElement('div');
       wrap.className = 'route-side';
       side.before(wrap);
       wrap.append(pass, side);
     }
-    let active = 'rainbow';
+    let active = 'rainbow', painted = false;
+    const order = ['rainbow', ...data.destinations.map(d => d.key)];
+    // Destination list (proyecto/entorno): "X KM · Y MIN" under each name.
+    function paintList() {
+      document.querySelectorAll('[data-rt-meta]').forEach(el => {
+        const d = routes[el.dataset.rtMeta]?.d;
+        el.dataset.noTranslate = '';
+        el.textContent = el.dataset.rtMeta === 'rainbow' ? t().start : d && typeof d.roadKm === 'number' ? `${km(d.roadKm)} · ${min(d.driveMin)}` : t().pending;
+      });
+    }
     const notch = () => { const p = pass.querySelector('.route-pass-perforation'); if (p) pass.style.setProperty('--perf', p.offsetTop + 'px'); };
     new ResizeObserver(notch).observe(pass);
-    function paintPass() {
+    function passHTML() {
       const s = t(), r = routes[active], d = r?.d;
       const has = d && typeof d.roadKm === 'number';
-      pass.innerHTML = `
+      return `
         <span class="route-pass-kicker">${s.pass}</span>
         <dl class="route-pass-trip">
           <div><dt>${s.from}</dt><dd>${data.origin.name}</dd></div>
@@ -97,14 +107,30 @@
         </div>
         <button type="button" class="btn btn--primary btn--block route-pass-go"><span>${s.explore}</span><b aria-hidden="true">→</b></button>
         <p class="route-pass-note">${s.note(date(data.asOf))}</p>`;
+    }
+    function wire() {
       notch();
       pass.querySelector('.route-pass-go').onclick = () => {
+        const link = card?.querySelector('#c-place-link');
+        if (passHost && link && active !== 'rainbow') { link.click(); return; }
+        if (passHost && active === 'rainbow') { document.querySelector('[data-place]:not([data-place="rainbow"])')?.focus(); return; }
         card?.scrollIntoView({ behavior: reduce.matches ? 'auto' : 'smooth', block: 'center' });
         const title = card?.querySelector('h2,h3');
         if (title) { title.setAttribute('tabindex', '-1'); title.focus({ preventScroll: true }); }
       };
     }
+    // Same lateral swap as the Investment cards: the old data leaves, the new one enters from the other side.
+    function paintPass(dir = 0) {
+      if (!painted || !dir || reduce.matches || !pass.animate) { pass.innerHTML = passHTML(); wire(); painted = true; return; }
+      const out = dir > 0 ? -40 : 40;
+      pass.getAnimations().forEach(a => a.cancel());
+      pass.animate([{ transform: 'translateX(0)', opacity: 1 }, { transform: `translateX(${out}px)`, opacity: 0 }], { duration: 320, easing: 'cubic-bezier(.65,.05,.25,1)', fill: 'forwards' }).onfinish = () => {
+        pass.innerHTML = passHTML(); wire();
+        pass.animate([{ transform: `translateX(${-out}px)`, opacity: 0 }, { transform: 'translateX(0)', opacity: 1 }], { duration: 560, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'forwards' });
+      };
+    }
     function setActive(key) {
+      const dir = Math.sign(order.indexOf(key) - order.indexOf(active));
       active = key;
       Object.entries(routes).forEach(([k, r]) => {
         const on = k === key;
@@ -114,8 +140,14 @@
         r.dot.getElement()?.classList.toggle('is-active', on);
         r.label.getElement()?.classList.toggle('is-active', on);
         if (on) r.line.bringToFront();
+        // The selected route redraws itself when chosen.
+        const el = r.line.getElement();
+        if (on && el && dir && container.classList.contains('routes-drawn') && !reduce.matches) {
+          el.style.transition = 'none'; el.style.strokeDashoffset = '1'; void el.getBoundingClientRect();
+          requestAnimationFrame(() => { el.style.transition = 'stroke-dashoffset 1.2s cubic-bezier(.65,0,.35,1)'; el.style.strokeDashoffset = '0'; });
+        }
       });
-      paintPass();
+      paintPass(dir);
     }
     const buttons = [...document.querySelectorAll(entry.buttons)];
     const read = () => buttons.find(b => b.getAttribute('aria-pressed') === 'true')?.dataset[entry.buttonKey] || 'rainbow';
@@ -125,12 +157,13 @@
     const prepare = () => {
       Object.values(routes).forEach(r => { const el = r.line.getElement(); if (el) { el.setAttribute('pathLength', '1'); el.style.setProperty('--route-delay', r.delay + 's'); } });
       paintLabels();
+      paintList();
       setActive(active);
     };
     setActive(read());
     map.whenReady(prepare);
     map.on('zoomend viewreset', prepare);
-    document.addEventListener('rpc:language', () => { paintLabels(); paintPass(); });
+    document.addEventListener('rpc:language', () => { paintLabels(); paintList(); paintPass(); });
 
     /* Draw when the map enters the viewport (static with reduced motion). */
     if (reduce.matches) container.classList.add('routes-drawn', 'routes-static');

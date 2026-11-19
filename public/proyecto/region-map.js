@@ -3,8 +3,8 @@ const host=document.getElementById('region-map');if(!host||!window.L)return;
 const places={classic:{name:'Classic Mile',point:[29.152725,-82.34334]},wec:{name:'World Equestrian Center',point:[29.200286,-82.259861]},downtown:{name:'Downtown Ocala',point:[29.1878,-82.1367]},nature:{name:'Rainbow Springs',point:[29.1025,-82.4375]},airport:{name:'Aeropuerto de Ocala',point:[29.1717,-82.2242]}};
 const map=L.map(host,{scrollWheelZoom:true,touchZoom:true,doubleClickZoom:true,zoomControl:false,zoomSnap:.25});L.control.zoom({position:'topright'}).addTo(map);
 const layers={sketch:L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'&copy; OpenStreetMap'}),satellite:L.tileLayer('https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}',{maxNativeZoom:16,maxZoom:18,attribution:'USDA / USGS The National Map'})};let layer=layers.sketch.addTo(map);host.dataset.mode='sketch';
-const rainbowPin=L.marker([29.148212,-82.379192],{title:'Rainbow Park',alt:'Rainbow Park',keyboard:true,icon:L.divIcon({className:'region-rainbow-pin',html:'<svg viewBox="0 0 28 38" aria-hidden="true"><path d="M14 36S2 21 2 14a12 12 0 0 1 24 0c0 7-12 22-12 22Z" fill="#a33e32" stroke="white" stroke-width="2"/><circle cx="14" cy="14" r="4" fill="white"/></svg><span>Rainbow Park</span>',iconSize:[28,38],iconAnchor:[14,36]})}).addTo(map);
-rainbowPin.on('click',()=>{document.querySelector('[data-place="rainbow"]').click();Object.values(markers).forEach(m=>m.getElement()?.classList.remove('selected'));map.panInside([29.15,-82.373],{padding:[45,45]})});
+const rainbowPin=L.marker([29.148212,-82.379192],{title:'Rainbow Park',alt:'Rainbow Park',keyboard:true,icon:L.divIcon({className:'region-rainbow-pin',html:'<svg viewBox="0 0 28 38" aria-hidden="true"><path d="M14 36S2 21 2 14a12 12 0 0 1 24 0c0 7-12 22-12 22Z" fill="currentColor" stroke="white" stroke-width="2"/><circle cx="14" cy="14" r="4" fill="white"/></svg><span>Rainbow Park</span>',iconSize:[28,38],iconAnchor:[14,36]})}).addTo(map);
+rainbowPin.on('click',()=>{document.querySelector('[data-place="rainbow"]').click();Object.values(markers).forEach(m=>m.getElement()?.classList.remove('selected'));map.panInside(rainbowPin.getLatLng(),{padding:[45,45]})});
 
 const markers={};Object.entries(places).forEach(([key,p])=>{const marker=L.marker(p.point,{keyboard:true,title:p.name,icon:L.divIcon({className:'region-place region-'+key,html:'<span>'+p.name+'</span>',iconSize:[0,0],iconAnchor:[0,0]})}).addTo(map);marker.on('click',()=>choose(key));markers[key]=marker;});
 const card=document.querySelector('.regional-tour .c-destination');
@@ -18,7 +18,7 @@ document.querySelectorAll('[data-region-mode]').forEach(b=>b.onclick=()=>{map.re
 document.querySelector('.region-reset').onclick=reset;
 new ResizeObserver(()=>map.invalidateSize({pan:false})).observe(host);
 const areas=window.addRegionalAreas(map,key=>document.querySelector('[data-place="'+key+'"]')?.click());
-(window.rpSurroundingsQueue=window.rpSurroundingsQueue||[]).push({map,container:host,side:card,card,buttons:'[data-place]',buttonKey:'place',select:choose});window.rpSurroundings?.flush();
+(window.rpSurroundingsQueue=window.rpSurroundingsQueue||[]).push({map,container:host,passHost:document.querySelector('.rt-pass-slot'),card,buttons:'[data-place]',buttonKey:'place',select:choose});window.rpSurroundings?.flush();
 document.querySelectorAll('[data-place]').forEach(b=>b.addEventListener('click',()=>{
  const key=b.dataset.place;
  card.hidden=false;map.invalidateSize({pan:false});
@@ -28,8 +28,11 @@ document.querySelectorAll('[data-place]').forEach(b=>b.addEventListener('click',
 reset();
 choose('rainbow');
 })();
-(()=>{const map=document.querySelector('#region-map'),title=document.querySelector('#c-place-title');if(!map||!title)return;
- const jump=document.createElement('a');jump.className='region-detail-jump';jump.href='#c-place-title';map.after(jump);
- const update=()=>{const lang=document.documentElement.lang.slice(0,2);jump.textContent=(({en:'View details',es:'Ver detalles',pt:'Ver detalhes'})[lang]||'View details')+' · '+title.textContent;};
- jump.dataset.noTranslate='';new MutationObserver(update).observe(title,{childList:true,subtree:true,characterData:true});document.addEventListener('rpc:language',update);update();
+/* Destination photo: cross-fade from the previous picture (the old one is laid over and fades out). */
+(()=>{const img=document.querySelector('.rt-photo #c-place-image');if(!img)return;
+ const reduce=matchMedia('(prefers-reduced-motion: reduce)');
+ new MutationObserver(records=>{const old=records.find(r=>r.attributeName==='src')?.oldValue;if(!old||old===img.getAttribute('src')||reduce.matches)return;
+  const ghost=document.createElement('img');ghost.className='rt-photo-ghost';ghost.alt='';ghost.setAttribute('aria-hidden','true');ghost.src=old;img.after(ghost);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>ghost.classList.add('is-out')));setTimeout(()=>ghost.remove(),900);
+ }).observe(img,{attributes:true,attributeFilter:['src'],attributeOldValue:true});
 })();
