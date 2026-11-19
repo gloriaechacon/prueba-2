@@ -147,3 +147,50 @@
   .rt-seg button+button{border-left:0!important}
   .rt #region-map{position:relative!important;inset:auto;height:min(64svh,480px)!important;border-radius:18px!important;overflow:hidden}
 }
+
+/* ---------- Review round 7: horizontal destination bar above the map; block fits the screen ---------- */
+.rt{--rt-h:clamp(540px,calc(100svh - var(--nav-height,86px) - 36px),860px);grid-template-columns:minmax(0,3fr) minmax(320px,2fr)!important;grid-template-rows:auto auto;row-gap:18px}
+.rt-left{grid-column:1;grid-row:1;height:var(--rt-h);min-height:0!important;display:grid!important;grid-template-columns:1fr!important;grid-template-rows:auto minmax(0,1fr)!important}
+.rt-list-col{display:grid!important;grid-template-columns:auto minmax(0,1fr);grid-template-areas:"title hint" "list list";align-items:end;gap:6px 20px!important;padding:14px 18px 0!important;border-right:0!important;border-bottom:1px solid var(--c-line)}
+.rt-title{grid-area:title;font-size:clamp(1.3rem,1rem + .8vw,1.8rem)!important}
+.rt-hint{grid-area:hint;justify-self:end;text-align:right;max-width:52ch}
+.rt .regional-map-note{display:none}
+.rt-list{grid-area:list;display:flex!important;gap:0;overflow-x:auto;scrollbar-width:none;margin:0 -18px!important;padding:0!important}
+.rt-list li{flex:1 0 auto;border:0!important;border-left:1px solid var(--c-line)!important;border-radius:0!important;background:none!important}
+.rt-list li:first-child{border-left:0!important}
+.rt-list button{grid-template-columns:auto minmax(0,1fr)!important;padding:12px 16px 14px!important;white-space:nowrap}
+.rt-list button::before{left:16px!important;right:16px;top:auto!important;bottom:0!important;width:auto!important;height:2px!important;transform:scaleX(0)!important;transform-origin:left!important}
+.rt-list button[aria-pressed=true]::before{transform:scaleX(1)!important}
+.rt-name{font-size:clamp(1rem,.85rem + .4vw,1.25rem)!important}
+.rt-map-col{min-height:0}
+.rt-card{grid-column:2;grid-row:1;height:var(--rt-h)}
+.rt-card .rt-photo{flex:1 1 auto;height:auto!important;min-height:140px}
+.rt-card .rt-pass-slot{flex:0 0 auto}
+.rt-info--below{grid-column:2;grid-row:2;border-top:0!important;padding:0 4px!important}
+@media(max-width:1100px) and (min-width:861px){.rt{grid-template-columns:minmax(0,1fr) minmax(300px,.8fr)!important}.rt-hint{display:none}}
+@media(max-width:860px){
+  .rt{grid-template-columns:1fr!important;grid-template-rows:auto}
+  .rt-card{grid-column:1;grid-row:1;height:auto}
+  .rt-card .rt-photo{height:clamp(200px,52vw,280px)!important;flex:none}
+  .rt-info--below{grid-column:1;grid-row:2;padding:0!important}
+  .rt-left{grid-column:1;grid-row:3;height:auto}
+  .rt-list-col{grid-template-columns:1fr;grid-template-areas:"title" "hint" "list";padding:0!important;border:0}
+  .rt-hint{justify-self:start;text-align:left}
+  .rt-list{margin:0!important;gap:10px}
+  .rt-list li{flex:0 0 auto;border:1px solid var(--c-line)!important;border-radius:14px!important;background:var(--c-paper)!important}
+  .rt-list li:first-child{border-left:1px solid var(--c-line)!important}
+}
+/* In the horizontal bar the six destinations must fit: name in the label style (may wrap to two
+   lines), number + distance/time underneath. The title style would need ~2x the width. */
+@media(min-width:861px){
+  .rt-list li{flex:1 1 0!important;min-width:0}
+  .rt-list button{white-space:normal!important;padding:10px 12px 12px!important;height:100%;align-content:start}
+  html[lang] body:not(#rp-type) .rt-list .rt-name{font:var(--t-label)!important;letter-spacing:var(--t-label-track)!important;text-transform:uppercase!important;color:var(--c-ink)}
+  .rt-list .rt-meta{color:var(--c-muted)}
+  .rt-list button[aria-pressed=true] .rt-name{color:var(--c-accent-text)!important}
+}
+/* Phone: the segmented control sits above the map as one compact row */
+@media(max-width:860px){.rt-seg{flex-wrap:nowrap!important;overflow-x:auto;max-width:100%!important;border-radius:999px!important}.rt-seg button{white-space:nowrap;flex:0 0 auto}}
+@media(min-width:861px){.rt-list button{grid-template-columns:1fr!important;row-gap:3px!important}.rt-list .rt-n{grid-row:auto!important;padding-top:0!important}.rt-list .rt-name{overflow-wrap:anywhere}}
+html body .rt-info--below,html body .rt-info--below :is(h3,a){color:var(--s-fg)!important}
+html body .rt-info--below p{color:var(--s-muted)!important}

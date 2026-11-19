@@ -36,3 +36,6 @@ choose('rainbow');
   requestAnimationFrame(()=>requestAnimationFrame(()=>ghost.classList.add('is-out')));setTimeout(()=>ghost.remove(),900);
  }).observe(img,{attributes:true,attributeFilter:['src'],attributeOldValue:true});
 })();
+/* The long destination info (description + links) goes under the photo + pass piece, so the
+   map, the list and the pass fit the visible screen. */
+(()=>{const card=document.querySelector('.rt .rt-card'),info=card?.querySelector('.rt-info');if(!card||!info)return;info.classList.add('rt-info--below');card.after(info);})();
