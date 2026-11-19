@@ -45,18 +45,55 @@ export function exteriorLight(T, scene, renderer) {
   const texture = new T.CanvasTexture(image);
   texture.colorSpace=T.SRGBColorSpace;
   texture.mapping=T.EquirectangularReflectionMapping;
-  const pmrem = new T.PMREMGenerator(renderer);
-  const environment = pmrem.fromEquirectangular(texture);
-  scene.environment = environment.texture;
-  texture.dispose();
-  pmrem.dispose();
+  // The PMREM bake compiles its own shaders and blocks the main thread for a moment, so it runs
+  // in a quiet idle period (no input in the last 700 ms). Viewers await .ready before their
+  // first render; the poster / loading state stays up meanwhile.
+  let environment = null, disposed = false;
+  // Pre-baked PMREM of this exact studio sky (assets/env, gzip, half float 384x512): no shader
+  // compilation and no GPU bake on the main thread. The live bake below is only the fallback.
+  const ready = loadBaked(T).then(tex => {
+    if (disposed) return;
+    environment = { texture: tex, dispose: () => tex.dispose() };
+    scene.environment = tex;
+    texture.dispose();
+  }).catch(() => quietIdle().then(() => {
+    if (disposed) return;
+    const pmrem = new T.PMREMGenerator(renderer);
+    environment = pmrem.fromEquirectangular(texture);
+    scene.environment = environment.texture;
+    dispose.target = environment;
+    texture.dispose();
+    pmrem.dispose();
+  }));
   renderer.toneMapping=T.ACESFilmicToneMapping;
   renderer.toneMappingExposure=.9;
   renderer.shadowMap.enabled=true;
   renderer.shadowMap.type=T.PCFSoftShadowMap;
   renderer.shadowMap.autoUpdate=false;
   renderer.shadowMap.needsUpdate=true;
-  return () => environment.dispose();
+  const dispose = () => { disposed = true; environment?.dispose(); };
+  dispose.ready = ready;
+  return dispose;
+}
+async function loadBaked(T) {
+  const r = await fetch('/assets/env/exterior-pmrem-384x512-half.gz');
+  if (!r.ok || !('DecompressionStream' in window)) throw Error('no baked env');
+  const buf = await new Response(r.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();
+  const tex = new T.DataTexture(new Uint16Array(buf), 384, 512, T.RGBAFormat, T.HalfFloatType);
+  tex.mapping = T.CubeUVReflectionMapping;
+  tex.minFilter = tex.magFilter = T.LinearFilter;
+  tex.generateMipmaps = false;
+  tex.colorSpace = T.LinearSRGBColorSpace;
+  tex.needsUpdate = true;
+  return tex;
+}
+let lastInput = 0;
+['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(t => addEventListener(t, () => { lastInput = performance.now(); }, { passive: true, capture: true }));
+function quietIdle() {
+  return new Promise(resolve => {
+    const tick = () => (window.requestIdleCallback || setTimeout)(() => { if (performance.now() - lastInput > 700) resolve(); else setTimeout(tick, 250); }, { timeout: 1500 });
+    tick();
+  });
 }
 
 export function finishExterior(T, model) {
@@ -157,6 +194,8 @@ export function createSceneRenderer(THREE) {
   renderer.outputColorSpace=THREE.SRGBColorSpace;
   renderer.toneMapping=THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure=1.05;
+  // Shader link checks force a synchronous wait on the GPU compiler (seconds of main-thread block).
+  renderer.debug.checkShaderErrors=false;
   return renderer;
 }
 

@@ -11,5 +11,5 @@ export async function loadHouse(url){
 export function daylight(scene,renderer){
  const disposeLight=exteriorLight(T,scene,renderer);
  const disposeSky=attachSky(scene,renderer,renderer.domElement.parentElement);
- return ()=>{disposeSky();disposeLight()};
+ const dispose=()=>{disposeSky();disposeLight()};dispose.ready=disposeLight.ready;return dispose;
 }

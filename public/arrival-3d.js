@@ -8,6 +8,7 @@ import { loadHouse } from './utah/model-loader.js';
 import { attachSky, exteriorLight, createSceneRenderer } from './exterior-atmosphere.js';
 import { createLotEnvironment } from './utah/lot-environment.js';
 import { keyframes, fov, door } from './hero-path.js';
+import { compileInSlices } from './three-compile.js';
 
 // Clear sunset sky (CSS gradient, no clouds, no HDRI). Its lower stop matches the fog colour.
 const SUNSET_SKY = 'linear-gradient(180deg,#8fa9c2 0%,#c3c6c4 30%,#ecc9a0 58%,#f0b783 74%,#e9c49c 100%)';
@@ -62,9 +63,10 @@ export function mountArrival(host, { mobile = false, debug = null } = {}) {
   const eye = new T.Vector3(), look = new T.Vector3();
   let progress = 0, visible = true, pivot = null, frame = 0;
 
+  let compiled = false;
   function render() {
     frame = 0;
-    if (!visible) return;
+    if (!visible || !compiled) return;
     positions.getPoint(progress, eye);
     targets.getPoint(progress, look);
     camera.position.copy(eye);
@@ -104,11 +106,15 @@ export function mountArrival(host, { mobile = false, debug = null } = {}) {
     return true;
   }
 
-  const ready = loadHouse('/' + home.model).then(model => {
+  const ready = loadHouse('/' + home.model).then(async model => {
     model.position.z = lotOffset(home);
     const hinged = hingeDoor(model);
     scene.add(model);
     renderer.shadowMap.needsUpdate = true;
+    positions.getPoint(progress, eye); targets.getPoint(progress, look); camera.position.copy(eye); camera.lookAt(look);
+    await disposeEnv.ready;
+    await compileInSlices(renderer, scene, camera);
+    compiled = true;
     render();
     return { hinged };
   });

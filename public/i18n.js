@@ -38,12 +38,23 @@ const fragments=new RegExp('(?<![\\p{L}\\p{N}])(?:'+phrases.map(escape).join('|'
 let lang='en';try{lang=new URLSearchParams(location.search).get('lang')||'en'}catch{}
 if(!['es','en','pt'].includes(lang))lang='en';
 const original=new WeakMap(),attributes=new WeakMap();let observer;
-function translated(source){
+// Performance: the fragment regex is a huge alternation; skip it when no word of the text starts
+// a known phrase, and memoise results per language (same strings repeat across nodes).
+const firstWord=p=>normalize(p).toLowerCase().split(/[^p{L}p{N}]+/u).find(Boolean);
+const byFirst=new Map();for(const p of phrases){const w=firstWord(p);if(!w)continue;if(!byFirst.has(w))byFirst.set(w,[]);byFirst.get(w).push(p)}
+const firstWords=new Set(byFirst.keys());const regexCache=new Map();
+// Only the phrases whose first word appears in the text take part in the match (same longest-first order).
+function fragmentsFor(text){const ws=[...new Set(normalize(text).toLowerCase().split(/[^p{L}p{N}]+/u).filter(w=>w&&firstWords.has(w)))].sort();if(!ws.length)return null;const key=ws.join('|');let re=regexCache.get(key);if(!re){const cand=ws.flatMap(w=>byFirst.get(w)).sort((a,b)=>b.length-a.length);re=new RegExp('(?<![p{L}p{N}])(?:'+cand.map(escape).join('|')+')(?![p{L}p{N}])','giu');if(regexCache.size>4000)regexCache.clear();regexCache.set(key,re)}return re}
+const memo=new Map();
+function mayContain(text){for(const w of normalize(text).toLowerCase().split(/[^p{L}p{N}]+/u))if(w&&firstWords.has(w))return true;return false}
+function translated(source){const k=lang+''+source;let r=memo.get(k);if(r===undefined){r=translatedRaw(source);if(memo.size>20000)memo.clear();memo.set(k,r)}return r}
+function translatedRaw(source){
 
  const sourceKey=normalize(source),hit=byKey.get(sourceKey.toLowerCase());
  const pick=(s,v)=>/[a-záéíóúñãõç]/i.test(s)&&s===s.toUpperCase()?v.toUpperCase():v;
  if(hit)return source.replace(source.trim(),pick(sourceKey,hit[lang]));
- return source.replace(fragments,s=>pick(s,byKey.get(normalize(s).toLowerCase())[lang]));
+ const re=fragmentsFor(source);if(!re)return source;
+ return source.replace(re,s=>pick(s,byKey.get(normalize(s).toLowerCase())[lang]));
 }
 function blocked(el){return !el||Boolean(el.closest('script,style,textarea,input,[data-no-translate],.rpc-language-control,canvas,svg defs'))}
 function textNode(node){

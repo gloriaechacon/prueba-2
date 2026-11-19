@@ -16,7 +16,7 @@ export const HOMES = {
     photo: null,                       // PENDING: Blender frame (front or 3/4) for Utah
     image: '/assets/homes-utah-tall',
     thumb: '/assets/home-utah',
-    turntable: '/assets/turntable/utah/',
+    turntable: '/assets/turntable/utah/', turntableReady: false,   // set true when the Blender sequence is in place
     finishes: [                         // swatch crops + the two concept images, one gallery
       { src: '/assets/finishes/utah-stucco', label: 'Exterior stucco', swatch: true },
       { src: '/assets/finishes/utah-roof', label: 'Roof shingles', swatch: true },
@@ -36,7 +36,7 @@ export const HOMES = {
     photo: null,                       // PENDING: Bell renders
     image: '/assets/homes-bell-tall',
     thumb: '/assets/home-bell',
-    turntable: '/assets/turntable/bell/',
+    turntable: '/assets/turntable/bell/', turntableReady: false,
     finishes: null
   }
 };

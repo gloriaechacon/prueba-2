@@ -199,8 +199,11 @@
     let ctrl = null, posterZoom = false, progress = 0;
 
     const use3D = (() => { try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch { return false; } })();
+    // The 3D scene starts once the page has loaded and the main thread is idle (the poster shows
+    // meanwhile), so the first taps and clicks are not delayed by model parsing / GPU warm-up.
+    const afterLoad = () => new Promise(r => { const go = () => (window.requestIdleCallback || setTimeout)(r, { timeout: 1500 }); document.readyState === 'complete' ? go() : addEventListener('load', go, { once: true }); });
     if (use3D) {
-      import('/arrival-3d.js').then(m => {
+      afterLoad().then(() => import('/arrival-3d.js')).then(m => {
         ctrl = m.mountArrival(sceneEl, { mobile, debug });
         ctrl.setProgress(progress);
         return ctrl.ready;

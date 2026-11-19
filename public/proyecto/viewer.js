@@ -3,6 +3,7 @@ import * as THREE from '/vendor/three.module.js';
 import {loadHouse, daylight} from '/utah/model-loader.js';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {createSceneRenderer, addHouseStage} from '/exterior-atmosphere.js';
+import {compileInSlices} from '/three-compile.js';
 
 export async function createViewer(host, id, opts = {}) {
   const scene = new THREE.Scene();
@@ -33,7 +34,8 @@ export async function createViewer(host, id, opts = {}) {
   const disposeDaylight = daylight(scene, renderer);
   const roofNodes = [];
   model.traverse(node => {if(node.userData.roof === true) roofNodes.push(node)});
-  const render = () => renderer.render(scene, camera);
+  let compiled = false;
+  const render = () => { if (compiled) renderer.render(scene, camera); };
   const resize = () => {
     const width=host.clientWidth, height=host.clientHeight;
     if(!width || !height) return;
@@ -59,6 +61,10 @@ export async function createViewer(host, id, opts = {}) {
   };
   setCamera('front');
   resize();
+  await disposeDaylight.ready;
+  await compileInSlices(renderer, scene, camera);
+  compiled = true;
+  render();
   const listeners = new Set();
   controls.addEventListener('change', () => listeners.forEach(fn => fn(controls.getAzimuthalAngle())));
   return {

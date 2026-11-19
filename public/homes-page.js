@@ -147,6 +147,7 @@ function crossfade() {
 }
 async function turntable(pane, id) {
   // Blender sequence (when it exists): manifest.json → { frames, desktop: "desktop/frame-%03d.webp", mobile: … }
+  if (!HOMES[id].turntableReady) return false;
   try {
     const r = await fetch(HOMES[id].turntable + 'manifest.json', { cache: 'no-store' });
     if (!r.ok) return false;
@@ -260,7 +261,7 @@ Promise.all(ids.map(id => fetch(HOMES[id].metadata).then(r => r.json()).then(m =
   // The GLB (several MB) loads only when the viewer approaches the viewport.
   let mounted = false;
   const mountOnce = () => { if (!mounted) { mounted = true; mountTab(); } };
-  new IntersectionObserver(([e], io) => { if (e.isIntersecting) { io.disconnect(); mountOnce(); } }, { rootMargin: "300px 0px" }).observe(viewerEl);
+  new IntersectionObserver(([e], io) => { if (e.isIntersecting) { io.disconnect(); (window.requestIdleCallback || setTimeout)(mountOnce, { timeout: 600 }); } }, { rootMargin: "0px 0px -15% 0px" }).observe(viewerEl);
   window.__hmMount = mountOnce;
   document.addEventListener('rpc:language', () => { renderCards(); renderViewer(0); renderCompare(); if (mounted) mountTab(); });
 });
