@@ -10,7 +10,7 @@ const S = {
     drag: 'Drag to rotate', loading: 'Loading the 3D model…', fail: '3D view unavailable on this device.', pdf: 'Open original PDF', zin: 'Zoom in', zout: 'Zoom out', fit: 'Fit',
     note: 'Presentation model · finishes proposed, not official specifications.',
     cmpTitle: ['Side by ', 'side'], rows: ['Living area', 'Entry', 'Garage', 'Total covered area', 'Bedrooms', 'Bathrooms', 'Garage spaces'],
-    diff: { living: 'living', entry: 'entry', garageArea: 'garage', total: 'total', bedrooms: 'bedroom', bathrooms: 'bathroom', garage: 'garage space' }, gallery: 'Finishes', close: 'Close', prev: 'Previous', next: 'Next', note2: 'Proposed finishes, not official specifications',
+    diff: { living: 'living', entry: 'entry', garageArea: 'garage', total: 'total', bedrooms: 'bedroom', bathrooms: 'bathroom', garage: 'garage space' }, gallery: 'Finishes', close: 'Close', prev: 'Previous', next: 'Next', note2: 'Proposed finishes, not official specifications', finishSub: 'Exterior and kitchen · open the images', full: 'Full screen',
     src: 'Official area schedules from the architectural plans (Kimsa Construction LLC). Utah: job 2025-713 · Bell: job 2024-140.', studio: '+ studio', plan: n => `Floor plan of the ${n} home` },
   es: { bed: n => `${n} dormitorios`, bedStudio: n => `${n} dormitorios + anexo estudio`, bath: n => `${n} baños`, gar: n => `${n} plaza${n > 1 ? 's' : ''} de garaje`, livingL: 'habitables', explore: n => `Explorar ${n}`,
     title: ['Dos casas, ', 'un lugar'], choose: ['Elige tu ', 'casa'], change: 'Cambiar de casa', tabs: ['Vista de la casa', 'Modelo 3D', 'Planta 3D', 'Plano'],
@@ -18,7 +18,7 @@ const S = {
     drag: 'Arrastra para girar', loading: 'Cargando el modelo 3D…', fail: 'Vista 3D no disponible en este dispositivo.', pdf: 'Abrir el PDF original', zin: 'Acercar', zout: 'Alejar', fit: 'Ajustar',
     note: 'Modelo de presentación · acabados propuestos, no especificaciones oficiales.',
     cmpTitle: ['Lado a ', 'lado'], rows: ['Superficie habitable', 'Entrada', 'Garaje', 'Superficie cubierta total', 'Dormitorios', 'Baños', 'Plazas de garaje'],
-    diff: { living: 'habitables', entry: 'de entrada', garageArea: 'de garaje', total: 'en total', bedrooms: 'dormitorio', bathrooms: 'baño', garage: 'plaza de garaje' }, gallery: 'Acabados', close: 'Cerrar', prev: 'Anterior', next: 'Siguiente', note2: 'Acabados propuestos, no especificaciones oficiales',
+    diff: { living: 'habitables', entry: 'de entrada', garageArea: 'de garaje', total: 'en total', bedrooms: 'dormitorio', bathrooms: 'baño', garage: 'plaza de garaje' }, gallery: 'Acabados', close: 'Cerrar', prev: 'Anterior', next: 'Siguiente', note2: 'Acabados propuestos, no especificaciones oficiales', finishSub: 'Exterior y cocina · ver las imágenes', full: 'Pantalla completa',
     src: 'Cuadros de superficies oficiales de los planos arquitectónicos (Kimsa Construction LLC). Utah: expediente 2025-713 · Bell: expediente 2024-140.', studio: '+ estudio', plan: n => `Plano de la casa ${n}` },
   pt: { bed: n => `${n} quartos`, bedStudio: n => `${n} quartos + anexo estúdio`, bath: n => `${n} banheiros`, gar: n => `${n} vaga${n > 1 ? 's' : ''} de garagem`, livingL: 'habitáveis', explore: n => `Explorar ${n}`,
     title: ['Duas casas, ', 'um lugar'], choose: ['Escolha sua ', 'casa'], change: 'Trocar de casa', tabs: ['Vista da casa', 'Modelo 3D', 'Planta 3D', 'Planta'],
@@ -26,7 +26,7 @@ const S = {
     drag: 'Arraste para girar', loading: 'Carregando o modelo 3D…', fail: 'Vista 3D indisponível neste dispositivo.', pdf: 'Abrir o PDF original', zin: 'Aproximar', zout: 'Afastar', fit: 'Ajustar',
     note: 'Modelo de apresentação · acabamentos propostos, não especificações oficiais.',
     cmpTitle: ['Lado a ', 'lado'], rows: ['Área habitável', 'Entrada', 'Garagem', 'Área coberta total', 'Quartos', 'Banheiros', 'Vagas de garagem'],
-    diff: { living: 'habitáveis', entry: 'de entrada', garageArea: 'de garagem', total: 'no total', bedrooms: 'quarto', bathrooms: 'banheiro', garage: 'vaga de garagem' }, gallery: 'Acabamentos', close: 'Fechar', prev: 'Anterior', next: 'Próximo', note2: 'Acabamentos propostos, não especificações oficiais',
+    diff: { living: 'habitáveis', entry: 'de entrada', garageArea: 'de garagem', total: 'no total', bedrooms: 'quarto', bathrooms: 'banheiro', garage: 'vaga de garagem' }, gallery: 'Acabamentos', close: 'Fechar', prev: 'Anterior', next: 'Próximo', note2: 'Acabamentos propostos, não especificações oficiais', finishSub: 'Exterior e cozinha · ver as imagens', full: 'Tela cheia',
     src: 'Quadros de áreas oficiais das plantas arquitetônicas (Kimsa Construction LLC). Utah: processo 2025-713 · Bell: processo 2024-140.', studio: '+ estúdio', plan: n => `Planta da casa ${n}` }
 };
 const lang = () => (window.rpcI18n?.language || new URLSearchParams(location.search).get('lang') || 'en').slice(0, 2);
@@ -101,7 +101,8 @@ function enter(id, card) {
 function sheetHTML(id) {
   const s = t(), f = facts(id, META[id]), h = HOMES[id];
   const fin = h.finishes || [];
-  const sw = fin.length ? `<div class="hm-finishes"><span class="t-label">${s.finishes}</span><div class="hm-swatches">${fin.map((x, i) => x.swatch ? `<button type="button" class="hm-swatch" data-fin="${i}" aria-label="${x.label}"><img src="${x.src}.webp" alt="" loading="lazy" decoding="async"></button>` : '').join('')}</div><button type="button" class="link-line hm-finish-open" data-fin="${fin.findIndex(x => x.concept)}">${s.finish}</button></div>` : '';
+  const c = fin.find(x => x.concept) || fin[0];
+  const sw = c ? `<button type="button" class="hm-finish-card" data-fin="${fin.indexOf(c)}"><img src="${c.src}.webp" alt="" loading="lazy" decoding="async"><span class="hm-finish-txt"><span class="t-label">${s.finish}</span><small class="t-small">${s.finishSub}</small></span><svg class="hm-finish-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg></button>` : '';
   return `<h3 class="t-display hm-sheet-name">${h.name}</h3>
     <ul class="hm-rooms"><li class="t-label">${f.studio ? s.bedStudio(f.bedrooms) : s.bed(f.bedrooms)}</li><li class="t-label">${s.bath(f.bathrooms)}</li><li class="t-label">${s.gar(f.garage)}</li></ul>
     <dl class="hm-areas">${[[s.living, f.living], [s.entry, f.entry], [s.garage, f.garageArea]].map(([k, v]) => `<div><dt class="t-label">${k}</dt><dd class="t-label">${nf(v)} ft²</dd></div>`).join('')}
@@ -114,13 +115,12 @@ function renderViewer(dir = 0) {
   const s = t();
   if (!viewerEl.querySelector('.hm-v-head')) {
     viewerEl.innerHTML = `<header class="hm-v-head"><h2 class="t-display" id="hm-viewer-title" data-no-translate>${s.title[0]}<em>${s.title[1]}</em></h2>
-        <div class="hm-houses" role="group" data-no-translate></div><a class="link-line hm-change" href="#hm-select-title"></a></header>
-      <div class="hm-tabs" role="tablist" data-no-translate></div>
+</header>
+      <div class="hm-controls"><div class="hm-tabs" role="tablist" data-no-translate></div><div class="hm-houses" role="group" aria-label="Utah | Bell" data-no-translate></div></div>
       <div class="hm-body"><div class="hm-stage"><div class="hm-pane"></div></div><aside class="hm-sheet" aria-live="polite" data-no-translate></aside></div>`;
   }
   viewerEl.querySelector('#hm-viewer-title').innerHTML = `${s.title[0]}<em>${s.title[1]}</em>`;
   viewerEl.querySelector('.hm-houses').innerHTML = ids.map(id => `<button type="button" data-house="${id}" aria-pressed="${id === house}">${HOMES[id].name}</button>`).join('');
-  viewerEl.querySelector('.hm-change').textContent = s.change;
   viewerEl.querySelector('.hm-tabs').innerHTML = s.tabs.map((n, i) => `<button type="button" role="tab" aria-selected="${i === tab}" data-tab="${i}">${n}</button>`).join('');
   const sheet = viewerEl.querySelector('.hm-sheet'), stage = viewerEl.querySelector('.hm-stage');
   slide(sheet, dir, () => { sheet.innerHTML = sheetHTML(house); });
@@ -175,9 +175,10 @@ async function mountTab() {
   if (tab === 3) {
     planZoom = 1;
     pane.innerHTML = `<div class="hm-plan"><img src="${HOMES[id].plan}" alt="${s.plan(HOMES[id].name)}"></div>
-      <div class="hm-plan-bar"><span class="t-small">${facts(id, META[id]).source}</span><div class="hm-plan-tools"><button type="button" data-z="-1" aria-label="${s.zout}">−</button><button type="button" data-z="1" aria-label="${s.zin}">+</button><button type="button" data-z="0" aria-label="${s.fit}">⤢</button></div><a class="link-line" href="${HOMES[id].planPdf}" target="_blank" rel="noopener">${s.pdf}</a></div>`;
+      <div class="hm-plan-bar"><span class="t-small">${facts(id, META[id]).source}</span><div class="hm-plan-tools"><button type="button" data-z="-1" aria-label="${s.zout}">−</button><button type="button" data-z="1" aria-label="${s.zin}">+</button><button type="button" data-z="full" aria-label="${s.full}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg></button></div><a class="link-line" href="${HOMES[id].planPdf}" target="_blank" rel="noopener">${s.pdf}</a></div>`;
     const img = pane.querySelector('.hm-plan img');
-    pane.querySelectorAll('[data-z]').forEach(b => b.onclick = () => { const z = Number(b.dataset.z); planZoom = z ? Math.max(1, Math.min(3, planZoom + z * .5)) : 1; img.style.transform = `scale(${planZoom})`; pane.querySelector('.hm-plan').classList.toggle('is-zoomed', planZoom > 1); });
+    const zp = panZoom(pane.querySelector('.hm-plan'), img);
+    pane.querySelectorAll('[data-z]').forEach(b => b.onclick = () => { if (b.dataset.z === 'full') openPlan(id); else zp.step(Number(b.dataset.z)); });
     return;
   }
   pane.innerHTML = `<div class="hm-3d" aria-busy="true"><p class="hm-loading t-small">${s.loading}</p></div>
@@ -195,6 +196,33 @@ async function mountTab() {
     if (needle) v.onRotate(az => needle.style.setProperty('--az', (-az * 180 / Math.PI) + 'deg'));
   } catch (e) { pane.querySelector('.hm-3d').innerHTML = `<p class="hm-loading t-small">${s.fail}</p>`; }
 }
+
+/* ---------- Zoom + drag (floor plan inline and full screen) ---------- */
+function panZoom(frame, el) {
+  let z = 1, x = 0, y = 0, drag = null; const pts = new Map(); let d0 = 0, z0 = 1;
+  const apply = () => { const mx = (z - 1) * el.offsetWidth / 2, my = (z - 1) * el.offsetHeight / 2; x = Math.max(-mx, Math.min(mx, x)); y = Math.max(-my, Math.min(my, y)); el.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(' + z + ')'; frame.classList.toggle('is-zoomed', z > 1); };
+  const set = v => { z = Math.max(1, Math.min(5, v)); if (z === 1) { x = 0; y = 0; } apply(); };
+  frame.addEventListener('wheel', e => { e.preventDefault(); set(z * (e.deltaY < 0 ? 1.15 : 1 / 1.15)); }, { passive: false });
+  el.addEventListener('pointerdown', e => { pts.set(e.pointerId, [e.clientX, e.clientY]); el.setPointerCapture(e.pointerId); if (pts.size === 2) { const [a, b] = [...pts.values()]; d0 = Math.hypot(a[0] - b[0], a[1] - b[1]); z0 = z; drag = null; } else drag = [e.clientX - x, e.clientY - y]; });
+  el.addEventListener('pointermove', e => { if (!pts.has(e.pointerId)) return; pts.set(e.pointerId, [e.clientX, e.clientY]); if (pts.size === 2 && d0) { const [a, b] = [...pts.values()]; set(z0 * Math.hypot(a[0] - b[0], a[1] - b[1]) / d0); } else if (drag && z > 1) { x = e.clientX - drag[0]; y = e.clientY - drag[1]; apply(); } });
+  const up = e => { pts.delete(e.pointerId); if (pts.size < 2) d0 = 0; if (!pts.size) drag = null; };
+  el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
+  el.addEventListener('dblclick', () => set(z > 1 ? 1 : 2.2));
+  el.style.touchAction = 'none'; el.draggable = false;
+  return { step: d => set(z * (d > 0 ? 1.3 : 1 / 1.3)), reset: () => set(1) };
+}
+const planDlg = document.createElement('dialog');
+planDlg.className = 'lx-gallery hm-plan-full'; planDlg.dataset.noTranslate = '';
+document.body.append(planDlg);
+function openPlan(id) {
+  const s = t();
+  planDlg.innerHTML = '<header class="lxg-head"><h2 class="t-title">' + s.plan(HOMES[id].name) + '</h2><div class="hm-plan-tools"><button type="button" data-pz="-1" aria-label="' + s.zout + '">−</button><button type="button" data-pz="1" aria-label="' + s.zin + '">+</button></div><button type="button" class="lxg-close t-button">' + s.close + ' <span aria-hidden="true">✕</span></button></header><div class="lxg-stage hm-plan-stage"><img src="' + HOMES[id].plan + '" alt="' + s.plan(HOMES[id].name) + '"></div>';
+  const img = planDlg.querySelector('img'), zp = panZoom(planDlg.querySelector('.hm-plan-stage'), img);
+  planDlg.querySelectorAll('[data-pz]').forEach(b => b.onclick = () => zp.step(Number(b.dataset.pz)));
+  planDlg.querySelector('.lxg-close').onclick = () => planDlg.close();
+  planDlg.showModal();
+}
+planDlg.addEventListener('keydown', e => { if (e.key === '+' || e.key === '=') planDlg.querySelector('[data-pz="1"]')?.click(); if (e.key === '-') planDlg.querySelector('[data-pz="-1"]')?.click(); });
 
 /* ---------- Finishes gallery (same style as the Lots gallery) ---------- */
 const finDlg = document.createElement('dialog');

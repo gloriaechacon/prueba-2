@@ -135,3 +135,33 @@
 .hm-cmp-diff{color:var(--c-accent-text)}
 .hm-bar{display:none}
 @media(max-width:860px){.hm-cmp-head{grid-template-columns:1fr 1fr}}
+
+/* ---------- Round 8 ---------- */
+/* Viewer controls: tabs read as buttons; Utah | Bell is a prominent segmented control beside them */
+.hm-controls{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px;border-bottom:1px solid var(--c-line)}
+.hm-controls .hm-tabs{border-bottom:0}
+html body .hm-tabs button{padding:0 14px!important;border-radius:8px 8px 0 0!important}
+html body .hm-houses{display:flex;gap:0!important;padding:3px;margin-bottom:6px;border:1px solid var(--c-line-mid);border-radius:999px}
+html body .hm-houses button{min-height:40px!important;padding:0 20px!important;border-radius:999px!important}
+html body .hm-houses button::after{display:none}
+html body .hm-houses button[aria-pressed=true]{background:var(--c-btn)!important}
+html body .hm-houses button[aria-pressed=true],html body .hm-houses button[aria-pressed=true] *{color:var(--c-on-accent)!important}
+/* Finish concept: a clearly clickable card */
+.hm-finish-card{display:grid;grid-template-columns:88px minmax(0,1fr) 22px;align-items:center;gap:14px;width:100%;padding:10px;border:1px solid var(--c-line-mid);border-radius:12px;background:var(--c-paper-2);color:var(--c-ink);text-align:left;cursor:zoom-in;transition:border-color .3s,transform .35s var(--ease-out-expo)}
+.hm-finish-card:hover{border-color:var(--c-accent);transform:translateY(-2px)}
+.hm-finish-card:focus-visible{outline:2px solid var(--c-focus);outline-offset:2px}
+.hm-finish-card img{width:88px;height:60px;object-fit:cover;border-radius:8px;display:block}
+.hm-finish-txt{display:grid;gap:3px}
+.hm-finish-txt small{color:var(--c-muted)}
+.hm-finish-ico,.hm-plan-tools svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.hm-plan-tools button{display:grid;place-items:center}
+/* Floor plan: drag when zoomed, full screen viewer */
+.hm-plan{overflow:hidden!important;place-items:center!important}
+.hm-plan img{transition:transform .18s ease-out!important;cursor:zoom-in}
+.hm-plan.is-zoomed img{cursor:grab}
+.hm-plan-full .lxg-head{gap:16px}
+.hm-plan-full .hm-plan-tools button{width:40px;height:40px;border-radius:8px;border:1px solid #ffffff55;background:none;color:#fff;cursor:pointer}
+.hm-plan-stage{padding:16px!important;background:#fff;display:grid;place-items:center;overflow:hidden}
+.hm-plan-stage img{max-width:100%;max-height:100%;object-fit:contain;transition:transform .18s ease-out;cursor:zoom-in}
+.hm-plan-full{grid-template-rows:auto minmax(0,1fr)!important}
+@media(max-width:860px){.hm-controls{flex-direction:column-reverse;align-items:stretch}.hm-houses{align-self:flex-start}}

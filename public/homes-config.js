@@ -18,10 +18,6 @@ export const HOMES = {
     thumb: '/assets/home-utah',
     turntable: '/assets/turntable/utah/', turntableReady: false,   // set true when the Blender sequence is in place
     finishes: [                         // swatch crops + the two concept images, one gallery
-      { src: '/assets/finishes/utah-stucco', label: 'Exterior stucco', swatch: true },
-      { src: '/assets/finishes/utah-roof', label: 'Roof shingles', swatch: true },
-      { src: '/assets/finishes/utah-oak', label: 'Oak cabinetry and floor', swatch: true },
-      { src: '/assets/finishes/utah-quartz', label: 'Quartz countertop', swatch: true },
       { src: '/assets/finishes/utah-exterior-concept', label: 'Finish concept · exterior', concept: true },
       { src: '/assets/finishes/utah-kitchen-concept', label: 'Finish concept · kitchen' }
     ]
