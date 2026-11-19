@@ -128,3 +128,16 @@ html body main.lx{padding:0!important;margin:0!important;max-width:none!importan
 html body.c-page main.lx#contenido{padding:0!important}
 html body .btn[hidden],html body .lx-all[hidden],html body .lx-cta[hidden]{display:none!important}
 .lx-pill{white-space:normal;text-align:left}
+
+/* ---------- Round 8 ---------- */
+.lx-index-label{display:block;margin-bottom:-8px;color:var(--c-muted)}
+/* Status: Available has its own colour (never the accent); Sold is unmistakable dark grey */
+html body .lx-pill.is-available{background:#2F6FB0!important;border-color:#2F6FB0!important;color:#fff!important}
+html body .lx-pill.is-sold{background:#3f3f3d!important;border-color:#3f3f3d!important;color:#f2f0ea!important}
+/* Gallery zoom stays inside the stage; the outline never catches the pointer */
+.lxg-stage{overflow:hidden;z-index:0}
+.lxg-head,.lxg-foot{position:relative;z-index:2;background:#121210}
+.lxg-photo svg{pointer-events:none}
+.lxg-photo{transition:transform .18s ease-out;will-change:transform}
+.lxg-frame.is-zoomed .lxg-photo{cursor:grab}
+html body .lx-gallery .lx-tabs [role=tab][aria-selected=true],html body .lx-gallery .lx-tabs [role=tab][aria-selected=true] *{color:#fff!important}

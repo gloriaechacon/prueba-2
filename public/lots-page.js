@@ -30,6 +30,10 @@ if (select && panel) {
 
   /* ---------- Static parts of the panel ---------- */
   const index = panel.querySelector('.lx-index');
+  const SEL = { en: 'Select your lot', es: 'Elige tu lote', pt: 'Escolha seu lote' };
+  const selLabel = document.createElement('span'); selLabel.className = 't-label lx-index-label'; selLabel.dataset.noTranslate = '';
+  index.before(selLabel); const paintSel = () => { selLabel.textContent = SEL[lang()] || SEL.en; }; paintSel(); document.addEventListener('rpc:language', paintSel);
+  addEventListener('message', e => { if (e.origin === location.origin && e.data?.type === 'parcel-overview' && select.value) { select.value = ''; select.dispatchEvent(new Event('change')); } });
   index.innerHTML = ids.map((id, i) => `<button type="button" data-lot="${id}" aria-pressed="false" data-no-translate>${pad(i + 1)}</button>`).join('');
   const nav = panel.querySelector('.lx-nav');
   nav.innerHTML = `<button type="button" class="rp-arrow" data-dir="-1"><span class="rp-arrow-ico">${ARROW(-1)}</span></button>
@@ -42,7 +46,6 @@ if (select && panel) {
   const allBtn = document.createElement('button');
   allBtn.type = 'button'; allBtn.className = 'btn btn--secondary btn--block lx-all'; allBtn.dataset.noTranslate = '';
   allBtn.innerHTML = '<span></span><b aria-hidden="true">↖</b>';
-  cta.after(allBtn);
   allBtn.addEventListener('click', () => { if (select.value) { select.value = ''; select.dispatchEvent(new Event('change')); } });
 
   const choose = id => { if (!id || id === select.value) return; select.value = id; select.dispatchEvent(new Event('change')); };
@@ -89,7 +92,7 @@ if (select && panel) {
       <dl class="lx-facts">
         <div class="lx-fact-area"><dt class="t-label">${s.area}</dt>${area}</div>
         <div><dt class="t-label">${s.street}</dt><dd><a class="link-line" href="${esc(maps)}" target="_blank" rel="noopener" title="${s.gmaps}">${esc(lot.front?.nearestStreet || '—')}</a></dd></div>
-        <div><dt class="t-label">${s.status}</dt><dd><span class="lx-pill t-label ${n ? '' : 'is-sold'}">${n ? s.available : s.sold}</span></dd></div>
+        <div><dt class="t-label">${s.status}</dt><dd><span class="lx-pill t-label ${n ? 'is-available' : 'is-sold'}">${n ? s.available : s.sold}</span></dd></div>
       </dl></div>`;
   }
   function items(id) { return (catalog[id] || []).filter(x => !x.hidden); }
@@ -182,7 +185,6 @@ if (select && panel) {
     const list = items(current).filter(x => x.type === gType);
     return `<header class="lxg-head"><h2 class="t-title">${s.lot} ${n} · ${esc(lot.front?.nearestStreet || '')}</h2>
       <div class="lx-tabs" role="tablist"><button type="button" role="tab" data-gtype="photo" aria-selected="${gType === 'photo'}" ${items(current).some(x => x.type === 'photo') ? '' : 'disabled'}>${s.photos}</button><button type="button" role="tab" data-gtype="360" aria-selected="${gType === '360'}" ${items(current).some(x => x.type === '360') ? '' : 'disabled'}>${s.p360}</button></div>
-      <label class="lxg-switch t-label"><span>${s.outline}</span><button type="button" role="switch" aria-checked="${outlineOn}" class="lxg-toggle"><i></i></button></label>
       <button type="button" class="lxg-close t-button">${s.close} <span aria-hidden="true">✕</span></button></header>
       <div class="lxg-stage"><div class="lxg-frame"></div>
         <button type="button" class="rp-arrow lxg-prev" data-gdir="-1" aria-label="${s.prev}"><span class="rp-arrow-ico">${ARROW(-1)}</span></button>
@@ -195,14 +197,15 @@ if (select && panel) {
     const frame = dlg.querySelector('.lxg-frame');
     dlg.querySelector('.lxg-count').textContent = `${gType === 'photo' ? s.photo : '360°'} ${gIndex + 1} / ${list.length}`;
     dlg.querySelectorAll('[data-gi]').forEach((b, i) => b.setAttribute('aria-pressed', String(i === gIndex)));
-    dlg.querySelector('.lxg-switch').hidden = !it.outline;
-    dlg.querySelector('.lxg-note').hidden = !it.outline || !outlineOn;
+    dlg.querySelector('.lxg-note').hidden = !it.outline;
     const build = () => {
       frame.innerHTML = '';
       if (gType === 'photo') {
         const box = document.createElement('div'); box.className = 'lxg-photo';
         const img = new Image(); img.src = base + it.file; img.alt = `${s.photo} ${gIndex + 1}`;
+        if (it.hd) { const hd = new Image(); hd.decoding = 'async'; hd.src = base + it.hd; hd.decode().then(() => { if (img.isConnected) img.src = hd.src; }).catch(() => {}); }
         box.append(img);
+        zoomable(frame, box);
         if (it.outline) {
           const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
           svg.setAttribute('viewBox', '0 0 1 1'); svg.setAttribute('preserveAspectRatio', 'none'); svg.setAttribute('aria-hidden', 'true');
@@ -218,7 +221,7 @@ if (select && panel) {
         const stage = document.createElement('div'); stage.className = 'lxg-pano'; stage.tabIndex = 0; stage.setAttribute('aria-label', s.drag);
         frame.append(stage);
         const hint = document.createElement('span'); hint.className = 'lxg-hint t-label'; hint.textContent = s.drag; frame.append(hint);
-        dispose = panorama(stage, base + it.file, { ...it, showOutline: outlineOn });
+        dispose = panorama(stage, base + it.file, { ...it, hd: it.hd ? base + it.hd : null, showOutline: true });
       }
     };
     if (dir && !reduce.matches && frame.animate && frame.firstChild) {
@@ -250,7 +253,6 @@ if (select && panel) {
   dlg.addEventListener('click', e => {
     if (e.target.closest('.lxg-close')) return closeGallery();
     const tab = e.target.closest('[data-gtype]'); if (tab && !tab.disabled) { gType = tab.dataset.gtype; gIndex = 0; dlg.innerHTML = galleryHTML(); gShow(0); return; }
-    if (e.target.closest('.lxg-toggle')) { outlineOn = !outlineOn; e.target.closest('.lxg-toggle').setAttribute('aria-checked', String(outlineOn)); gShow(0); return; }
     const d = e.target.closest('[data-gdir]'); if (d) { const n = items(current).filter(x => x.type === gType).length; gIndex = (gIndex + Number(d.dataset.gdir) + n) % n; gShow(Number(d.dataset.gdir)); return; }
     const g = e.target.closest('[data-gi]'); if (g) { const i = Number(g.dataset.gi); const dir = Math.sign(i - gIndex); gIndex = i; gShow(dir); }
   });
@@ -258,6 +260,20 @@ if (select && panel) {
     if (e.target.closest('.lxg-pano')) return;
     if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); dlg.querySelector(e.key === 'ArrowRight' ? '.lxg-next' : '.lxg-prev')?.click(); }
   });
+
+  /* Wheel / pinch zoom with drag inside the enlarged photo (outline scales with it). */
+  function zoomable(frame, box) {
+    let z = 1, x = 0, y = 0, drag = null; const pts = new Map(); let d0 = 0, z0 = 1;
+    const apply = () => { const mx = (z - 1) * box.offsetWidth / 2, my = (z - 1) * box.offsetHeight / 2; x = Math.max(-mx, Math.min(mx, x)); y = Math.max(-my, Math.min(my, y)); box.style.transform = `translate(${x}px,${y}px) scale(${z})`; box.style.cursor = z > 1 ? 'grab' : ''; frame.classList.toggle('is-zoomed', z > 1); };
+    const set = v => { z = Math.max(1, Math.min(4, v)); if (z === 1) { x = 0; y = 0; } apply(); };
+    frame.addEventListener('wheel', e => { e.preventDefault(); set(z * (e.deltaY < 0 ? 1.15 : 1 / 1.15)); }, { passive: false });
+    box.addEventListener('pointerdown', e => { pts.set(e.pointerId, [e.clientX, e.clientY]); box.setPointerCapture(e.pointerId); if (pts.size === 2) { const [a, b] = [...pts.values()]; d0 = Math.hypot(a[0] - b[0], a[1] - b[1]); z0 = z; drag = null; } else drag = [e.clientX - x, e.clientY - y]; });
+    box.addEventListener('pointermove', e => { if (!pts.has(e.pointerId)) return; pts.set(e.pointerId, [e.clientX, e.clientY]); if (pts.size === 2 && d0) { const [a, b] = [...pts.values()]; set(z0 * Math.hypot(a[0] - b[0], a[1] - b[1]) / d0); } else if (drag && z > 1) { x = e.clientX - drag[0]; y = e.clientY - drag[1]; apply(); } });
+    const up = e => { pts.delete(e.pointerId); if (pts.size < 2) d0 = 0; if (!pts.size) drag = null; };
+    box.addEventListener('pointerup', up); box.addEventListener('pointercancel', up);
+    box.addEventListener('dblclick', () => set(z > 1 ? 1 : 2.2));
+    box.style.touchAction = 'none';
+  }
 
   /* ---------- Data ---------- */
   Promise.all([

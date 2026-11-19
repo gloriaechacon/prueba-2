@@ -18,7 +18,8 @@
     const world = $('#lot-explorer .zone-world');
     info = $('.zone-place-info');
     // Sold tags
-    const sold = () => document.querySelectorAll('.zone-pin.is-sold>span').forEach(s => { s.dataset.sold = SOLD[lang()] || SOLD.en; });
+    const AV = { en: 'Available', es: 'Disponible', pt: 'Disponível' };
+    const sold = () => { document.querySelectorAll('.zone-pin.is-sold>span').forEach(s => { s.dataset.sold = SOLD[lang()] || SOLD.en; }); document.querySelectorAll('.zone-pin:not(.is-sold)>span').forEach(s => { s.dataset.state = AV[lang()] || AV.en; }); };
     sold();
     document.addEventListener('rpc:language', sold);
 
@@ -27,9 +28,11 @@
     seg.className = 'lx-seg';
     seg.setAttribute('role', 'group');
     seg.setAttribute('aria-label', 'Controles del mapa');
-    seg.innerHTML = '<button type="button" data-m="pan" aria-pressed="true">Mover</button><button type="button" data-m="orbit" aria-pressed="false">Rotar</button><button type="button" data-m="area" aria-pressed="false">Ver entorno</button>';
+    // Two separate groups inside the map: movement and view.
+    seg.innerHTML = '<div class="lx-seg-group" role="group" aria-label="Movimiento"><button type="button" data-m="pan" aria-pressed="true">Mover</button><button type="button" data-m="orbit" aria-pressed="false">Rotar</button></div><div class="lx-seg-group" role="group" aria-label="Vista"><button type="button" data-m="area" aria-pressed="false">Ver entorno</button><button type="button" data-m="all" aria-pressed="false">Ver todo Rainbow Park</button></div>';
     world.append(seg);
-    const [pan, orbit, area] = seg.querySelectorAll('button');
+    const [pan, orbit, area, all] = seg.querySelectorAll('button');
+    all.onclick = () => { area.setAttribute('aria-pressed', 'false'); close(); window.rpZoneEngine?.clearSelection?.(); parent.postMessage({ type: 'parcel-overview' }, location.origin); };
     pan.onclick = () => { area.setAttribute('aria-pressed', 'false'); $('[data-zone-mode="pan"]')?.click(); pan.setAttribute('aria-pressed', 'true'); orbit.setAttribute('aria-pressed', 'false'); };
     orbit.onclick = () => { area.setAttribute('aria-pressed', 'false'); $('[data-zone-mode="orbit"]')?.click(); orbit.setAttribute('aria-pressed', 'true'); pan.setAttribute('aria-pressed', 'false'); };
     area.onclick = () => {

@@ -89,7 +89,7 @@ function renderRegionalAreas(){
 function anchor(){const ray=camera.getPickRay(new C.Cartesian2(scene.canvas.clientWidth/2,scene.canvas.clientHeight/2));return scene.globe.show?scene.globe.pick(ray,scene):scene.pickPosition(new C.Cartesian2(scene.canvas.clientWidth/2,scene.canvas.clientHeight/2))}
 function flyToPoint(target,range,heading=0,pitch=-.68,duration){camera.cancelFlight();camera.flyToBoundingSphere(new C.BoundingSphere(target,1),{offset:new C.HeadingPitchRange(heading,pitch,range),duration:duration??(reduced?0:1.35),complete:()=>scene.requestRender()});scene.requestRender()}
 function overview(duration){flyToPoint(collectionSphere.center,Math.max(1800,collectionSphere.radius*2.8)*(scene.canvas.clientWidth<600?1.35:1),0,-.78,duration)}
-const collectionPin=document.createElement('button');collectionPin.type='button';collectionPin.className='zone-collection-pin';collectionPin.setAttribute('aria-label','Lotes Rainbow Park');collectionPin.innerHTML='<svg viewBox="0 0 24 32" aria-hidden="true"><path d="M12 30S2 18 2 12a10 10 0 0 1 20 0c0 6-10 18-10 18Z" fill="#6b5733" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.5" fill="#fff"/></svg><span>Lotes Rainbow Park</span>';collectionPin.hidden=true;document.querySelector('#zone-pins').append(collectionPin);collectionPin.addEventListener('click',()=>overview());
+const collectionPin=document.createElement('button');collectionPin.type='button';collectionPin.className='zone-collection-pin';collectionPin.setAttribute('aria-label','Lotes Rainbow Park');collectionPin.innerHTML='<svg viewBox="0 0 24 32" aria-hidden="true"><path d="M12 30S2 18 2 12a10 10 0 0 1 20 0c0 6-10 18-10 18Z" fill="#6b5733" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3.5" fill="#fff"/></svg><span>Lotes de Rainbow Park</span>';collectionPin.hidden=true;document.querySelector('#zone-pins').append(collectionPin);collectionPin.addEventListener('click',()=>overview());
 const clusterButtons=new Map();
 let openCluster=null;
 const picker=document.createElement('div');
@@ -113,10 +113,10 @@ function renderPins(){
  renderRegionalAreas();
  const visible=[];
  const regionalDistance=C.Cartesian3.distance(camera.positionWC,collectionSphere.center);
- const regionalScale=regionalDistance>12000;
+ const regionalScale=regionalDistance>(document.body.classList.contains('embedded-lotes2')?7000:12000);
  const cp=C.SceneTransforms.worldToWindowCoordinates(scene,collectionSphere.center);
  const facing=C.Cartesian3.dot(C.Cartesian3.subtract(collectionSphere.center,camera.positionWC,new C.Cartesian3()),camera.directionWC)>0;
- collectionPin.hidden=!regionalScale||!facing||!cp||cp.x<0||cp.x>scene.canvas.clientWidth||cp.y<0||cp.y>scene.canvas.clientHeight;
+ collectionPin.hidden=!(document.body.classList.contains('embedded-lotes2')?regionalDistance>4500:regionalScale)||!facing||!cp||cp.x<0||cp.x>scene.canvas.clientWidth||cp.y<0||cp.y>scene.canvas.clientHeight;
  if(cp){collectionPin.style.left=cp.x+'px';collectionPin.style.top=cp.y+'px'}
  for(const lot of lots){
   const cart=C.Cartographic.fromDegrees(...lot.coordinates);let h=heightLocal(lot.x,lot.z)*factor;
@@ -132,7 +132,8 @@ function renderPins(){
  const used=new Set(),singles=new Set();
  const V2=document.body.classList.contains('embedded-lotes2');
  // v2: never stack markers; raise the ones that would overlap and draw a fine leader to their lot.
- if(V2){const placed=[];for(const v of [...visible].sort((a,b)=>b.y-a.y)){let y=v.y;for(let k=0;k<12;k++){const hit=placed.find(p=>Math.abs(p.x-v.x)<30&&Math.abs(p.y-y)<30);if(!hit)break;y=hit.y-32}v.lead=v.y-y;v.y=y;placed.push({x:v.x,y})}for(const v of visible)v.lot.pin.style.setProperty('--lead',(v.lead||0)+'px')}
+ if(V2){const dA=activeLot?C.Cartesian3.distance(camera.positionWC,point(activeLot.x,activeLot.z)):Infinity;document.body.classList.toggle('lots-close',dA<1400);document.body.classList.toggle('lots-far',regionalDistance>4500);for(const l of lots)l.pin?.classList.toggle('is-current',l===activeLot);
+ const placed=[];for(const v of [...visible].sort((a,b)=>a.lot.id-b.lot.id)){let y=v.y;for(let k=0;k<12;k++){const hit=placed.find(p=>Math.abs(p.x-v.x)<30&&Math.abs(p.y-y)<30);if(!hit)break;y=hit.y-32}v.lead=v.y-y;v.y=y;placed.push({x:v.x,y})}for(const v of visible)v.lot.pin.style.setProperty('--lead',(v.lead||0)+'px')}
  for(const group of (V2?visible.map(v=>({x:v.x,y:v.y,points:[v]})):clusterPins(visible))){
   if(group.points.length===1){const {lot}=group.points[0];singles.add(lot);lot.pin.style.left=group.x+'px';lot.pin.style.top=group.y+'px';continue;}
   const key=group.points.map(p=>p.lot.id).sort((a,b)=>a-b).join('-');used.add(key);
