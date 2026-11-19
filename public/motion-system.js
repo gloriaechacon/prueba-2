@@ -112,107 +112,25 @@
   /* ---------- Portal intro component (phase-1 arrival, extracted unchanged) ----------
    * Any .portal[data-portal]: arched frame + film grows to full screen with scroll,
    * split headline travels from beside the frame into place. */
+  /* Portal: the whole geometry lives in portal.css as a function of --portal-p (0 = small arch,
+     1 = full screen). CSS paints the arch before any JS; here GSAP only scrubs the variables with the
+     scroll, so scrolling back up closes the film to the arch again. No one-off entrance. */
+  /* Portal: the whole geometry lives in portal.css as a function of --portal-p (0 = small arch,
+     1 = full screen). CSS paints the arch before any JS; here GSAP only scrubs the variables with the
+     scroll, so scrolling back up closes the film to the arch again. No one-off entrance. */
   function initPortal(portal) {
-    const stage = portal.querySelector('.portal-stage');
-    const frame = portal.querySelector('.portal-frame');
-    const video = frame.querySelector('video,img');
-    const shade = portal.querySelector('.portal-shade');
-    const left = portal.querySelector('.portal-line--left');
-    const right = portal.querySelector('.portal-line--right');
-    const inners = portal.querySelectorAll('.portal-line > span');
-    const tinted = portal.querySelectorAll('.portal-title, .portal-meta, .portal-utility');
-    const footer = portal.querySelector('.portal-footer');
-
     portal.classList.add('is-live');
-    const state = { p: 0, o: 1 };
-    let g;
-    const lerp = (a, b, t) => a + (b - a) * t;
-
-    function geometry() {
-      const W = stage.clientWidth, H = stage.clientHeight;
-      const mobile = W < 760;
-      const w0 = mobile ? W * 0.62 : Math.min(W * 0.3, 470);
-      const h0 = Math.min(H * (mobile ? 0.44 : 0.64), w0 * 1.5);
-      const top = (H - h0) / 2 + H * (mobile ? 0.05 : 0.04);
-      g = { W, H, w0, h0, top, left: (W - w0) / 2, mobile };
-    }
-
-    function applyClip() {
-      if (!g) geometry();
-      const e = state.p;
-      const top = lerp(g.top + (1 - state.o) * g.h0, 0, e);
-      const side = lerp(g.left, 0, e);
-      const bottom = lerp(g.H - g.top - g.h0, 0, e);
-      const r = lerp(g.w0 / 2, 0, e);
-      frame.style.clipPath = `inset(${top}px ${side}px ${bottom}px ${side}px round ${r}px ${r}px 0px 0px)`;
-    }
-
-    /* Start pose for the split headline, measured from its final CSS layout. */
-    function startPose(line, isLeft) {
-      if (!g) geometry();
-      const prev = line.style.transform;
-      line.style.transform = 'none';
-      const box = line.getBoundingClientRect();
-      const sb = stage.getBoundingClientRect();
-      line.style.transform = prev;
-      const rect = { left: box.left - sb.left, right: box.right - sb.left, top: box.top - sb.top, bottom: box.bottom - sb.top, width: box.width, height: box.height };
-      const gutter = Math.max(16, g.W * 0.05);
-      const gap = g.mobile ? 14 : 28;
-      if (g.mobile) {
-        const scale = Math.min(1, (g.W - gutter * 2) / rect.width);
-        const y = isLeft
-          ? (g.top - gap - rect.height * scale) - rect.top
-          : (g.top + g.h0 + gap) - rect.top;
-        return { x: 0, y, scale };
-      }
-      const room = g.left - gap - gutter;
-      const scale = Math.min(1, room / rect.width);
-      const anchor = g.top + g.h0 * (isLeft ? 0.3 : 0.66);
-      const y = anchor - (rect.top + rect.height * scale / 2);
-      const x = isLeft ? gutter - rect.left : (g.W - gutter) - rect.right;
-      return { x, y, scale };
-    }
-
-    gsap.set(left, { transformOrigin: 'left top' });
-    gsap.set(right, { transformOrigin: 'right top' });
-
-    const scrollTl = gsap.timeline({
+    gsap.timeline({
       defaults: { ease: 'none' },
-      scrollTrigger: {
-        trigger: portal,
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: 0.6,
-        invalidateOnRefresh: true,
-        onRefreshInit: () => { g = null; },
-        onRefresh: () => { geometry(); applyClip(); }
-      }
-    });
-    scrollTl
-      .to(state, { p: 1, duration: 0.7, ease: 'power2.inOut', onUpdate: applyClip }, 0)
-      .fromTo(video, { scale: 1.2 }, { scale: 1, duration: 0.7 }, 0)
-      .fromTo(left, { x: () => startPose(left, true).x, y: () => startPose(left, true).y, scale: () => startPose(left, true).scale },
-        { x: 0, y: 0, scale: 1, duration: 0.7, ease: 'power2.inOut' }, 0)
-      .fromTo(right, { x: () => startPose(right, false).x, y: () => startPose(right, false).y, scale: () => startPose(right, false).scale },
-        { x: 0, y: 0, scale: 1, duration: 0.7, ease: 'power2.inOut' }, 0)
-      .fromTo(tinted, { '--portal-tint': 0 }, { '--portal-tint': 1, duration: 0.22 }, 0.3)
-      .fromTo(shade, { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0.35)
-      .fromTo(footer, { autoAlpha: 0, y: 26 }, { autoAlpha: 1, y: 0, duration: 0.16 }, 0.7)
+      scrollTrigger: { trigger: portal, start: 'top top', end: 'bottom bottom', scrub: 0.6 }
+    })
+      .fromTo(portal, { '--portal-p': 0 }, { '--portal-p': 1, duration: 0.7, ease: 'power2.inOut' }, 0)
+      .fromTo(portal, { '--portal-tint': 0 }, { '--portal-tint': 1, duration: 0.22 }, 0.3)
+      .fromTo(portal, { '--portal-shade': 0 }, { '--portal-shade': 1, duration: 0.3 }, 0.35)
+      .fromTo(portal, { '--portal-foot': 0 }, { '--portal-foot': 1, duration: 0.16 }, 0.7)
       .to({}, { duration: 0.12 });
-
-    /* Entrance (the phase-1 opening, triggered when the portal arrives): frame opens, lines rise. */
-    state.o = 0; applyClip();
-    gsap.set(inners, { y: 0, yPercent: 110 });
-    const meta = portal.querySelectorAll('.portal-meta, .portal-utility');
-    gsap.set(meta, { autoAlpha: 0 });
-    ScrollTrigger.create({
-      trigger: portal, start: 'top 75%', once: true,
-      onEnter: () => gsap.timeline()
-        .to(state, { o: 1, duration: 1.3, ease: 'expo.out', onUpdate: applyClip }, 0)
-        .to(inners, { yPercent: 0, duration: 1.2, ease: EASE, stagger: 0.12 }, 0.15)
-        .to(meta, { autoAlpha: 1, duration: 0.8 }, 0.5)
-    });
   }
+  const portalStatic = () => document.querySelectorAll('[data-portal]').forEach(p => p.classList.add('portal--static'));
 
   /* Inner-page intro: nav over media + gentle parallax (parallax only with motion). */
   function pageIntroNav() {
@@ -350,7 +268,7 @@
       if (!window.gsap) await load('/vendor/gsap.min.js');
       if (!window.ScrollTrigger) await load('/vendor/ScrollTrigger.min.js');
       // The failsafe already showed the static page: don't re-layout it now.
-      if (window.__rpMotionTimedOut) return;
+      if (window.__rpMotionTimedOut) { portalStatic(); return; }
       gsap.registerPlugin(ScrollTrigger);
       root.classList.add('motion-ready');
       initArrival();
@@ -365,6 +283,7 @@
       window.rpMotion = { refresh: () => ScrollTrigger.refresh(), bind: initReveals };
     } catch (error) {
       root.classList.remove('motion-ready', 'motion-arrival');
+      portalStatic();
       finish();
       console.info('Motion unavailable; content remains readable.');
     }

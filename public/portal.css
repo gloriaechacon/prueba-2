@@ -3,8 +3,10 @@
    headline moves from beside the frame into place.
    Markup: .portal[data-portal] > .portal-stage > .portal-frame(video) + .portal-shade
            + .portal-meta + .portal-title(.portal-line--left/right > span) + .portal-footer + .portal-utility
-   Default (no JS / reduced motion) = final state: full-screen film, headline in place.
-   .portal.is-live (motion-system.js) = pinned, scroll-driven version. */
+   Everything is a function of --portal-p (0 = small centred arch with the two title lines at its
+   sides, 1 = full-screen film). CSS sets p = 0, so the arch is what paints first, even before JS;
+   motion-system.js scrubs the variables with the scroll in both directions.
+   .portal--static (reduced motion or motion unavailable) = final state at p = 1. */
 
 .portal{
   --portal-gutter:clamp(16px,5vw,88px);
@@ -15,14 +17,22 @@
   background:var(--portal-paper);color:var(--portal-cream);
   isolation:isolate
 }
-.portal.is-live{height:290svh}
-.portal-stage{position:relative;height:100svh;min-height:560px;overflow:hidden}
-.portal.is-live .portal-stage{position:sticky;top:0}
+.portal{height:290svh;--portal-p:0;--portal-tint:0;--portal-shade:0;--portal-foot:0;--q:calc(1 - var(--portal-p));
+  --H:max(100svh,560px);--w0:min(30vw,470px);--h0:min(64svh,calc(var(--w0) * 1.5));--lift:.04;--s:1}
+.portal-stage{position:sticky;top:0;height:100svh;min-height:560px;overflow:hidden}
+.portal--static{height:100svh;--portal-p:1;--portal-tint:1;--portal-shade:1;--portal-foot:1}
+.portal--static .portal-stage{position:relative}
+@media(prefers-reduced-motion:reduce){.portal{height:100svh;--portal-p:1;--portal-tint:1;--portal-shade:1;--portal-foot:1}.portal .portal-stage{position:relative}}
+@media(max-width:1199px) and (min-width:761px){.portal{--s:.85}}
 
-.portal-frame{position:absolute;inset:0;overflow:hidden;background:var(--c-deep);will-change:clip-path}
+.portal-frame{position:absolute;inset:0;overflow:hidden;background:var(--c-deep);will-change:clip-path;
+  clip-path:inset(calc(((100% - var(--h0)) / 2 + 100% * var(--lift)) * var(--q)) calc((100% - var(--w0)) / 2 * var(--q))
+    calc(((100% - var(--h0)) / 2 - 100% * var(--lift)) * var(--q)) calc((100% - var(--w0)) / 2 * var(--q))
+    round calc(var(--w0) / 2 * var(--q)) calc(var(--w0) / 2 * var(--q)) 0 0)}
+.portal-frame video,.portal-frame img{scale:calc(1 + .2 * var(--q))}
 .portal-frame video,.portal-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 55%;transform-origin:50% 50%}
 .portal-shade{position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(90deg,rgb(var(--c-shade) / .55),rgb(var(--c-shade) / .08) 60%),linear-gradient(0deg,rgb(var(--c-shade) / .62),transparent 55%)}
+  background:linear-gradient(90deg,rgb(var(--c-shade) / .55),rgb(var(--c-shade) / .08) 60%),linear-gradient(0deg,rgb(var(--c-shade) / .62),transparent 55%);opacity:var(--portal-shade)}
 
 .portal-meta{position:absolute;z-index:2;top:calc(var(--nav-height,86px) + 2.5vh);left:var(--portal-gutter);right:var(--portal-gutter);
   display:flex;justify-content:space-between;gap:24px;font:600 var(--step--2)/1.4 var(--font-sans);letter-spacing:var(--track-label);text-transform:uppercase}
@@ -31,13 +41,18 @@
   font-family:var(--font-display);font-weight:300;font-size:var(--step-5);line-height:var(--lh-display);letter-spacing:var(--track-display)}
 .portal-line{position:absolute;display:block;overflow:hidden;padding:.04em .06em .14em;margin:-.04em -.06em -.14em;white-space:nowrap;will-change:transform}
 .portal-line>span{display:block;will-change:transform}
-.portal-line--left{left:var(--portal-gutter);top:30%}
-.portal-line--right{right:var(--portal-gutter);top:calc(30% + .98em);text-align:right}
+.portal-line--left{left:var(--portal-gutter);top:30%;transform-origin:left top;
+  --ly:calc((var(--H) - var(--h0)) / 2 + var(--H) * var(--lift) + var(--h0) * .3 - var(--H) * .3 - .62em * var(--s));
+  transform:translateY(calc(var(--ly) * var(--q))) scale(calc(1 - (1 - var(--s)) * var(--q)))}
+.portal-line--right{right:var(--portal-gutter);top:calc(30% + .98em);text-align:right;transform-origin:right top;
+  --ry:calc((var(--H) - var(--h0)) / 2 + var(--H) * var(--lift) + var(--h0) * .66 - var(--H) * .3 - .98em - .62em * var(--s));
+  transform:translateY(calc(var(--ry) * var(--q))) scale(calc(1 - (1 - var(--s)) * var(--q)))}
 .portal-line em{font-style:italic;font-weight:300}
 /* Live portal: title/meta/utility go from ink (over paper) to light (over film); --portal-tint is tweened 0 → 1 */
-.portal.is-live :is(.portal-title,.portal-meta,.portal-utility){color:color-mix(in srgb,var(--c-on-deep) calc(var(--portal-tint,1) * 100%),var(--c-ink))}
+.portal :is(.portal-title,.portal-meta,.portal-utility){color:color-mix(in srgb,var(--c-on-deep) calc(var(--portal-tint,1) * 100%),var(--c-ink))}
 
 .portal-footer{position:absolute;z-index:2;left:var(--portal-gutter);right:var(--portal-gutter);bottom:calc(64px + 4vh);
+  opacity:var(--portal-foot);transform:translateY(calc(26px * (1 - var(--portal-foot))));
   display:flex;justify-content:space-between;align-items:flex-end;gap:32px}
 .portal-footer p{margin:0;max-width:30ch;font-size:var(--step-0);line-height:1.55}
 .portal-actions{display:flex;flex-direction:column;align-items:flex-end;gap:14px}
@@ -52,6 +67,9 @@
 
 @media(max-width:760px){
   .portal,.portal-stage{min-height:520px}
+  .portal{--H:max(100svh,520px);--w0:62vw;--h0:min(44svh,calc(var(--w0) * 1.5));--lift:.05;--s:1}
+  .portal .portal-line--left{--ly:calc((var(--H) - var(--h0)) / 2 + var(--H) * var(--lift) - 14px - 1.24em - var(--H) * .27)}
+  .portal .portal-line--right{--ry:calc((var(--H) - var(--h0)) / 2 + var(--H) * var(--lift) + var(--h0) + 14px - var(--H) * .27 - 1em)}
   .portal-meta{flex-direction:column;gap:6px}
   .portal-meta span:last-child{display:none}
   .portal-title{font-size:clamp(3.1rem,15vw,4.5rem)}
