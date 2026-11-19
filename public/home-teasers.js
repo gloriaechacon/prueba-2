@@ -17,3 +17,9 @@
   document.addEventListener('rpc:language', label);
   label();
 })();
+/* Hero clouds behind the first headline; they part left/right with the scroll (clouds.js). */
+(() => {
+  const stage = document.querySelector('.arrival-stage');
+  const lines = [...document.querySelectorAll('.arrival-beat[data-beat="0"] .arrival-line')];
+  if (stage && lines.length && window.rpClouds) window.rpClouds.mount(stage, { lines, track: document.querySelector('.arrival'), from: .13, to: .42 });
+})();

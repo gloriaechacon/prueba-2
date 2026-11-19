@@ -107,17 +107,4 @@ html.motion-pending .arrival-intro-label{opacity:0}
   .arrival-scroll i::after{animation:none;top:30%}
 }
 
-/* Legibility of the split headline over the 3D scene (all palettes): a soft paper veil behind
-   each line plus a light halo on the letters. The veils are local, so the house stays clear. */
-.arrival-heading::before,.arrival-heading::after{content:"";position:absolute;z-index:0;pointer-events:none;height:1.9em;
-  background:radial-gradient(closest-side,color-mix(in srgb,var(--c-paper) 42%,transparent),color-mix(in srgb,var(--c-paper) 18%,transparent) 58%,transparent)}
-.arrival-heading::before{left:calc(var(--arrival-gutter) - .7em);top:calc(var(--nav-height,86px) + 9vh - .46em);width:min(8.5em,70vw)}
-.arrival-heading::after{right:calc(var(--arrival-gutter) - .7em);top:calc(var(--nav-height,86px) + 9vh + .98em - .46em);width:min(7.5em,66vw)}
-.arrival-line>span{text-shadow:0 0 .06em color-mix(in srgb,var(--c-paper) 85%,transparent),0 0 .35em color-mix(in srgb,var(--c-paper) 45%,transparent)}
-html.motion-pending .arrival-heading::before,html.motion-pending .arrival-heading::after{opacity:0}
-.arrival-heading::before,.arrival-heading::after{transition:opacity .8s ease .4s}
-@media(max-width:760px){
-  .arrival-heading::before{top:calc(var(--nav-height,86px) + 11vh - .7em);width:84vw}
-  .arrival-heading::after{top:calc(var(--nav-height,86px) + 11vh + 1em - .7em);width:72vw}
-}
-.arrival-heading .arrival-line{z-index:1}
+/* Headline legibility comes from the cloud layers (clouds.js), placed between the scene and the text. */

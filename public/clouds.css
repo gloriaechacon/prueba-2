@@ -1,0 +1,6 @@
+/* Cloud legibility layer (clouds.js): scene → clouds → text */
+.rp-clouds{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden;color:color-mix(in srgb,#fffaf1 82%,var(--c-paper));opacity:0;transition:opacity 1.6s ease .3s}
+.rp-clouds.is-in{opacity:1}
+.rp-cloud{position:absolute;opacity:var(--op);will-change:transform,opacity}
+.rp-cloud svg{display:block;width:100%;height:100%;overflow:visible}
+@media(prefers-reduced-motion:reduce){.rp-clouds{transition:none}}
