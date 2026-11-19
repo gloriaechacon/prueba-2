@@ -52,14 +52,45 @@ body.embedded-lotes2 .zone-place-info p{margin:0;display:-webkit-box;-webkit-lin
 body.embedded-lotes2 .zone-place-info a{display:inline-block;margin-right:16px;color:var(--c-ink)!important;text-decoration:underline;text-underline-offset:4px}
 @media(prefers-reduced-motion:reduce){body.embedded-lotes2 .zone-pin span,body.embedded-lotes2 .zone-pin span::before,body.embedded-lotes2 .zone-place-info{animation:none!important;transition:none!important;opacity:1!important}}
 /* Stronger than the legacy pin styles and the type scale */
-html[lang] body.embedded-lotes2 #zone-pins .zone-pin{width:auto!important;height:auto!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;border-radius:0!important;outline-offset:4px}
-html[lang] body.embedded-lotes2 #zone-pins .zone-pin::before,html[lang] body.embedded-lotes2 #zone-pins .zone-pin::after{display:none!important}
-html[lang] body.embedded-lotes2 #zone-pins .zone-pin>span{width:38px!important;height:38px!important;padding:0!important;display:grid!important;place-items:center;border-radius:50%!important;background:var(--c-paper)!important;border:2px solid var(--c-accent)!important}
-html[lang] body.embedded-lotes2 #zone-pins .zone-pin>span>strong{font:500 13px/1 var(--font-sans)!important;letter-spacing:.04em!important;text-transform:none!important;color:var(--c-ink)!important;margin:0!important}
-html[lang] body.embedded-lotes2 #zone-pins .zone-pin[aria-pressed=true]>span{background:var(--c-btn)!important;border-color:var(--c-paper)!important}
-html[lang] body.embedded-lotes2 #zone-pins .zone-pin[aria-pressed=true]>span>strong{color:var(--c-on-accent)!important}
-html[lang] body.embedded-lotes2 #zone-pins .zone-pin.is-sold>span{width:auto!important;height:auto!important;padding:5px 9px!important;border-radius:6px!important;background:#8e8e8a!important;border:0!important}
-html[lang] body.embedded-lotes2 #zone-pins .zone-pin.is-sold>span>strong{display:none!important}
-html[lang] body.embedded-lotes2 #zone-pins .zone-pin.is-sold>span::after{content:attr(data-sold);font:500 11px/1 var(--font-sans);letter-spacing:.18em;text-transform:uppercase;color:#fff}
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin{width:auto!important;height:auto!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;border-radius:0!important;outline-offset:4px}
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin::before,html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin::after{display:none!important}
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin>span{width:38px!important;height:38px!important;padding:0!important;display:grid!important;place-items:center;border-radius:50%!important;background:var(--c-paper)!important;border:2px solid var(--c-accent)!important}
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin>span>strong{font:500 13px/1 var(--font-sans)!important;letter-spacing:.04em!important;text-transform:none!important;color:var(--c-ink)!important;margin:0!important}
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin[aria-pressed=true]>span{background:var(--c-btn)!important;border-color:var(--c-paper)!important}
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin[aria-pressed=true]>span>strong{color:var(--c-on-accent)!important}
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin.is-sold>span{width:auto!important;height:auto!important;padding:5px 9px!important;border-radius:6px!important;background:#8e8e8a!important;border:0!important}
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin.is-sold>span>strong{display:none!important}
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin.is-sold>span::after{content:attr(data-sold);font:500 11px/1 var(--font-sans);letter-spacing:.18em;text-transform:uppercase;color:#fff}
 .lx-seg:has([data-m=area][aria-pressed=true]) [data-m]:not([data-m=area]){background:transparent!important;color:var(--c-ink)!important}
 @media(max-width:600px){body.embedded-lotes2 .zone-controls{display:none!important}.lx-seg{right:14px;justify-content:space-between}.lx-seg button{padding:0 10px!important}}
+
+/* ---------- Review round 7: clean markers, leaders instead of stacks, palette colours ---------- */
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin{transform:translate(-50%,-100%)!important;overflow:visible!important}
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin>span{width:28px!important;height:28px!important;border:1.5px solid var(--c-accent)!important;background:var(--c-paper)!important;box-shadow:0 2px 8px rgb(0 0 0 / .3)!important}
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin>span>strong{font:500 12px/1 var(--font-sans)!important;letter-spacing:.02em!important}
+/* leader: a fine line from the marker down to its lot (long when the marker had to be raised) */
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin::after{display:block!important;content:""!important;position:absolute;left:50%;top:100%;width:1px;height:calc(var(--lead,0px) + 12px);margin-left:-.5px;background:var(--c-paper);box-shadow:0 0 2px rgb(0 0 0 / .5)}
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin>span::before{inset:-5px!important;border-width:1.5px!important}
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin:not(.is-sold):not([aria-pressed=true])>span::before{animation:none!important}
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin:not(.is-sold)>span::before{animation:lx-idle 5s ease-in-out infinite!important}
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin[aria-pressed=true]>span{background:var(--c-btn)!important;border-color:var(--c-btn)!important}
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin[aria-pressed=true]>span>strong{color:var(--c-paper)!important}
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin[aria-pressed=true]>span::before{opacity:1;animation:lx-ring 1.8s ease-out infinite!important}
+/* sold: small grey dot + small "Sold" label, never a plate */
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin.is-sold>span{width:10px!important;height:10px!important;padding:0!important;border-radius:50%!important;background:#8e8e8a!important;border:1.5px solid #f2f0ea!important;box-shadow:0 1px 4px rgb(0 0 0 / .4)!important}
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin.is-sold>span::after{position:absolute;left:14px;top:50%;transform:translateY(-50%);white-space:nowrap;font:500 10px/1 var(--font-sans)!important;letter-spacing:.14em;text-transform:uppercase;color:#fff;text-shadow:0 1px 3px #000}
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin.is-sold::after{height:calc(var(--lead,0px) + 6px)}
+/* surroundings markers and map controls in the palette, not Cesium / fixed blue */
+body.embedded-lotes2 .zone-poi{background:var(--c-deep)!important;color:var(--c-on-deep)!important;border:1.5px solid var(--c-paper)!important;box-shadow:0 2px 8px rgb(0 0 0 / .35)!important}
+body.embedded-lotes2 .zone-poi[aria-pressed=true]{background:var(--c-btn)!important;color:var(--c-on-accent)!important}
+body.embedded-lotes2 .zone-collection-pin svg path{fill:var(--c-deep)}
+html body.embedded-lotes2 .zone-controls button{width:40px!important;min-height:40px!important;height:40px!important;border-radius:50%!important;background:color-mix(in srgb,var(--c-paper) 94%,transparent)!important;color:var(--c-ink)!important;border:1px solid var(--c-line-mid)!important;font:400 20px/1 var(--font-sans)!important;box-shadow:0 2px 10px rgb(var(--c-shade) / .2)!important}
+body.embedded-lotes2 .zone-controls{gap:8px!important}
+body.embedded-lotes2 .cesium-widget-credits{font:400 10px/1.4 var(--font-sans)!important;color:#f3efe6!important;background:rgb(var(--c-shade) / .55)!important;padding:2px 8px!important;border-radius:6px 0 0 0;right:0!important;left:auto!important;bottom:0!important}
+body.embedded-lotes2 .cesium-widget-credits a{color:inherit!important}
+body.embedded-lotes2 .cesium-credit-logoContainer img{height:14px!important;width:auto!important;opacity:.75}
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin{display:block!important;min-height:0!important;border-radius:0!important}
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin:hover{background:transparent!important}
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin::after{width:1px!important;left:50html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin{display:block!important;min-height:0!important;border-radius:0!important}
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin:hover{background:transparent!important}
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin::after{width:1px!important;left:50%!important}

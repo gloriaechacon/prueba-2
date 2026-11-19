@@ -73,6 +73,8 @@
     document.addEventListener('pointerdown', e => { if (!info.contains(e.target) && !e.target.closest('.zone-regional-label')) close(); });
   }
 
+  // 'View all Rainbow Park' / initial state from the page: no lot selected, whole area.
+  addEventListener('message', e => { if (e.origin === location.origin && e.source === parent && e.data?.type === 'rainbow-overview' && document.querySelector('.zone-pin[aria-pressed="true"]')) window.rpZoneEngine?.clearSelection?.(); });
   // Pins and the place card are created by the explorer once Cesium has loaded.
   const wait = setInterval(() => {
     if ($('#lot-explorer .zone-world') && $('.zone-place-info') && $('.zone-pin')) { clearInterval(wait); init(); }

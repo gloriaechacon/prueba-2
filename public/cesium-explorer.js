@@ -29,6 +29,8 @@ const collectionSphere=C.BoundingSphere.fromPoints(lots.map(l=>point(l.x,l.z)));
 const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
 // Only sourced geographic boundaries are shaded; never infer a boundary from a radius.
 let regionalAreas=[];
+// v2 (lots page): regional outlines follow the palette instead of the fixed source colours
+const areaColor=area=>document.body.classList.contains('embedded-lotes2')?(getComputedStyle(document.documentElement).getPropertyValue('--c-accent').trim()||area.color):area.color;
 const regionalOverlay=document.createElement('div');regionalOverlay.className='zone-regional-labels';regionalOverlay.setAttribute('aria-label','Lugares del entorno');container.append(regionalOverlay);
 const regionalNote=document.createElement('p');regionalNote.className='zone-regional-note';regionalNote.hidden=true;
 regionalNote.textContent='Áreas: comunidades Rainbow Park y Rainbow Springs (US Census), aeropuerto (EPA). Selecciona un pin para saber más.';
@@ -59,8 +61,8 @@ fetch(new URL('./assets/geography/regional-context.json',import.meta.url)).then(
   const shapes=area.geometry?.type==='MultiPolygon'?area.geometry.coordinates:area.geometry?.type==='Polygon'?[area.geometry.coordinates]:[];
   for(const rings of shapes){
    const positions=ring=>ring.map(([lon,lat])=>C.Cartesian3.fromDegrees(lon,lat));
-   entities.push(viewer.entities.add({show:false,polygon:{hierarchy:new C.PolygonHierarchy(positions(rings[0]),rings.slice(1).map(r=>new C.PolygonHierarchy(positions(r)))),material:C.Color.fromCssColorString(area.color).withAlpha(.25),classificationType:C.ClassificationType.BOTH}}));
-   for(const ring of rings)entities.push(viewer.entities.add({show:false,polyline:{positions:positions(ring),clampToGround:true,width:3,material:new C.PolylineDashMaterialProperty({color:C.Color.fromCssColorString(area.color),dashLength:14})}}));
+   entities.push(viewer.entities.add({show:false,polygon:{hierarchy:new C.PolygonHierarchy(positions(rings[0]),rings.slice(1).map(r=>new C.PolygonHierarchy(positions(r)))),material:C.Color.fromCssColorString(areaColor(area)).withAlpha(.18),classificationType:C.ClassificationType.BOTH}}));
+   for(const ring of rings)entities.push(viewer.entities.add({show:false,polyline:{positions:positions(ring),clampToGround:true,width:3,material:new C.PolylineDashMaterialProperty({color:C.Color.fromCssColorString(areaColor(area)),dashLength:14})}}));
   }
   const label=document.createElement('button');label.type='button';label.className='zone-regional-label zone-poi';label.dataset.place=area.id;label.setAttribute('aria-label',area.name);label.setAttribute('aria-pressed','false');
   label.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true">'+poiIcons[area.kind||'community']+'</svg><span><strong></strong><small></small></span>';
@@ -129,6 +131,8 @@ function renderPins(){
  }
  const used=new Set(),singles=new Set();
  const V2=document.body.classList.contains('embedded-lotes2');
+ // v2: never stack markers; raise the ones that would overlap and draw a fine leader to their lot.
+ if(V2){const placed=[];for(const v of [...visible].sort((a,b)=>b.y-a.y)){let y=v.y;for(let k=0;k<12;k++){const hit=placed.find(p=>Math.abs(p.x-v.x)<30&&Math.abs(p.y-y)<30);if(!hit)break;y=hit.y-32}v.lead=v.y-y;v.y=y;placed.push({x:v.x,y})}for(const v of visible)v.lot.pin.style.setProperty('--lead',(v.lead||0)+'px')}
  for(const group of (V2?visible.map(v=>({x:v.x,y:v.y,points:[v]})):clusterPins(visible))){
   if(group.points.length===1){const {lot}=group.points[0];singles.add(lot);lot.pin.style.left=group.x+'px';lot.pin.style.top=group.y+'px';continue;}
   const key=group.points.map(p=>p.lot.id).sort((a,b)=>a-b).join('-');used.add(key);
@@ -203,7 +207,8 @@ function reframe({heading=camera.heading,pitch=camera.pitch,scale=1,duration=.65
 function setColor(value){for(const layer of [imagery,detailImagery])if(layer){layer.saturation=value?1.25:1;layer.contrast=value?1.06:1;layer.brightness=value?1.03:1}scene.requestRender()}
 async function connectPhotorealistic(){if(!config.ionAccessToken)return false;C.Ion.defaultAccessToken=config.ionAccessToken;onStatus('Conectando la capa fotorrealista…');try{tileset=await C.createGooglePhotorealistic3DTileset({onlyUsingWithGoogleGeocoder:true},{maximumScreenSpaceError:scene.canvas.clientWidth<600?24:16,cacheBytes:256*1024*1024,maximumCacheOverflowBytes:128*1024*1024});scene.primitives.add(tileset);photoMode=true;scene.globe.show=false;factor=1;scene.verticalExaggeration=1;viewer.imageryLayers.removeAll();imagery=null;detailImagery=null;document.querySelector('#zone-engine-status').textContent='CESIUM · 3D FOTORREALISTA';document.querySelector('#zone-photoreal-note').textContent='Capa fotorrealista conectada. El detalle depende de la cobertura de la zona.';document.querySelector('#zone-vivid').hidden=true;onStatus('Cesium · 3D fotorrealista');try{worldTerrain=await C.createWorldTerrainAsync()}catch{}overview();return true}catch{onStatus('Cesium activo · La capa fotorrealista no está disponible con esta conexión');return false}}
 try{const r=await fetch('config/cesium.json',{cache:'no-store'});if(r.ok)config=await r.json()}catch{}
-const controller={hover,setHouse(key){houseKey=key;setState(currentState)},resize(){viewer.resize();scene.requestRender()},setMode,select,focus,setState,setColor,overview(){overview()},zoom(scale){reframe({scale})},north(){reframe({heading:0,duration:0})},tilt(){reframe({pitch:camera.pitch>-.5?-.9:-.4})},top(){reframe({pitch:camera.pitch< -1.45?-.75:-Math.PI/2})}};
+function clearSelection(){activeLot=null;for(const e of accessEntities)viewer.entities.remove(e);accessEntities=[];clearProposal();paintLots();for(const l of lots)l.pin?.setAttribute('aria-pressed','false');overview()}
+const controller={hover,clearSelection,setHouse(key){houseKey=key;setState(currentState)},resize(){viewer.resize();scene.requestRender()},setMode,select,focus,setState,setColor,overview(){overview()},zoom(scale){reframe({scale})},north(){reframe({heading:0,duration:0})},tilt(){reframe({pitch:camera.pitch>-.5?-.9:-.4})},top(){reframe({pitch:camera.pitch< -1.45?-.75:-Math.PI/2})}};
 document.addEventListener('rpc:language',()=>{if(activeLot)showRoadFront(activeLot);setState(currentState);scene.requestRender()});
 container.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','a','d','+','=','-'].includes(e.key))return;e.preventDefault();camera.cancelFlight();if(e.key==='a')reframe({heading:camera.heading-.18});else if(e.key==='d')reframe({heading:camera.heading+.18});else if(['+','='].includes(e.key))controller.zoom(.8);else if(e.key==='-')controller.zoom(1.25);else{const step=Math.max(5,camera.positionCartographic.height*.06);if(e.key==='ArrowLeft')camera.moveLeft(step);if(e.key==='ArrowRight')camera.moveRight(step);if(e.key==='ArrowUp')camera.moveForward(step);if(e.key==='ArrowDown')camera.moveBackward(step);scene.requestRender()}});
 scene.canvas.addEventListener('pointerdown',()=>container.focus({preventScroll:true}));new ResizeObserver(()=>controller.resize()).observe(container);setMode('pan');if(document.body.classList.contains('embedded-lotes2'))entrance();else overview(0);if(config.ionAccessToken&&config.photorealistic)await connectPhotorealistic();return controller;

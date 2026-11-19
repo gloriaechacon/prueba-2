@@ -6,9 +6,9 @@
 import { panorama } from '/proyecto/lot-panorama.js';
 
 const S = {
-  en: { lot: 'Lot', area: 'Area', street: 'Street', status: 'Status', available: 'Available', sold: 'Sold', photos: 'Photos', p360: '360°', mls: 'MLS · supplied by the client', tbc: 'Area to be confirmed', ask: 'Ask about this lot', photo: 'Photo', outline: 'Show outline', note: 'Indicative outline, pending confirmation', close: 'Close', prev: 'Previous', next: 'Next', open: 'Open the gallery', expand: 'Lot details', drag: 'Drag to look around', gmaps: 'Open in Google Maps' },
-  es: { lot: 'Lote', area: 'Superficie', street: 'Calle', status: 'Estado', available: 'Disponible', sold: 'Vendido', photos: 'Fotos', p360: '360°', mls: 'MLS · aportado por el cliente', tbc: 'Superficie por confirmar', ask: 'Consultar por este lote', photo: 'Foto', outline: 'Mostrar contorno', note: 'Contorno indicativo, pendiente de confirmación', close: 'Cerrar', prev: 'Anterior', next: 'Siguiente', open: 'Abrir la galería', expand: 'Ficha del lote', drag: 'Arrastra para mirar alrededor', gmaps: 'Abrir en Google Maps' },
-  pt: { lot: 'Lote', area: 'Área', street: 'Rua', status: 'Status', available: 'Disponível', sold: 'Vendido', photos: 'Fotos', p360: '360°', mls: 'MLS · fornecido pelo cliente', tbc: 'Área a confirmar', ask: 'Consultar sobre este lote', photo: 'Foto', outline: 'Mostrar contorno', note: 'Contorno indicativo, pendente de confirmação', close: 'Fechar', prev: 'Anterior', next: 'Próximo', open: 'Abrir a galeria', expand: 'Ficha do lote', drag: 'Arraste para olhar ao redor', gmaps: 'Abrir no Google Maps' }
+  en: { lot: 'Lot', area: 'Area', street: 'Street', status: 'Status', available: 'Available', sold: 'Sold', photos: 'Photos', p360: '360°', mls: 'MLS · supplied by the client', tbc: 'Area to be confirmed', ask: 'Ask about this lot', photo: 'Photo', outline: 'Show outline', note: 'Indicative outline, pending confirmation', close: 'Close', prev: 'Previous', next: 'Next', open: 'Open the gallery', expand: 'Lot details', drag: 'Drag to look around', gmaps: 'Open in Google Maps', all: 'View all Rainbow Park', avail: n => `${n} available lots`, total: 'Total area · MLS', plus: n => `+ lot ${n} to be confirmed`, statusSum: (a, s) => `${a} available · ${s} sold`, pick: 'Choose a lot to fly to it.', coll: 'Rainbow Park collection' },
+  es: { lot: 'Lote', area: 'Superficie', street: 'Calle', status: 'Estado', available: 'Disponible', sold: 'Vendido', photos: 'Fotos', p360: '360°', mls: 'MLS · aportado por el cliente', tbc: 'Superficie por confirmar', ask: 'Consultar por este lote', photo: 'Foto', outline: 'Mostrar contorno', note: 'Contorno indicativo, pendiente de confirmación', close: 'Cerrar', prev: 'Anterior', next: 'Siguiente', open: 'Abrir la galería', expand: 'Ficha del lote', drag: 'Arrastra para mirar alrededor', gmaps: 'Abrir en Google Maps', all: 'Ver todo Rainbow Park', avail: n => `${n} lotes disponibles`, total: 'Superficie total · MLS', plus: n => `+ lote ${n} por confirmar`, statusSum: (a, s) => `${a} disponibles · ${s} vendidos`, pick: 'Elige un lote para volar hasta él.', coll: 'Colección Rainbow Park' },
+  pt: { lot: 'Lote', area: 'Área', street: 'Rua', status: 'Status', available: 'Disponível', sold: 'Vendido', photos: 'Fotos', p360: '360°', mls: 'MLS · fornecido pelo cliente', tbc: 'Área a confirmar', ask: 'Consultar sobre este lote', photo: 'Foto', outline: 'Mostrar contorno', note: 'Contorno indicativo, pendente de confirmação', close: 'Fechar', prev: 'Anterior', next: 'Próximo', open: 'Abrir a galeria', expand: 'Ficha do lote', drag: 'Arraste para olhar ao redor', gmaps: 'Abrir no Google Maps', all: 'Ver todo Rainbow Park', avail: n => `${n} lotes disponíveis`, total: 'Área total · MLS', plus: n => `+ lote ${n} a confirmar`, statusSum: (a, s) => `${a} disponíveis · ${s} vendidos`, pick: 'Escolha um lote para voar até ele.', coll: 'Coleção Rainbow Park' }
 };
 const lang = () => (window.rpcI18n?.language || new URLSearchParams(location.search).get('lang') || 'en').slice(0, 2);
 const t = () => S[lang()] || S.en;
@@ -39,12 +39,17 @@ if (select && panel) {
   const media = panel.querySelector('.lx-media');
   const cta = panel.querySelector('.lx-cta');
   const handle = panel.querySelector('.lx-handle');
+  const allBtn = document.createElement('button');
+  allBtn.type = 'button'; allBtn.className = 'btn btn--secondary btn--block lx-all'; allBtn.dataset.noTranslate = '';
+  allBtn.innerHTML = '<span></span><b aria-hidden="true">↖</b>';
+  cta.after(allBtn);
+  allBtn.addEventListener('click', () => { if (select.value) { select.value = ''; select.dispatchEvent(new Event('change')); } });
 
   const choose = id => { if (!id || id === select.value) return; select.value = id; select.dispatchEvent(new Event('change')); };
   index.addEventListener('click', e => { const b = e.target.closest('[data-lot]'); if (b) choose(b.dataset.lot); });
   nav.addEventListener('click', e => {
     const b = e.target.closest('[data-dir]'); if (!b) return;
-    const i = ids.indexOf(select.value); const k = i < 0 ? 0 : (i + Number(b.dataset.dir) + ids.length) % ids.length;
+    const i = ids.indexOf(select.value); const k = i < 0 ? (Number(b.dataset.dir) > 0 ? 0 : ids.length - 1) : (i + Number(b.dataset.dir) + ids.length) % ids.length;
     choose(ids[k]);
   });
   handle?.addEventListener('click', () => { const on = !panel.classList.contains('is-expanded'); panel.classList.toggle('is-expanded', on); handle.setAttribute('aria-expanded', String(on)); });
@@ -110,8 +115,30 @@ if (select && panel) {
     if (img.complete) done(); else { img.onload = done; img.onerror = done; }
     media.querySelectorAll('.lx-thumb').forEach((b, i) => b.setAttribute('aria-pressed', String(i === mediaIndex)));
   }
+  /* Initial / 'View all' state: nothing selected, collection summary. */
+  function overviewHTML() {
+    const s = t(), avail = lots.filter(l => RP.available(l.id)), sold = lots.length - avail.length;
+    const mls = avail.filter(l => l.mlsReported && typeof l.mlsReported.acres === 'number');
+    const acres = mls.reduce((a, l) => a + l.mlsReported.acres, 0), sq = mls.reduce((a, l) => a + l.mlsReported.areaSqFt, 0);
+    const missing = avail.filter(l => !mls.includes(l)).map(l => RP.number(l.id));
+    return `<div class="lx-sheet-in" data-no-translate><h2 class="t-title lx-lotname">${s.avail(avail.length)}</h2>
+      <dl class="lx-facts"><div class="lx-fact-area"><dt class="t-label">${s.total}</dt><dd><span class="lx-acres t-title"><span data-count="${acres}">0</span> acres</span><span class="t-label">${Math.round(sq).toLocaleString(locale())} ft²</span>${missing.length ? `<small class="t-small">${missing.map(s.plus).join(' · ')}</small>` : ''}</dd></div>
+      <div><dt class="t-label">${s.coll}</dt><dd class="t-small">${s.pick}</dd></div>
+      <div><dt class="t-label">${s.status}</dt><dd><span class="lx-pill t-label">${s.statusSum(avail.length, sold)}</span></dd></div></dl></div>`;
+  }
+  async function renderOverview(dir = 0) {
+    current = null;
+    index.querySelectorAll('[data-lot]').forEach(b => b.setAttribute('aria-pressed', 'false'));
+    nav.querySelector('.lx-count').textContent = `— / ${pad(ids.length)}`;
+    nav.querySelector('.rp-progress i').style.transform = 'scaleX(0)';
+    cta.hidden = true; allBtn.hidden = true; media.classList.add('is-empty'); media.innerHTML = '';
+    await swap(sheet, overviewHTML(), dir);
+    const c = sheet.querySelector('[data-count]'); if (c) countUp(c, Number(c.dataset.count), 2);
+  }
   async function render(id, dir = 0) {
+    if (!id) return renderOverview(dir);
     const lot = lots.find(l => l.id === id); if (!lot) return;
+    allBtn.hidden = false; allBtn.querySelector('span').textContent = t().all;
     const changed = id !== current;
     current = id;
     if (changed) { type = 'photo'; mediaIndex = 0; }
@@ -139,8 +166,8 @@ if (select && panel) {
     if (th) { const i = Number(th.dataset.i); if (i === mediaIndex) openGallery(th.querySelector('img')); else { mediaIndex = i; showMain(true); } return; }
     if (e.target.closest('.lx-main')) openGallery(media.querySelector('.lx-main-img:last-child'));
   });
-  select.addEventListener('change', () => { const prev = ids.indexOf(current), next = ids.indexOf(select.value); render(select.value, prev < 0 || next < 0 ? 1 : Math.sign(next - prev) || 1); });
-  document.addEventListener('rpc:language', () => { const id = current; current = null; render(id, 0); });
+  select.addEventListener('change', () => { const prev = ids.indexOf(current), next = ids.indexOf(select.value); render(select.value, !select.value ? -1 : prev < 0 ? 1 : Math.sign(next - prev) || 1); });
+  document.addEventListener('rpc:language', () => { const id = current; current = null; render(id, 0); if (!id) allBtn.querySelector('span').textContent = t().all; });
 
   /* ---------- Full-screen gallery ---------- */
   const dlg = document.createElement('dialog');
@@ -238,8 +265,8 @@ if (select && panel) {
     fetch(base + 'catalog.json').then(r => r.json()).catch(() => ({}))
   ]).then(([data, cat]) => {
     lots = data.lots; catalog = cat;
-    const start = () => render(select.value || ids[0], 0);
-    if (select.value) start(); else addEventListener('rpc:lots-ready', start, { once: true });
-    setTimeout(() => { if (!current) start(); }, 1500);
+    // Render now with the data, and again once detail.js has filled the select (it may apply ?lot=).
+    render(select.value, 0);
+    addEventListener('rpc:lots-ready', () => { if ((select.value || null) !== current) render(select.value, 0); }, { once: true });
   });
 }

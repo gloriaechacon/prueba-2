@@ -59,7 +59,7 @@
  const map=$('#c-map');
  if(map){
   const frame=document.createElement('iframe');frame.className='parcel-frame';frame.title='Vista aérea y exploración de los lotes de Rainbow Park';frame.loading='lazy';frame.src='/a/?embed='+(map.dataset.embed||'lotes')+'&lang='+(new URLSearchParams(location.search).get('lang')||'en')+'&revision=layout2&palette='+(document.body.dataset.palette||'champagne');map.replaceChildren(frame);
-  const send=()=>{const lot=$('#c-lot')?.value;if(lot)frame.contentWindow.postMessage({type:'rainbow-lot',lot},location.origin);};frame.addEventListener('load',send);addEventListener('rpc:lots-ready',send);$('#c-lot')?.addEventListener('change',send);
+  const send=()=>{const lot=$('#c-lot')?.value;frame.contentWindow?.postMessage(lot?{type:'rainbow-lot',lot}:{type:'rainbow-overview'},location.origin);};frame.addEventListener('load',send);addEventListener('rpc:lots-ready',send);$('#c-lot')?.addEventListener('change',send);
   addEventListener('message',e=>{if(e.origin===location.origin&&e.source===frame.contentWindow&&e.data?.type==='parcel-height'&&Number.isFinite(e.data.height))frame.style.height=Math.max(600,Math.min(1400,e.data.height))+'px';});
   addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==frame.contentWindow||e.data?.type!=='parcel-selected')return;const select=$('#c-lot');if(select?.options.length&&select.value!==e.data.lot){select.value=e.data.lot;select.dispatchEvent(new Event('change'));}});
   const btitle=$('.salon-lots .section-opening h2');if(btitle)btitle.innerHTML='Conoce los lotes<br>de Rainbow Park.';

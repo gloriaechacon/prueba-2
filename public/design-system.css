@@ -117,7 +117,7 @@ html[data-palette=azul-rey]{
   --c-accent-text:#876b14;--c-accent-on-deep:#E2B93B;--c-accent-on-support:#E2B93B;   /* AA: accent as text on paper #E2B93B → #876b14 */
   --c-detail:#E86F51;
   --c-map-line:#1D3F94;--c-map-active:#E2B93B;--c-pin:#E86F51;
-  --c-map-lot:#F7F2E7;--c-map-lot-fill:color-mix(in srgb,#E2B93B 40%,#F7F2E7);--c-map-lot-active:#E2B93B;--c-map-group:#E86F51;--c-map-sold:#b98277;
+  --c-map-lot:#F7F2E7;--c-map-lot-fill:#efdba2 /* 40% accent on paper, hex because Cesium reads it */;--c-map-lot-active:#E2B93B;--c-map-group:#E86F51;--c-map-sold:#b98277;
   --c-tone:#1D3F94;--c-shade:15 31 77
 }
 html[data-palette=esmeralda]{
@@ -127,7 +127,7 @@ html[data-palette=esmeralda]{
   --c-accent-text:#92690a;--c-accent-on-deep:#f6d484;--c-accent-on-support:#F0B429;   /* AA: accent as text on paper #F0B429 → #92690a; accent on deep #F0B429 → #f6d484 (3.48 → 4.5) */
   --c-detail:#B5543F;
   --c-map-line:#0F6B4F;--c-map-active:#F0B429;--c-pin:#B5543F;
-  --c-map-lot:#FBF6EC;--c-map-lot-fill:color-mix(in srgb,#F0B429 40%,#FBF6EC);--c-map-lot-active:#F0B429;--c-map-group:#B5543F;--c-map-sold:#b98277;
+  --c-map-lot:#FBF6EC;--c-map-lot-fill:#f7dc9e /* 40% accent on paper, hex because Cesium reads it */;--c-map-lot-active:#F0B429;--c-map-group:#B5543F;--c-map-sold:#b98277;
   --c-tone:#0F6B4F;--c-shade:10 61 46
 }
 html[data-palette=cielo-florida]{
@@ -137,7 +137,7 @@ html[data-palette=cielo-florida]{
   --c-accent-text:#a3550a;--c-accent-on-deep:#f5a658;--c-accent-on-support:#F28C28;   /* AA: accent as text on paper #F28C28 → #a3550a; accent on deep #F28C28 → #f5a658 (3.71 → 4.5) */
   --c-detail:#3FA7D6;
   --c-map-line:#0E4D6E;--c-map-active:#F28C28;--c-pin:#3FA7D6;
-  --c-map-lot:#F6EBD9;--c-map-lot-fill:color-mix(in srgb,#F28C28 40%,#F6EBD9);--c-map-lot-active:#F28C28;--c-map-group:#3FA7D6;--c-map-sold:#b98277;
+  --c-map-lot:#F6EBD9;--c-map-lot-fill:#f4c592 /* 40% accent on paper, hex because Cesium reads it */;--c-map-lot-active:#F28C28;--c-map-group:#3FA7D6;--c-map-sold:#b98277;
   --c-tone:#0E4D6E;--c-shade:14 47 68
 }
 html[data-palette=borgona]{
@@ -147,7 +147,7 @@ html[data-palette=borgona]{
   --c-accent-text:#8c6714;--c-accent-on-deep:#E5B54A;--c-accent-on-support:#E5B54A;   /* AA: accent as text on paper #E5B54A → #8c6714 */
   --c-detail:#9DB49A;
   --c-map-line:#6B1E3A;--c-map-active:#E5B54A;--c-pin:#9DB49A;
-  --c-map-lot:#F8F1E6;--c-map-lot-fill:color-mix(in srgb,#E5B54A 40%,#F8F1E6);--c-map-lot-active:#E5B54A;--c-map-group:#9DB49A;--c-map-sold:#b98277;
+  --c-map-lot:#F8F1E6;--c-map-lot-fill:#f0d9a8 /* 40% accent on paper, hex because Cesium reads it */;--c-map-lot-active:#E5B54A;--c-map-group:#9DB49A;--c-map-sold:#b98277;
   --c-tone:#6B1E3A;--c-shade:61 15 34
 }
 html[data-palette=cobalto]{
@@ -157,7 +157,7 @@ html[data-palette=cobalto]{
   --c-accent-text:#b64c23;--c-accent-on-deep:#ecb39d;--c-accent-on-support:#D9673B;   /* AA: accent as text on paper #D9673B → #b64c23; accent on deep #D9673B → #ecb39d (2.33 → 4.5); carousel arrow uses ink (deep on accent 2.33) */
   --c-detail:#F2C14E;
   --c-map-line:#2747A8;--c-map-active:#D9673B;--c-pin:#F2C14E;
-  --c-map-lot:#F5EFE4;--c-map-lot-fill:color-mix(in srgb,#D9673B 40%,#F5EFE4);--c-map-lot-active:#D9673B;--c-map-group:#F2C14E;--c-map-sold:#b98277;
+  --c-map-lot:#F5EFE4;--c-map-lot-fill:#eab9a0 /* 40% accent on paper, hex because Cesium reads it */;--c-map-lot-active:#D9673B;--c-map-group:#F2C14E;--c-map-sold:#b98277;
   --c-tone:#2747A8;--c-shade:20 27 51;--c-arrow:#141B33
 }
 :root{
