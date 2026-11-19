@@ -13,7 +13,12 @@ export const HOMES = {
     plan: '/utah/floorplan-v3.png',
     planPdf: '/utah/utah-floor-plan.pdf',
     metadata: '/utah/metadata-plan-v3.json',
-    photo: null,                       // PENDING: Blender frame (front or 3/4) for Utah
+    // Blender images, responsive (base-<w>.webp|jpg): photo = horizontal 3:2, photoTall = 3:4 card,
+    // cmp = comparison still. Utah: hero-sequence frame 34 (desktop) / 18 (mobile), full front façade.
+    photo: { base: '/assets/homes/utah-front', w: [960, 1600] },
+    photoTall: { base: '/assets/homes/utah-front-tall', w: [600, 1200] },
+    cmp: { base: '/assets/homes/utah-card34', w: [960, 1600] },
+    illustrative: false,
     image: '/assets/homes-utah-tall',
     thumb: '/assets/home-utah',
     turntable: '/assets/turntable/utah/', turntableReady: true,
@@ -29,7 +34,10 @@ export const HOMES = {
     plan: '/bell/floorplan.png',
     planPdf: '/bell/bell-model.pdf',
     metadata: '/bell/metadata.json',
-    photo: null,                       // PENDING: Bell renders
+    photo: { base: '/assets/homes/bell-real', w: [960, 1600] },            // direccion-visual/bell/bell-real-v1
+    photoTall: { base: '/assets/homes/bell-real-tall', w: [600, 1200] },
+    cmp: { base: '/assets/homes/bell-card34', w: [960, 1600] },
+    illustrative: true,                // 'Illustrative image' note on the selector and the Home preview
     image: '/assets/homes-bell-tall',
     thumb: '/assets/home-bell',
     turntable: '/assets/turntable/bell/', turntableReady: true,

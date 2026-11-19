@@ -10,7 +10,7 @@ const S = {
     drag: 'Drag to rotate', loading: 'Loading the 3D model…', fail: '3D view unavailable on this device.', pdf: 'Open original PDF', zin: 'Zoom in', zout: 'Zoom out', fit: 'Fit',
     note: 'Presentation model · finishes proposed, not official specifications.',
     cmpTitle: ['Side by ', 'side'], rows: ['Living area', 'Entry', 'Garage', 'Total covered area', 'Bedrooms', 'Bathrooms', 'Garage spaces'],
-    diff: { living: 'living', entry: 'entry', garageArea: 'garage', total: 'total', bedrooms: 'bedroom', bathrooms: 'bathroom', garage: 'garage space' }, gallery: 'Finishes', close: 'Close', prev: 'Previous', next: 'Next', note2: 'Proposed finishes, not official specifications', finishSub: 'Exterior and kitchen · open the images', full: 'Full screen',
+    diff: { living: 'living', entry: 'entry', garageArea: 'garage', total: 'total', bedrooms: 'bedroom', bathrooms: 'bathroom', garage: 'garage space' }, gallery: 'Finishes', close: 'Close', prev: 'Previous', next: 'Next', note2: 'Proposed finishes, not official specifications', finishSub: 'Exterior and kitchen · open the images', illus: 'Illustrative image', full: 'Full screen',
     src: 'Official area schedules from the architectural plans (Kimsa Construction LLC). Utah: job 2025-713 · Bell: job 2024-140.', studio: '+ studio', plan: n => `Floor plan of the ${n} home` },
   es: { bed: n => `${n} dormitorios`, bedStudio: n => `${n} dormitorios + anexo estudio`, bath: n => `${n} baños`, gar: n => `${n} plaza${n > 1 ? 's' : ''} de garaje`, livingL: 'habitables', explore: n => `Explorar ${n}`,
     title: ['Dos casas, ', 'un lugar'], choose: ['Elige tu ', 'casa'], change: 'Cambiar de casa', tabs: ['Vista de la casa', 'Modelo 3D', 'Planta 3D', 'Plano'],
@@ -18,7 +18,7 @@ const S = {
     drag: 'Arrastra para girar', loading: 'Cargando el modelo 3D…', fail: 'Vista 3D no disponible en este dispositivo.', pdf: 'Abrir el PDF original', zin: 'Acercar', zout: 'Alejar', fit: 'Ajustar',
     note: 'Modelo de presentación · acabados propuestos, no especificaciones oficiales.',
     cmpTitle: ['Lado a ', 'lado'], rows: ['Superficie habitable', 'Entrada', 'Garaje', 'Superficie cubierta total', 'Dormitorios', 'Baños', 'Plazas de garaje'],
-    diff: { living: 'habitables', entry: 'de entrada', garageArea: 'de garaje', total: 'en total', bedrooms: 'dormitorio', bathrooms: 'baño', garage: 'plaza de garaje' }, gallery: 'Acabados', close: 'Cerrar', prev: 'Anterior', next: 'Siguiente', note2: 'Acabados propuestos, no especificaciones oficiales', finishSub: 'Exterior y cocina · ver las imágenes', full: 'Pantalla completa',
+    diff: { living: 'habitables', entry: 'de entrada', garageArea: 'de garaje', total: 'en total', bedrooms: 'dormitorio', bathrooms: 'baño', garage: 'plaza de garaje' }, gallery: 'Acabados', close: 'Cerrar', prev: 'Anterior', next: 'Siguiente', note2: 'Acabados propuestos, no especificaciones oficiales', finishSub: 'Exterior y cocina · ver las imágenes', illus: 'Imagen ilustrativa', full: 'Pantalla completa',
     src: 'Cuadros de superficies oficiales de los planos arquitectónicos (Kimsa Construction LLC). Utah: expediente 2025-713 · Bell: expediente 2024-140.', studio: '+ estudio', plan: n => `Plano de la casa ${n}` },
   pt: { bed: n => `${n} quartos`, bedStudio: n => `${n} quartos + anexo estúdio`, bath: n => `${n} banheiros`, gar: n => `${n} vaga${n > 1 ? 's' : ''} de garagem`, livingL: 'habitáveis', explore: n => `Explorar ${n}`,
     title: ['Duas casas, ', 'um lugar'], choose: ['Escolha sua ', 'casa'], change: 'Trocar de casa', tabs: ['Vista da casa', 'Modelo 3D', 'Planta 3D', 'Planta'],
@@ -26,7 +26,7 @@ const S = {
     drag: 'Arraste para girar', loading: 'Carregando o modelo 3D…', fail: 'Vista 3D indisponível neste dispositivo.', pdf: 'Abrir o PDF original', zin: 'Aproximar', zout: 'Afastar', fit: 'Ajustar',
     note: 'Modelo de apresentação · acabamentos propostos, não especificações oficiais.',
     cmpTitle: ['Lado a ', 'lado'], rows: ['Área habitável', 'Entrada', 'Garagem', 'Área coberta total', 'Quartos', 'Banheiros', 'Vagas de garagem'],
-    diff: { living: 'habitáveis', entry: 'de entrada', garageArea: 'de garagem', total: 'no total', bedrooms: 'quarto', bathrooms: 'banheiro', garage: 'vaga de garagem' }, gallery: 'Acabamentos', close: 'Fechar', prev: 'Anterior', next: 'Próximo', note2: 'Acabamentos propostos, não especificações oficiais', finishSub: 'Exterior e cozinha · ver as imagens', full: 'Tela cheia',
+    diff: { living: 'habitáveis', entry: 'de entrada', garageArea: 'de garagem', total: 'no total', bedrooms: 'quarto', bathrooms: 'banheiro', garage: 'vaga de garagem' }, gallery: 'Acabamentos', close: 'Fechar', prev: 'Anterior', next: 'Próximo', note2: 'Acabamentos propostos, não especificações oficiais', finishSub: 'Exterior e cozinha · ver as imagens', illus: 'Imagem ilustrativa', full: 'Tela cheia',
     src: 'Quadros de áreas oficiais das plantas arquitetônicas (Kimsa Construction LLC). Utah: processo 2025-713 · Bell: processo 2024-140.', studio: '+ estúdio', plan: n => `Planta da casa ${n}` }
 };
 const lang = () => (window.rpcI18n?.language || new URLSearchParams(location.search).get('lang') || 'en').slice(0, 2);
@@ -34,7 +34,11 @@ const t = () => S[lang()] || S.en;
 const nf = v => Number(v).toLocaleString({ en: 'en-US', es: 'es-ES', pt: 'pt-BR' }[lang()] || 'en-US');
 const reduce = matchMedia('(prefers-reduced-motion: reduce)');
 const ids = ['utah', 'bell'];
-const pic = (base, alt, cls = '') => `<picture class="${cls}"><source srcset="${base}.webp" type="image/webp"><img src="${base}.jpg" alt="${alt}" loading="lazy"></picture>`;
+// img: a base path (base.webp + base.jpg) or a responsive set { base, w: [widths] } → base-<w>.webp|jpg
+const pic = (img, alt, cls = '', sizes = '100vw') => typeof img === 'object' && img ? `<picture class="${cls}"><source type="image/webp" srcset="${img.w.map(w => `${img.base}-${w}.webp ${w}w`).join(', ')}" sizes="${sizes}"><img src="${img.base}-${img.w[0]}.jpg" srcset="${img.w.map(w => `${img.base}-${w}.jpg ${w}w`).join(', ')}" sizes="${sizes}" alt="${alt}" loading="lazy" decoding="async"></picture>` : picBase(img, alt, cls);
+// selector card: vertical crop on phones, horizontal on wider screens
+const cardPic = h => `<picture class="hm-card-media"><source media="(max-width:760px)" type="image/webp" srcset="${h.photoTall.w.map(w => `${h.photoTall.base}-${w}.webp ${w}w`).join(', ')}" sizes="100vw"><source type="image/webp" srcset="${h.photo.w.map(w => `${h.photo.base}-${w}.webp ${w}w`).join(', ')}" sizes="55vw"><img src="${h.photo.base}-${h.photo.w[0]}.jpg" srcset="${h.photo.w.map(w => `${h.photo.base}-${w}.jpg ${w}w`).join(', ')}" sizes="55vw" alt="" loading="lazy" decoding="async"></picture>`;
+const picBase = (base, alt, cls = '') => `<picture class="${cls}"><source srcset="${base}.webp" type="image/webp"><img src="${base}.jpg" alt="${alt}" loading="lazy"></picture>`;
 const vt = fn => (document.startViewTransition && !reduce.matches) ? document.startViewTransition(fn) : (fn(), null);
 const slide = (el, dir, swap) => {
   if (!dir || reduce.matches || !el.animate) { swap(); return; }
@@ -63,7 +67,7 @@ function renderCards() {
   const s = t();
   const ct = document.querySelector("#hm-select-title"); ct.dataset.noTranslate = ""; ct.innerHTML = s.choose[0] + "<em>" + s.choose[1] + "</em>";
   cardsEl.innerHTML = ids.map(id => `<article class="hm-card" data-id="${id}" data-active="${id === house}">
-      ${pic(HOMES[id].photo || HOMES[id].image, '', 'hm-card-media')}
+      ${HOMES[id].photo ? cardPic(HOMES[id]) : pic(HOMES[id].image, '', 'hm-card-media')}${HOMES[id].illustrative ? `<small class="t-small hm-illus">${s.illus}</small>` : ''}
       <div class="hm-card-info" data-no-translate><h3 class="t-display hm-card-name">${HOMES[id].name}</h3><span class="t-label">${specLine(id)}</span>
         <a class="btn btn--primary hm-card-go" href="#visor" data-go="${id}"><span>${s.explore(HOMES[id].name)}</span><b aria-hidden="true">→</b></a></div>
     </article>`).join('');
@@ -295,7 +299,7 @@ function renderCompare() {
   const s = t(), F = Object.fromEntries(ids.map(id => [id, facts(id, META[id])]));
   const rows = [['living', 'ft2'], ['entry', 'ft2'], ['garageArea', 'ft2'], ['total', 'ft2'], ['bedrooms', 'n'], ['bathrooms', 'n'], ['garage', 'n']];
   compareEl.innerHTML = `<h2 class="t-display" id="hm-compare-title" data-no-translate>${s.cmpTitle[0]}<em>${s.cmpTitle[1]}</em></h2>
-    <div class="hm-cmp" data-no-translate><div class="hm-cmp-head"><span></span>${ids.map(id => `<figure>${pic(HOMES[id].photo || HOMES[id].thumb, HOMES[id].name, 'hm-cmp-img')}<figcaption class="t-display hm-cmp-name">${HOMES[id].name}</figcaption></figure>`).join('')}</div>
+    <div class="hm-cmp" data-no-translate><div class="hm-cmp-head"><span></span>${ids.map(id => `<figure>${pic(HOMES[id].cmp || HOMES[id].thumb, HOMES[id].name, 'hm-cmp-img', '(max-width:760px) 50vw, 40vw')}<figcaption class="t-display hm-cmp-name">${HOMES[id].name}</figcaption></figure>`).join('')}</div>
     ${rows.map(([k, u], r) => {
       const vals = ids.map(id => F[id][k]), max = Math.max(...vals);
       return `<div class="hm-cmp-row"><span class="t-label">${s.rows[r]}</span>${ids.map((id, i) => {
