@@ -13,6 +13,8 @@ Object.assign(catalog,{"Desde la calle":["From the street","Da rua"],"hasta tu p
 Object.assign(catalog,{"Encuentra tu":["Find your","Encontre o seu"],"lugar":["place","lugar"]});
 // PROPOSAL · Contact intro (split of the existing title)
 Object.assign(catalog,{"Hablemos de":["Let's talk about","Vamos conversar sobre"],"tu idea.":["your plans.","seus planos."],"Desliza":["Scroll","Role"]});
+// PROPOSAL · Investment (round 8)
+Object.assign(catalog,{"Ver los 13 proyectos":["View all 13 projects","Ver os 13 projetos"],"Listado completo con cifras y fechas":["Full list with figures and dates","Lista completa com números e datas"],"Fuentes y metodología":["Sources and methodology","Fontes e metodologia"],"fuentes":["sources","fontes"]});
 // PROPOSAL · Lots map controls (round 8)
 Object.assign(catalog,{"Ver todo Rainbow Park":["View all Rainbow Park","Ver todo Rainbow Park"],"Lotes de Rainbow Park":["Rainbow Park lots","Lotes de Rainbow Park"],"Movimiento":["Movement","Movimento"],"Vista":["View","Vista"]});
 // PROPOSAL · Investment catalogue (round 7)

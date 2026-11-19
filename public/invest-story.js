@@ -76,7 +76,7 @@
      the first time the section is seen (none with reduced motion). */
   function nextLabel(el, name, word = 'Siguiente') {
     if (!el) return;
-    el.innerHTML = name ? `<span>${word}</span> · <span>${esc(name)}</span>` : '';
+    el.innerHTML = name ? `<span class="rp-arrow-word">${word}</span><small class="rp-arrow-name" data-no-translate>${esc(name)}</small>` : '';
     document.dispatchEvent(new CustomEvent('rpc:content'));
   }
   // At the ends the arrow (and its label) disappears.
@@ -135,7 +135,7 @@
         </div>
         <figure class="ifig-visual" aria-hidden="true">${visualSVG(kind)}<figcaption>Visual esquemático · sin serie temporal</figcaption></figure>
         <footer class="ifig-meta">
-          <div><span class="ifig-period">${esc(it.period)}</span>${src ? `<span class="ifig-src"><b>Fuente</b> · <span data-no-translate>${esc(src.publisher)}</span></span>` : ''}</div>
+          <div><span class="ifig-period">${esc(it.period)}</span></div>
           <span class="ifig-status">${esc(it.status)}</span>
         </footer>
       </article>`;
@@ -246,7 +246,9 @@
     L.tileLayer('https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}', { maxNativeZoom: 16, maxZoom: 18, attribution: 'USDA / USGS The National Map' }).addTo(map);
     const rp = L.marker(origin, { keyboard: false, icon: L.divIcon({ className: 'imap-origin', html: '<span>Rainbow Park</span>', iconSize: null }) }).addTo(map);
     const dots = new Map();
-    data.locations.forEach(loc => dots.set(loc.id, L.circleMarker([loc.lat, loc.lon], { className: 'imap-dot', radius: 5, weight: 1.5, fillOpacity: 0.9, interactive: false }).addTo(map)));
+    const ICON = { wec: '<path d="M5 21l2-7 4-2 1-6 4 1 2 4-3 2v8"/><path d="M12 6l-1-3"/>', empleo: '<rect x="4" y="8" width="16" height="12" rx="1.5"/><path d="M9 8V5h6v3M4 13h16"/>', infraestructura: '<path d="M4 20 9 4M20 20 15 4M12 6v2M12 11v2M12 16v2"/>', servicios: '<path d="M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6"/>' };
+    const catOf = loc => loc.projects[0]?.category;
+    data.locations.forEach(loc => dots.set(loc.id, L.marker([loc.lat, loc.lon], { keyboard: false, interactive: true, icon: L.divIcon({ className: 'imap-pin imap-pin--' + catOf(loc), iconSize: null, html: `<span><svg viewBox="0 0 24 24" aria-hidden="true">${ICON[catOf(loc)] || ICON.servicios}</svg></span>` }) }).addTo(map).on('click', () => { const i = steps.findIndex(s => s.loc.id === loc.id); if (i >= 0) ctl.go(i, i > ctl.index ? 1 : -1); })));
     const link = L.polyline([origin, origin], { className: 'imap-link', weight: 2.5, interactive: false }).addTo(map);
     const tag = L.marker(origin, { keyboard: false, interactive: false, icon: L.divIcon({ className: 'imap-distance', html: '', iconSize: null }) }).addTo(map);
     map.fitBounds([origin, ...data.locations.map(l => [l.lat, l.lon])], { padding: [40, 40] });
@@ -263,7 +265,6 @@
         <strong class="imap-metric" data-no-translate>${esc(p.metric)}</strong>
         <span class="imap-unit">${esc(p.unit)}</span>
         <dl class="imap-facts"><div><dd>${esc(p.date)}</dd></div><div><dd>${esc(p.location)}</dd></div></dl>
-        ${src ? `<p class="imap-source"><em>Fuente:</em> <a href="${esc(src.url)}" target="_blank" rel="noopener" data-no-translate>${esc(src.publisher)}</a> · ${esc(src.date)}</p>` : ''}
         ${note ? `<p class="imap-note">${esc(note)}</p>` : ''}`;
     };
     function show(i, prev, dir = 1, first = false) {
@@ -271,7 +272,7 @@
       const { loc } = step;
       const at = [loc.lat, loc.lon];
       const km = haversine(origin, at);
-      dots.forEach((d, id) => { d.setStyle({ radius: id === loc.id ? 9 : 5 }); d.getElement()?.classList.toggle('is-active', id === loc.id); });
+      dots.forEach((d, id) => { d.getElement()?.classList.toggle('is-active', id === loc.id); d.setZIndexOffset(id === loc.id ? 1000 : 0); });
       link.setLatLngs([origin, at]);
       const path = link.getElement();
       if (path) { path.setAttribute('pathLength', '1'); path.classList.remove('is-drawn'); void path.getBoundingClientRect(); requestAnimationFrame(() => path.classList.add('is-drawn')); }
@@ -323,7 +324,7 @@
         <span class="imap-cat-fig"><strong class="t-title" data-no-translate>${esc(p.metric)}</strong><span class="t-small">${esc(p.unit)}</span></span>
         <span class="imap-cat-src t-small"><span>${esc(p.date)}</span>${src ? ` · <span data-no-translate>${esc(src.publisher)}</span>` : ''}</span></button></li>`;
     }).join('');
-    cat.innerHTML = `<button type="button" class="btn btn--secondary imap-cat-toggle" aria-expanded="false" aria-controls="imap-cat-list"><span>Ver catálogo completo</span><b aria-hidden="true">↓</b></button>
+    cat.innerHTML = `<button type="button" class="btn btn--secondary imap-cat-toggle" aria-expanded="false" aria-controls="imap-cat-list"><svg class="imap-cat-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg><span>Ver los 13 proyectos</span><b aria-hidden="true" class="imap-cat-chev">⌄</b></button><small class="t-small imap-cat-sub">Listado completo con cifras y fechas</small>
       <div class="imap-cat-panel" id="imap-cat-list" hidden><ol class="imap-cat-list">${catRows()}</ol></div>`;
     root.append(cat);
     const toggle = cat.querySelector('.imap-cat-toggle'), panel = cat.querySelector('.imap-cat-panel');
@@ -379,10 +380,10 @@
       });
     }));
     root.classList.add('idos');
-    root.innerHTML = `
-      <div class="idos-side"><h2 class="idos-title" data-reveal="lines">Detrás de cada <em>cifra</em></h2><span class="idos-kicker">Dossier de fuentes</span></div>
-      <ol class="idos-list">${rows.map((r, i) => `${i === 0 ? `<li class="idos-group t-label" aria-hidden="true"><span>Fuentes de las cifras</span> · <span data-no-translate>${firstProject}</span></li>` : ''}${i === firstProject ? `<li class="idos-group t-label" aria-hidden="true"><span>Fuentes de los proyectos del mapa</span> · <span data-no-translate>${rows.length - firstProject}</span></li>` : ''}<li><details ${i === 0 ? 'open' : ''}><summary><span class="idos-n" data-no-translate>${pad(i + 1)}</span><span class="idos-row-title">${r.html ? r.title : esc(r.title)}</span><span class="idos-meta"><span data-no-translate>${esc(r.meta[0])}</span> · <span>${esc(r.meta[1])}</span></span><i aria-hidden="true"></i></summary><div class="idos-body">${r.body}</div></details></li>`).join('')}</ol>
-      <p class="idos-foot"><span>Indicadores: revisión</span> ${esc(latest)} · <span>Archivo de proyectos:</span> ${esc(archive)}</p>`;
+    root.innerHTML = `<details class="idos-fold"><summary class="idos-fold-sum"><span class="t-title">Fuentes y metodología</span><span class="t-small">${rows.length} <span>fuentes</span> · <span>Indicadores: revisión</span> ${esc(latest)}</span><i aria-hidden="true"></i></summary><div class="idos-fold-body">
+      <div class="idos-side"><span class="idos-kicker">Dossier de fuentes</span></div>
+      <ol class="idos-list">${rows.map((r, i) => `${i === 0 ? `<li class="idos-group t-label" aria-hidden="true"><span>Fuentes de las cifras</span> · <span data-no-translate>${firstProject}</span></li>` : ''}${i === firstProject ? `<li class="idos-group t-label" aria-hidden="true"><span>Fuentes de los proyectos del mapa</span> · <span data-no-translate>${rows.length - firstProject}</span></li>` : ''}<li><details><summary><span class="idos-n" data-no-translate>${pad(i + 1)}</span><span class="idos-row-title">${r.html ? r.title : esc(r.title)}</span><span class="idos-meta"><span data-no-translate>${esc(r.meta[0])}</span> · <span>${esc(r.meta[1])}</span></span><i aria-hidden="true"></i></summary><div class="idos-body">${r.body}</div></details></li>`).join('')}</ol>
+      <p class="idos-foot"><span>Indicadores: revisión</span> ${esc(latest)} · <span>Archivo de proyectos:</span> ${esc(archive)}</p></div></details>`;
   }
 
   Promise.all([indicatorsP, mapP, lotsP]).then(([indicators, data, lots]) => {
