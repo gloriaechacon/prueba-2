@@ -15,10 +15,10 @@ export const HOMES = {
     metadata: '/utah/metadata-plan-v3.json',
     // Blender images, responsive (base-<w>.webp|jpg): photo = horizontal 3:2, photoTall = 3:4 card,
     // cmp = comparison still. Utah: hero-sequence frame 34 (desktop) / 18 (mobile), full front façade.
-    photo: { base: '/assets/homes/utah-front', w: [960, 1600] },
-    photoTall: { base: '/assets/homes/utah-front-tall', w: [600, 1200] },
+    photo: { base: '/assets/homes/utah-illustrative', w: [960, 1536] },
+    photoTall: { base: '/assets/homes/utah-illustrative', w: [960, 1536] },
     cmp: { base: '/assets/homes/utah-card34', w: [960, 1600] },
-    illustrative: false,
+    illustrative: true,
     image: '/assets/homes-utah-tall',
     thumb: '/assets/home-utah',
     turntable: '/assets/turntable/utah/', turntableReady: true,

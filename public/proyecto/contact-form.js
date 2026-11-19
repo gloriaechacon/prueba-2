@@ -83,6 +83,11 @@
 
   function describe() {
     const labels = messages[window.rpcI18n?.language] || messages.en;
+    const lang = window.rpcI18n?.language || 'en';
+    const opening = document.querySelector('.contact-opening');
+    if (opening) opening.textContent = ({en: 'Let’s talk about your plans.', es: 'Hablemos de tus planes.', pt: 'Vamos conversar sobre seus planos.'})[lang] || 'Let’s talk about your plans.';
+    const caption = document.querySelector('.contact-image figcaption');
+    if (caption) caption.textContent = 'Utah · ' + ({en: 'Illustrative image', es: 'Imagen ilustrativa', pt: 'Imagem ilustrativa'})[lang];
     status.textContent = labels[state];
     submit.textContent = state === 'sending' ? labels.sending : labels.submit;
     fallback.textContent = labels.email;

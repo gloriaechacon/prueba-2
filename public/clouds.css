@@ -4,3 +4,7 @@
 .rp-cloud{position:absolute;opacity:var(--op);will-change:transform,opacity}
 .rp-cloud svg{display:block;width:100%;height:100%;overflow:visible}
 @media(prefers-reduced-motion:reduce){.rp-clouds{transition:none}}
+
+.rp-cloud{background-size:100% 100%;background-repeat:no-repeat}
+.rp-cloud--back{rotate:-7deg}
+.rp-cloud--lift{rotate:5deg}

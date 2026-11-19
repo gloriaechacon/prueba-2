@@ -141,7 +141,7 @@ html body .btn--secondary:hover{background:var(--s-fg,var(--c-ink))!important;co
 html body .btn *{color:inherit!important;font:inherit!important;letter-spacing:inherit!important}
 html body .link-line{font:var(--t-button)!important;letter-spacing:var(--t-button-track)!important;text-transform:uppercase!important;background:none!important;border:0!important;border-radius:0!important;padding:8px 0!important;box-shadow:none!important}
 html body .btn.btn.btn{border-radius:10px!important}
-html body .btn:not(:has(b))::after{content:"→";font-weight:400;font-size:1.15em;letter-spacing:0;transition:transform .5s var(--ease-out-expo)}
+
 html body .btn:not(:has(b)):hover::after{transform:translateX(5px)}
 
 /* Same vertical spacing between sections on every page (--section-y, design-system.css) */

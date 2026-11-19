@@ -243,10 +243,10 @@ em,i{font-synthesis:none}
 }
 /* One button system (reference: the pass "Explore destination"): primary, secondary, link-line. Nothing else. */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:16px;min-height:52px;padding:0 28px;
-  border-radius:var(--radius-btn);border:1px solid transparent;cursor:pointer;text-decoration:none;
+  border-radius:4px;border:1px solid transparent;cursor:pointer;text-decoration:none;
   font:var(--t-button);letter-spacing:var(--t-button-track);text-transform:uppercase;
   transition:background .35s var(--ease-out-expo),color .35s var(--ease-out-expo),border-color .35s var(--ease-out-expo)}
-.btn b{font-weight:400;font-size:1.15em;letter-spacing:0;transition:transform .5s var(--ease-out-expo)}
+.btn b[aria-hidden="true"]{display:none}
 .btn:hover b{transform:translateX(5px)}
 .btn:focus-visible{outline:2px solid var(--c-focus);outline-offset:3px}
 .btn--primary{background:var(--c-btn);color:var(--c-on-accent)}
