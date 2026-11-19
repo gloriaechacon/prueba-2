@@ -1,0 +1,65 @@
+/* Lots map, embed v2 (/a/?embed=lotes2, used by proyecto/lotes): the Cesium map alone, full bleed,
+   with a small segmented control, numbered lot markers, sold tags and floating place cards. */
+body.embedded-lotes2{margin:0!important;background:var(--c-deep)!important;overflow:hidden}
+body.embedded-lotes2>header,body.embedded-lotes2>footer,body.embedded-lotes2>dialog,body.embedded-lotes2>.skip,body.embedded-lotes2 main>:not(#lotes),
+body.embedded-lotes2 #lotes>:not(.zone-explorer),body.embedded-lotes2 .parcel-guide,body.embedded-lotes2 .rp-palette{display:none!important}
+body.embedded-lotes2 #lotes,body.embedded-lotes2 main{padding:0!important;margin:0!important;background:none!important}
+body.embedded-lotes2 .zone-explorer{margin:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:none!important;height:100vh}
+body.embedded-lotes2 :is(.zone-top,.zone-panel,.zone-modes,.zone-landscape,.zone-instruction,.zone-bottom,.zone-truth,.zone-lot-list,#zone-list,.zone-initial-note,.zone-regional-note,.zone-poi-key,.zone-states,.embedded-plot-actions,.embedded-map-toolbar,#zone-north,#zone-topdown,.zone-cluster-choices){display:none!important}
+body.embedded-lotes2 .zone-layout{display:block!important;height:100vh!important;min-height:0!important;grid-template-columns:1fr!important;border:0!important;margin:0!important}
+body.embedded-lotes2 .zone-world{position:relative!important;top:auto!important;height:100vh!important;min-height:0!important;border-radius:0!important;margin:0!important}
+body.embedded-lotes2 #zone-canvas{position:absolute;inset:0;height:100%!important;border-radius:0!important}
+body.embedded-lotes2 .zone-controls{top:14px!important;right:14px!important;left:auto!important;bottom:auto!important}
+
+/* Segmented control, top-left of the map */
+.lx-seg{position:absolute;z-index:30;left:14px;top:14px;display:flex;padding:3px;border-radius:999px;background:color-mix(in srgb,var(--c-paper) 94%,transparent);border:1px solid var(--c-line-mid);box-shadow:0 4px 16px rgb(var(--c-shade) / .22)}
+.lx-seg button{min-height:36px!important;padding:0 14px!important;border:0!important;border-radius:999px!important;background:transparent!important;color:var(--c-ink)!important;cursor:pointer;
+  font:var(--t-label)!important;letter-spacing:var(--t-label-track)!important;text-transform:uppercase}
+.lx-seg button[aria-pressed=true]{background:var(--c-btn)!important;color:var(--c-on-accent)!important}
+.lx-seg button:focus-visible{outline:2px solid var(--c-focus);outline-offset:2px}
+
+/* Lot markers: number in a circle (available), grey tag (sold) */
+body.embedded-lotes2 .zone-pin{padding:0!important;border:0!important;background:none!important;box-shadow:none!important;min-height:0!important;min-width:0!important;cursor:pointer;overflow:visible!important}
+body.embedded-lotes2 .zone-pin svg,body.embedded-lotes2 .zone-pin small{display:none!important}
+body.embedded-lotes2 .zone-pin span{position:relative;display:grid!important;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--c-paper)!important;color:var(--c-ink)!important;
+  border:2px solid var(--c-accent);box-shadow:0 4px 14px rgb(0 0 0 / .35);transition:transform .35s var(--ease-out-expo),background-color .3s}
+body.embedded-lotes2 .zone-pin strong{font:var(--t-label)!important;font-size:13px!important;letter-spacing:.04em!important}
+body.embedded-lotes2 .zone-pin span::before{content:"";position:absolute;inset:-7px;border-radius:50%;border:2px solid var(--c-accent);opacity:0;pointer-events:none}
+body.embedded-lotes2 .zone-pin:not(.is-sold) span::before{animation:lx-idle 4s ease-in-out infinite}
+body.embedded-lotes2 .is-moving .zone-pin span::before{animation:none}
+body.embedded-lotes2 .zone-pin:is(:hover,.is-hover,:focus-visible) span{transform:translateY(-6px) scale(1.08)}
+body.embedded-lotes2 .zone-pin:not(.is-sold):is(:hover,.is-hover,:focus-visible) span::before{animation:lx-ring 1.1s ease-out infinite}
+body.embedded-lotes2 .zone-pin[aria-pressed=true] span{background:var(--c-btn)!important;color:var(--c-on-accent)!important;border-color:var(--c-paper)}
+body.embedded-lotes2 .zone-pin.is-sold span{width:auto;height:auto;padding:5px 9px;border-radius:6px;background:#8e8e8a!important;color:#fff!important;border:0}
+body.embedded-lotes2 .zone-pin.is-sold strong{font-size:0!important}
+body.embedded-lotes2 .zone-pin.is-sold strong::after{content:attr(data-sold);font:var(--t-label);letter-spacing:var(--t-label-track);text-transform:uppercase}
+@keyframes lx-idle{0%,70%,100%{opacity:0;transform:scale(1)}35%{opacity:.4;transform:scale(1.18)}}
+@keyframes lx-ring{0%{opacity:.85;transform:scale(1)}100%{opacity:0;transform:scale(1.6)}}
+
+/* Entrance: numbers pop in sequence after the camera lands */
+body.embedded-lotes2:not(.lots-entered) .zone-pin span{opacity:0;transform:scale(.4)}
+body.embedded-lotes2.lots-entered .zone-pin:not(.was-popped) span{animation:lx-pop .6s cubic-bezier(.3,1.6,.5,1) both;animation-delay:calc(var(--pin-i,0) * .26s + .2s)}
+@keyframes lx-pop{0%{opacity:0;transform:scale(.4)}100%{opacity:1;transform:scale(1)}}
+
+/* Places of the area: floating card next to the marker */
+body.embedded-lotes2 .zone-place-info{position:absolute!important;z-index:40;left:0!important;top:0!important;right:auto!important;bottom:auto!important;width:min(320px,calc(100vw - 28px));margin:0!important;padding:16px 18px!important;border-radius:14px!important;
+  background:var(--c-paper)!important;color:var(--c-ink)!important;border:1px solid var(--c-line)!important;box-shadow:0 12px 36px rgb(var(--c-shade) / .35)!important;display:grid;gap:8px;transform-origin:50% 100%}
+body.embedded-lotes2 .zone-place-info[hidden]{display:none!important}
+body.embedded-lotes2 .zone-place-info.is-in{animation:lx-card .35s var(--ease-out-expo) both}
+@keyframes lx-card{from{opacity:0;transform:var(--lx-pos) scale(.85)}to{opacity:1;transform:var(--lx-pos) scale(1)}}
+body.embedded-lotes2 .zone-place-info h3{margin:0;color:inherit!important}
+body.embedded-lotes2 .zone-place-info p{margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--c-muted)!important;font:var(--t-small)!important}
+body.embedded-lotes2 .zone-place-info a{display:inline-block;margin-right:16px;color:var(--c-ink)!important;text-decoration:underline;text-underline-offset:4px}
+@media(prefers-reduced-motion:reduce){body.embedded-lotes2 .zone-pin span,body.embedded-lotes2 .zone-pin span::before,body.embedded-lotes2 .zone-place-info{animation:none!important;transition:none!important;opacity:1!important}}
+/* Stronger than the legacy pin styles and the type scale */
+html[lang] body.embedded-lotes2 #zone-pins .zone-pin{width:auto!important;height:auto!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;border-radius:0!important;outline-offset:4px}
+html[lang] body.embedded-lotes2 #zone-pins .zone-pin::before,html[lang] body.embedded-lotes2 #zone-pins .zone-pin::after{display:none!important}
+html[lang] body.embedded-lotes2 #zone-pins .zone-pin>span{width:38px!important;height:38px!important;padding:0!important;display:grid!important;place-items:center;border-radius:50%!important;background:var(--c-paper)!important;border:2px solid var(--c-accent)!important}
+html[lang] body.embedded-lotes2 #zone-pins .zone-pin>span>strong{font:500 13px/1 var(--font-sans)!important;letter-spacing:.04em!important;text-transform:none!important;color:var(--c-ink)!important;margin:0!important}
+html[lang] body.embedded-lotes2 #zone-pins .zone-pin[aria-pressed=true]>span{background:var(--c-btn)!important;border-color:var(--c-paper)!important}
+html[lang] body.embedded-lotes2 #zone-pins .zone-pin[aria-pressed=true]>span>strong{color:var(--c-on-accent)!important}
+html[lang] body.embedded-lotes2 #zone-pins .zone-pin.is-sold>span{width:auto!important;height:auto!important;padding:5px 9px!important;border-radius:6px!important;background:#8e8e8a!important;border:0!important}
+html[lang] body.embedded-lotes2 #zone-pins .zone-pin.is-sold>span>strong{display:none!important}
+html[lang] body.embedded-lotes2 #zone-pins .zone-pin.is-sold>span::after{content:attr(data-sold);font:500 11px/1 var(--font-sans);letter-spacing:.18em;text-transform:uppercase;color:#fff}
+.lx-seg:has([data-m=area][aria-pressed=true]) [data-m]:not([data-m=area]){background:transparent!important;color:var(--c-ink)!important}
+@media(max-width:600px){body.embedded-lotes2 .zone-controls{display:none!important}.lx-seg{right:14px;justify-content:space-between}.lx-seg button{padding:0 10px!important}}

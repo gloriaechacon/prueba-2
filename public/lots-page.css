@@ -1,0 +1,127 @@
+/* proyecto/lotes — map (~65%) + fixed side panel (~35%); phone: map on top and a two-state sheet. */
+.lx{padding:0!important;margin:0!important;max-width:none!important}
+.lx-grid{display:grid;grid-template-columns:minmax(0,65fr) minmax(360px,35fr);grid-template-rows:auto minmax(0,1fr);grid-template-areas:"map head" "map panel";
+  gap:0 clamp(18px,2vw,32px);height:calc(100svh - var(--nav-height,86px));min-height:640px;padding:clamp(12px,1.6vw,22px) clamp(12px,1.6vw,22px) clamp(12px,1.6vw,22px) clamp(12px,1.6vw,22px);box-sizing:border-box}
+.lx-head{grid-area:head;padding:4px 0 10px}
+.lx-head h1{margin:0}
+.lx-map{grid-area:map;position:relative;min-height:0;border-radius:18px;overflow:hidden;background:var(--c-deep)}
+.lx-map #c-map{position:absolute!important;inset:0;height:auto!important;min-height:0!important;margin:0!important;border:0!important;border-radius:0!important}
+html body .lx-map .parcel-frame{position:absolute;inset:0;display:block;width:100%!important;height:100%!important;min-height:0!important;border:0!important;border-radius:0!important}
+.lx-panel{grid-area:panel;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:16px;padding:0 4px 8px 0;scrollbar-width:thin}
+.lx-handle{display:none}
+/* Index 01–06 */
+.lx-index{display:flex;gap:4px;flex-wrap:nowrap}
+.lx-index button{position:relative;min-width:44px;min-height:40px;padding:0 6px;border:0;background:none;color:var(--c-muted);cursor:pointer}
+.lx-index button::after{content:"";position:absolute;left:8px;right:8px;bottom:4px;height:2px;background:var(--c-accent);transform:scaleX(0);transition:transform .45s var(--ease-out-expo)}
+.lx-index button[aria-pressed=true]{color:var(--c-ink)}
+.lx-index button[aria-pressed=true]::after{transform:scaleX(1)}
+.lx-index button:focus-visible{outline:2px solid var(--c-focus);outline-offset:2px}
+/* Arrows + progress */
+.lx-nav{display:flex;align-items:center;justify-content:space-between;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--c-line)}
+.lx-nav .rp-progress-wrap{flex:1}
+.lx-nav .rp-progress{width:100%;background:var(--c-line)}
+/* Sheet */
+.lx-sheet{min-height:150px}
+.lx-sheet-in{display:grid;gap:10px}
+.lx-lotname{margin:0}
+.lx-facts{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);grid-template-areas:"area street" "area status";gap:12px 22px;margin:0}
+.lx-facts>div{display:grid;gap:4px;align-content:start}
+.lx-fact-area{grid-area:area;padding-right:18px;border-right:1px solid var(--c-line)}
+.lx-facts dt{color:var(--c-muted)}
+.lx-facts dd{margin:0;display:grid;gap:4px}
+.lx-acres{color:var(--c-ink)}
+.lx-pill{justify-self:start;display:inline-flex;align-items:center;min-height:32px;padding:0 14px;border-radius:999px;border:1px solid var(--c-accent);color:var(--c-ink)}
+.lx-pill.is-sold{border-color:var(--c-line-mid);color:var(--c-muted)}
+.lx-facts .link-line{padding:4px 0!important}
+/* Media */
+.lx-media{display:grid;gap:10px}
+.lx-media.is-empty{display:none}
+.lx-tabs{display:flex;gap:18px;border-bottom:1px solid var(--c-line)}
+.lx-tabs [role=tab]{position:relative;min-height:40px;padding:0 2px;border:0;background:none;color:var(--c-muted);cursor:pointer}
+.lx-tabs [role=tab]::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--c-accent);transform:scaleX(0);transition:transform .45s var(--ease-out-expo)}
+.lx-tabs [role=tab][aria-selected=true]{color:var(--c-ink)}
+.lx-tabs [role=tab][aria-selected=true]::after{transform:scaleX(1)}
+.lx-tabs [role=tab]:disabled{opacity:.4;cursor:default}
+.lx-main{position:relative;display:block;width:100%;padding:0;border:0;border-radius:14px;overflow:hidden;aspect-ratio:16/9;background:var(--c-paper-tint);cursor:zoom-in}
+.lx-main-frame{position:absolute;inset:0}
+.lx-main-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .7s ease}
+.lx-main-img.is-in{opacity:1}
+.lx-main-img.is-kb{animation:lx-kb 6s cubic-bezier(.2,.6,.3,1) both}
+@keyframes lx-kb{from{transform:scale(1.07)}to{transform:scale(1)}}
+.lx-badge{position:absolute;right:10px;bottom:10px;padding:4px 8px;border-radius:6px;background:rgb(var(--c-shade) / .7);color:#fff}
+.lx-main:focus-visible,.lx-thumb:focus-visible{outline:2px solid var(--c-focus);outline-offset:3px}
+.lx-thumbs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.lx-thumb{position:relative;padding:0;border:2px solid transparent;border-radius:10px;overflow:hidden;aspect-ratio:4/3;background:var(--c-paper-tint);cursor:pointer}
+.lx-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.lx-thumb[aria-pressed=true]{border-color:var(--c-accent)}
+.lx-thumb .lx-badge{right:4px;bottom:4px;padding:2px 5px}
+.lx-thumb.is-entering{animation:lx-thumb-in .5s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0) * 70ms + 120ms)}
+@keyframes lx-thumb-in{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
+.lx-cta{margin-top:auto}
+.lx-note{margin:0;color:var(--c-muted)}
+
+/* Gallery (full screen, near black) */
+.lx-gallery{position:fixed;inset:0;width:100vw;max-width:none;height:100dvh;max-height:none;margin:0;padding:0;border:0;background:#121210;color:#f3efe6;display:none;grid-template-rows:auto minmax(0,1fr) auto;overflow:hidden}
+.lx-gallery[open]{display:grid}
+.lx-gallery::backdrop{background:#121210}
+.lxg-head{display:flex;align-items:center;gap:22px;padding:14px clamp(16px,3vw,40px);border-bottom:1px solid #ffffff1f}
+.lxg-head h2{margin:0;margin-right:auto;color:inherit}
+.lx-gallery .lx-tabs{border:0}
+.lx-gallery .lx-tabs [role=tab]{color:#bdb8ad}.lx-gallery .lx-tabs [role=tab][aria-selected=true]{color:#fff}
+.lxg-switch{display:flex;align-items:center;gap:10px;color:#e8e3d8}
+.lxg-switch[hidden]{display:none}
+.lxg-toggle{position:relative;width:46px;height:26px;padding:0;border-radius:999px;border:1px solid #ffffff55;background:#ffffff22;cursor:pointer}
+.lxg-toggle i{position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .3s var(--ease-out-expo)}
+.lxg-toggle[aria-checked=true]{background:var(--c-accent);border-color:var(--c-accent)}
+.lxg-toggle[aria-checked=true] i{transform:translateX(20px)}
+.lxg-close{min-height:44px;padding:0 6px;border:0;background:none;color:#fff;cursor:pointer}
+.lx-gallery :focus-visible{outline:2px solid var(--c-accent);outline-offset:3px}
+.lxg-stage{position:relative;min-height:0;display:grid;place-items:center;padding:12px clamp(70px,7vw,110px)}
+.lxg-frame{position:relative;width:100%;height:100%;display:grid;place-items:center;min-height:0}
+.lxg-photo{position:relative;max-width:100%;max-height:100%;height:100%;aspect-ratio:3/2}
+.lxg-photo img{display:block;width:100%;height:100%;object-fit:contain}
+.lxg-photo svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.lxg-photo polygon{fill:none;stroke:var(--c-map-lot-active);stroke-width:2.5;vector-effect:non-scaling-stroke;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;opacity:0}
+.lxg-photo svg.is-on polygon{opacity:1}
+.lxg-photo svg.is-drawn polygon{stroke-dashoffset:0;transition:stroke-dashoffset 1.4s cubic-bezier(.65,0,.35,1) .2s}
+.lxg-pano{position:absolute;inset:0;border-radius:6px;overflow:hidden;background-size:cover;cursor:grab;touch-action:none}
+.lxg-pano canvas{position:absolute;inset:0;width:100%!important;height:100%!important}
+.lxg-hint{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);padding:6px 12px;border-radius:999px;background:#000a;color:#fff;pointer-events:none}
+.lxg-prev,.lxg-next{position:absolute!important;top:50%;transform:translateY(-50%);z-index:3}
+.lxg-prev{left:clamp(10px,1.6vw,26px)}.lxg-next{right:clamp(10px,1.6vw,26px)}
+.lxg-foot{display:grid;grid-template-columns:minmax(120px,1fr) auto minmax(120px,1fr);align-items:center;gap:20px;padding:12px clamp(16px,3vw,40px) 16px;border-top:1px solid #ffffff1f}
+.lxg-count{color:#e8e3d8}
+.lxg-thumbs{display:flex;gap:10px;justify-content:center}
+.lxg-thumbs .lx-thumb{width:clamp(90px,10vw,150px)}
+.lxg-note{justify-self:end;margin:0;color:#cfc9bd;font-style:italic;max-width:30ch}
+::view-transition-group(lx-shared){animation-duration:.55s;animation-timing-function:cubic-bezier(.2,.8,.2,1)}
+
+/* Phone: map on top, sheet with compact / expanded states */
+@media(max-width:860px){
+  .lx-grid{display:flex;flex-direction:column;height:auto;min-height:0;padding:0}
+  .lx-head{padding:16px 16px 12px}
+  .lx-map{height:56svh;border-radius:0}
+  .lx-panel{position:relative;z-index:2;margin-top:-26px;padding:10px 16px 24px;border-radius:22px 22px 0 0;background:var(--c-paper);box-shadow:0 -8px 24px rgb(var(--c-shade) / .18);overflow:visible;gap:14px}
+  .lx-handle{display:block;align-self:center;width:64px;height:28px;padding:0;border:0;background:none;cursor:pointer}
+  .lx-handle span{display:block;width:44px;height:5px;margin:0 auto;border-radius:999px;background:var(--c-line-mid)}
+  .lx-index{overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+  .lx-index button{scroll-snap-align:center;flex:0 0 auto}
+  .lx-panel:not(.is-expanded) :is(.lx-media,.lx-note,.lx-facts>div:not(.lx-fact-area):not(:last-child),.lx-fact-area small){display:none}
+  .lx-panel:not(.is-expanded) .lx-facts{grid-template-areas:"area status";grid-template-columns:1fr auto}
+  .lx-thumbs{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .lxg-head{flex-wrap:wrap;gap:10px 16px}
+  .lxg-head h2{width:100%}
+  .lxg-stage{padding:8px 8px 70px}
+  .lxg-prev,.lxg-next{top:auto;bottom:6px;transform:none}
+  .lxg-foot{grid-template-columns:1fr;justify-items:center;gap:10px}
+  .lxg-note{justify-self:center;text-align:center}
+  .lxg-thumbs .lx-thumb{width:72px}
+}
+@media(prefers-reduced-motion:reduce){.lx-main-img,.lx-index button::after,.lx-tabs [role=tab]::after{transition:none}.lx-main-img.is-kb,.lx-thumb.is-entering{animation:none}}
+html body main.lx{padding:0!important;margin:0!important;max-width:none!important;width:100%}
+/* Panel entrance (system easing), independent of scroll */
+.lx-panel{animation:lx-panel-in .9s cubic-bezier(.16,1,.3,1) .25s both}
+@keyframes lx-panel-in{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@media(max-width:860px){html body .lx-grid{padding:0!important;width:100%}html body .lx-map{border-radius:0}}
+@media(prefers-reduced-motion:reduce){.lx-panel{animation:none}}
+@media(max-width:860px){html body .lx-map{height:46svh}}

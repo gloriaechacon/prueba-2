@@ -8,7 +8,7 @@
   if(node.nodeType===3){if(/[↗↖⤴]/.test(node.data))node.data=node.data.replace(/[↗↖⤴]/g,'').trimEnd();return;}
   if(node.nodeType!==1||node.matches('script,style,canvas,svg'))return;
   [...node.childNodes].forEach(clean);
-  if(node.matches('a,button')&&!node.matches('.photo-arrow')&&!node.textContent.trim()&&node.getAttribute('aria-label'))node.append(document.createTextNode(node.getAttribute('aria-label')));
+  if(node.matches('a,button')&&!node.matches('.photo-arrow,.rp-arrow,.lx-thumb,.lx-main,.lxg-toggle,.ifig-dotbtn,.lx-handle')&&!node.textContent.trim()&&node.getAttribute('aria-label'))node.append(document.createTextNode(node.getAttribute('aria-label')));
  }
  clean(document.body);
  new MutationObserver(records=>records.forEach(r=>r.type==='characterData'?clean(r.target):r.addedNodes.forEach(clean))).observe(document.body,{subtree:true,childList:true,characterData:true});
@@ -58,7 +58,7 @@
  // Reuse the actual aerial/3D explorer, not a second symbolic street map.
  const map=$('#c-map');
  if(map){
-  const frame=document.createElement('iframe');frame.className='parcel-frame';frame.title='Vista aérea y exploración de los lotes de Rainbow Park';frame.loading='lazy';frame.src='/a/?embed=lotes&lang='+(new URLSearchParams(location.search).get('lang')||'en')+'&revision=layout2&palette='+(document.body.dataset.palette||'champagne');map.replaceChildren(frame);
+  const frame=document.createElement('iframe');frame.className='parcel-frame';frame.title='Vista aérea y exploración de los lotes de Rainbow Park';frame.loading='lazy';frame.src='/a/?embed='+(map.dataset.embed||'lotes')+'&lang='+(new URLSearchParams(location.search).get('lang')||'en')+'&revision=layout2&palette='+(document.body.dataset.palette||'champagne');map.replaceChildren(frame);
   const send=()=>{const lot=$('#c-lot')?.value;if(lot)frame.contentWindow.postMessage({type:'rainbow-lot',lot},location.origin);};frame.addEventListener('load',send);addEventListener('rpc:lots-ready',send);$('#c-lot')?.addEventListener('change',send);
   addEventListener('message',e=>{if(e.origin===location.origin&&e.source===frame.contentWindow&&e.data?.type==='parcel-height'&&Number.isFinite(e.data.height))frame.style.height=Math.max(600,Math.min(1400,e.data.height))+'px';});
   addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==frame.contentWindow||e.data?.type!=='parcel-selected')return;const select=$('#c-lot');if(select?.options.length&&select.value!==e.data.lot){select.value=e.data.lot;select.dispatchEvent(new Event('change'));}});
@@ -117,6 +117,7 @@
  let index;
  const map=document.querySelector('#c-map');
  const zone=document.querySelector('#lot-explorer');
+ if(document.querySelector('.lx')||document.body.classList.contains('embedded-lotes2'))return; // the lots page has its own 01–06 index
  if(map||(zone&&parent===window)){
   index=document.createElement('nav');index.className='available-lot-index';index.dataset.noTranslate='';
   const heading=document.createElement('strong');index.append(heading);

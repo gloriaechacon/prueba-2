@@ -240,3 +240,24 @@ em,i{font-synthesis:none}
 .t-body{font:var(--t-body);letter-spacing:0}
 .t-small{font:var(--t-small);letter-spacing:0}
 .t-button{font:var(--t-button);letter-spacing:var(--t-button-track);text-transform:uppercase}
+
+/* Carousel arrows + progress (shared by Investment, Lots, House models) */
+.rp-arrow{position:relative;display:inline-grid;place-items:center;width:58px;height:58px;flex:0 0 58px;padding:0!important;margin:0!important;border:0!important;border-radius:50%!important;
+  background:var(--c-accent)!important;color:var(--c-arrow)!important;cursor:pointer;box-shadow:0 6px 22px rgb(var(--c-shade) / .28);
+  transition:scale .35s var(--ease-out-expo),background-color .3s;font:inherit}
+.rp-arrow-ico{display:block;font:400 26px/1 var(--font-sans);transition:transform .35s var(--ease-out-expo)}
+.rp-arrow:hover{scale:1.07}
+.rp-arrow[data-dir="1"]:hover .rp-arrow-ico{transform:translateX(4px)}
+.rp-arrow[data-dir="-1"]:hover .rp-arrow-ico{transform:translateX(-4px)}
+.rp-arrow:focus-visible{outline:2px solid currentColor;outline-offset:4px}
+.ifig .rp-arrow:focus-visible{outline-color:var(--if-fg)}.imap .rp-arrow:focus-visible{outline-color:var(--inv-ivory)}
+.rp-arrow-label{position:absolute;top:calc(100% + 10px);right:0;white-space:nowrap;pointer-events:none;
+  font:500 11px/1.2 var(--font-sans);letter-spacing:.18em;text-transform:uppercase;color:var(--if-fg,var(--inv-ivory))}
+.imap .rp-arrow-label{color:var(--inv-ivory)}
+.rp-arrow.is-nudging{animation:rp-nudge .7s ease-in-out .5s 2}
+@keyframes rp-nudge{0%,100%{translate:0 0}35%{translate:10px 0}65%{translate:0 0}}
+.rp-progress-wrap{display:grid;gap:10px;justify-items:center;min-width:120px}
+.rp-progress{display:block;width:clamp(96px,12vw,160px);height:2px;border-radius:2px;overflow:hidden;background:var(--if-rule,color-mix(in srgb,var(--inv-gold) 35%,transparent))}
+.rp-progress i{display:block;height:100%;background:var(--c-accent);transform-origin:left center;transform:scaleX(0);transition:transform .9s cubic-bezier(.65,.05,.25,1)}
+html body .rp-arrow.rp-arrow.rp-arrow.rp-arrow{border-radius:50%!important;width:58px!important;height:58px!important;min-width:58px!important;min-height:58px!important;background:var(--c-accent)!important;color:var(--c-arrow)!important;border:0!important;padding:0!important}
+.rp-arrow-ico svg{display:block;width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
