@@ -109,6 +109,57 @@ html[data-palette=tierra-ecuestre]{
   --c-map-lot:#9DB8C9;--c-map-lot-fill:#c9dbe6;--c-map-lot-active:#e3c48a;--c-map-group:#e3c48a;--c-map-sold:#b98277;
   --c-tone:#5e2f19;--c-shade:48 26 14
 }
+/* Round 6 palettes (same roles and section rhythm) */
+html[data-palette=azul-rey]{
+  --c-deep:#1D3F94;--c-paper:#F7F2E7;--c-ink:#0F1F4D;--c-on-deep:#F7F2E7;
+  --c-accent:#E2B93B;--c-accent-2:#E86F51;--c-support:#0F1F4D;
+  --c-on-support:#F7F2E7;--c-on-accent:#0F1F4D;--c-btn:#E2B93B;
+  --c-accent-text:#876b14;--c-accent-on-deep:#E2B93B;--c-accent-on-support:#E2B93B;   /* AA: accent as text on paper #E2B93B → #876b14 */
+  --c-detail:#E86F51;
+  --c-map-line:#1D3F94;--c-map-active:#E2B93B;--c-pin:#E86F51;
+  --c-map-lot:#F7F2E7;--c-map-lot-fill:color-mix(in srgb,#E2B93B 40%,#F7F2E7);--c-map-lot-active:#E2B93B;--c-map-group:#E86F51;--c-map-sold:#b98277;
+  --c-tone:#1D3F94;--c-shade:15 31 77
+}
+html[data-palette=esmeralda]{
+  --c-deep:#0F6B4F;--c-paper:#FBF6EC;--c-ink:#0A3D2E;--c-on-deep:#FBF6EC;
+  --c-accent:#F0B429;--c-accent-2:#B5543F;--c-support:#0A3D2E;
+  --c-on-support:#FBF6EC;--c-on-accent:#0A3D2E;--c-btn:#F0B429;
+  --c-accent-text:#92690a;--c-accent-on-deep:#f6d484;--c-accent-on-support:#F0B429;   /* AA: accent as text on paper #F0B429 → #92690a; accent on deep #F0B429 → #f6d484 (3.48 → 4.5) */
+  --c-detail:#B5543F;
+  --c-map-line:#0F6B4F;--c-map-active:#F0B429;--c-pin:#B5543F;
+  --c-map-lot:#FBF6EC;--c-map-lot-fill:color-mix(in srgb,#F0B429 40%,#FBF6EC);--c-map-lot-active:#F0B429;--c-map-group:#B5543F;--c-map-sold:#b98277;
+  --c-tone:#0F6B4F;--c-shade:10 61 46
+}
+html[data-palette=cielo-florida]{
+  --c-deep:#0E4D6E;--c-paper:#F6EBD9;--c-ink:#0E2F44;--c-on-deep:#F6EBD9;
+  --c-accent:#F28C28;--c-accent-2:#3FA7D6;--c-support:#0E2F44;
+  --c-on-support:#F6EBD9;--c-on-accent:#0E2F44;--c-btn:#F28C28;
+  --c-accent-text:#a3550a;--c-accent-on-deep:#f5a658;--c-accent-on-support:#F28C28;   /* AA: accent as text on paper #F28C28 → #a3550a; accent on deep #F28C28 → #f5a658 (3.71 → 4.5) */
+  --c-detail:#3FA7D6;
+  --c-map-line:#0E4D6E;--c-map-active:#F28C28;--c-pin:#3FA7D6;
+  --c-map-lot:#F6EBD9;--c-map-lot-fill:color-mix(in srgb,#F28C28 40%,#F6EBD9);--c-map-lot-active:#F28C28;--c-map-group:#3FA7D6;--c-map-sold:#b98277;
+  --c-tone:#0E4D6E;--c-shade:14 47 68
+}
+html[data-palette=borgona]{
+  --c-deep:#6B1E3A;--c-paper:#F8F1E6;--c-ink:#3D0F22;--c-on-deep:#F8F1E6;
+  --c-accent:#E5B54A;--c-accent-2:#9DB49A;--c-support:#3D0F22;
+  --c-on-support:#F8F1E6;--c-on-accent:#3D0F22;--c-btn:#E5B54A;
+  --c-accent-text:#8c6714;--c-accent-on-deep:#E5B54A;--c-accent-on-support:#E5B54A;   /* AA: accent as text on paper #E5B54A → #8c6714 */
+  --c-detail:#9DB49A;
+  --c-map-line:#6B1E3A;--c-map-active:#E5B54A;--c-pin:#9DB49A;
+  --c-map-lot:#F8F1E6;--c-map-lot-fill:color-mix(in srgb,#E5B54A 40%,#F8F1E6);--c-map-lot-active:#E5B54A;--c-map-group:#9DB49A;--c-map-sold:#b98277;
+  --c-tone:#6B1E3A;--c-shade:61 15 34
+}
+html[data-palette=cobalto]{
+  --c-deep:#2747A8;--c-paper:#F5EFE4;--c-ink:#141B33;--c-on-deep:#F5EFE4;
+  --c-accent:#D9673B;--c-accent-2:#F2C14E;--c-support:#141B33;
+  --c-on-support:#F5EFE4;--c-on-accent:#141B33;--c-btn:#D9673B;
+  --c-accent-text:#b64c23;--c-accent-on-deep:#ecb39d;--c-accent-on-support:#D9673B;   /* AA: accent as text on paper #D9673B → #b64c23; accent on deep #D9673B → #ecb39d (2.33 → 4.5); carousel arrow uses ink (deep on accent 2.33) */
+  --c-detail:#F2C14E;
+  --c-map-line:#2747A8;--c-map-active:#D9673B;--c-pin:#F2C14E;
+  --c-map-lot:#F5EFE4;--c-map-lot-fill:color-mix(in srgb,#D9673B 40%,#F5EFE4);--c-map-lot-active:#D9673B;--c-map-group:#F2C14E;--c-map-sold:#b98277;
+  --c-tone:#2747A8;--c-shade:20 27 51;--c-arrow:#141B33
+}
 :root{
   --c-line:color-mix(in srgb,var(--c-ink) 22%,transparent);
   --c-line-strong:color-mix(in srgb,var(--c-ink) 70%,transparent);
@@ -261,3 +312,6 @@ em,i{font-synthesis:none}
 .rp-progress i{display:block;height:100%;background:var(--c-accent);transform-origin:left center;transform:scaleX(0);transition:transform .9s cubic-bezier(.65,.05,.25,1)}
 html body .rp-arrow.rp-arrow.rp-arrow.rp-arrow{border-radius:50%!important;width:58px!important;height:58px!important;min-width:58px!important;min-height:58px!important;background:var(--c-accent)!important;color:var(--c-arrow)!important;border:0!important;padding:0!important}
 .rp-arrow-ico svg{display:block;width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+/* AA (esmeralda): its deep is a mid tone, so secondary text on deep uses 90% of on-deep (4.48 → ≥4.6) */
+html[data-palette=esmeralda] [data-surface=deep],html[data-palette=esmeralda] footer{--s-muted:color-mix(in srgb,var(--c-on-deep) 92%,var(--c-deep))}
+html[data-palette=esmeralda]{--inv-muted-deep:color-mix(in srgb,var(--c-on-deep) 92%,var(--c-deep))}

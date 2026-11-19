@@ -9,7 +9,12 @@
     'champana': { name: 'Champaña', note: 'Current · reference', swatches: ['#26272b', '#f4efe4', '#896714', '#d2b77e', '#d8c49d'] },
     'verde-ocala': { name: 'Verde Ocala', note: 'Forest green & brass', swatches: ['#1F3A2E', '#F4EEE2', '#C29A4B', '#B8653F', '#597446'] },
     'atardecer': { name: 'Atardecer', note: 'Night blue & sunset', swatches: ['#16233B', '#F2E6D3', '#E8875B', '#D9A441', '#8FA58C'] },
-    'tierra-ecuestre': { name: 'Tierra ecuestre', note: 'Saddle, pasture & sky', swatches: ['#7A3E22', '#F6F0E4', '#B98B3E', '#2F4A35', '#9DB8C9'] }
+    'tierra-ecuestre': { name: 'Tierra ecuestre', note: 'Saddle, pasture & sky', swatches: ['#7A3E22', '#F6F0E4', '#B98B3E', '#2F4A35', '#9DB8C9'] },
+    'azul-rey': { name: 'Azul rey', note: 'Royal blue & gold', swatches: ['#1D3F94', '#F7F2E7', '#E2B93B', '#E86F51', '#0F1F4D'] },
+    'esmeralda': { name: 'Esmeralda', note: 'Emerald & saffron', swatches: ['#0F6B4F', '#FBF6EC', '#F0B429', '#B5543F', '#0A3D2E'] },
+    'cielo-florida': { name: 'Cielo Florida', note: 'Gulf blue & orange', swatches: ['#0E4D6E', '#F6EBD9', '#F28C28', '#3FA7D6', '#0E2F44'] },
+    'borgona': { name: 'Borgoña', note: 'Burgundy & sage', swatches: ['#6B1E3A', '#F8F1E6', '#E5B54A', '#9DB49A', '#3D0F22'] },
+    'cobalto': { name: 'Cobalto', note: 'Cobalt & terracotta', swatches: ['#2747A8', '#F5EFE4', '#D9673B', '#F2C14E', '#141B33'] }
   };
   const DEFAULT = 'champana';
   const KEY = 'rp-palette', PANEL_KEY = 'rp-palette-panel';
