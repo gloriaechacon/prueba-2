@@ -150,7 +150,7 @@ if (select && panel) {
     nav.querySelector('[data-dir="1"]').setAttribute('aria-label', t().next);
     handle?.setAttribute('aria-label', t().expand);
     cta.hidden = !n;
-    cta.href = '/proyecto/contacto/' + (n ? '?lot=' + n : '');
+    cta.href = '/proyecto/contacto/' + (n ? '?lot=' + n : '') + '#c-consultation';
     cta.querySelector('span').textContent = t().ask;
     await Promise.all([swap(sheet, sheetHTML(lot), changed ? dir : 0), swap(media, mediaHTML(id), changed ? dir : 0)]);
     const c = sheet.querySelector('[data-count]'); if (c) countUp(c, Number(c.dataset.count), 2);

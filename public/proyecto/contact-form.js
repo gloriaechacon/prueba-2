@@ -141,3 +141,14 @@
   describe();
   document.addEventListener('rpc:language', describe);
 })();
+/* Coming from "Ask about this lot" / "Prepare my inquiry" (#c-consultation): go straight to the
+   form, without the animated intro. From the nav the intro stays. */
+(() => {
+  if (location.hash !== '#c-consultation') return;
+  const form = document.getElementById('c-consultation');
+  if (!form) return;
+  document.documentElement.classList.add('skip-page-intro');
+  const jump = () => { const nav = document.querySelector('.final-nav'); scrollTo({ top: form.getBoundingClientRect().top + scrollY - (nav ? nav.offsetHeight : 0) - 16, behavior: 'instant' }); };
+  jump(); addEventListener('load', jump, { once: true }); setTimeout(jump, 400);
+  form.querySelector('input,select,textarea')?.focus({ preventScroll: true });
+})();

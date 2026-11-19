@@ -107,7 +107,7 @@ function sheetHTML(id) {
     <dl class="hm-areas">${[[s.living, f.living], [s.entry, f.entry], [s.garage, f.garageArea]].map(([k, v]) => `<div><dt class="t-label">${k}</dt><dd class="t-label">${nf(v)} ft²</dd></div>`).join('')}
       <div class="hm-total"><dt class="t-label">${s.total}</dt><dd class="t-label">${nf(f.total)} ft²</dd></div></dl>
     ${sw}
-    <a class="btn btn--primary btn--block" href="/proyecto/contacto/?house=${id}"><span>${s.inquiry}</span><b aria-hidden="true">→</b></a>
+    <a class="btn btn--primary btn--block" href="/proyecto/contacto/?house=${id}#c-consultation"><span>${s.inquiry}</span><b aria-hidden="true">→</b></a>
     <p class="t-small hm-note">${s.note}</p>`;
 }
 function renderViewer(dir = 0) {

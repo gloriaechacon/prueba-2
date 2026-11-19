@@ -144,6 +144,7 @@
     update();
   }
   function pageIntroMotion() {
+    if (root.classList.contains('skip-page-intro')) return;
     const intro = document.querySelector('.page-intro');
     const img = intro?.querySelector('.page-intro-media img');
     if (!img) return;

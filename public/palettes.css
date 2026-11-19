@@ -154,3 +154,18 @@ html body.contact-page .c-heading{display:grid;gap:18px;align-content:start}
 html body.contact-page .contact-title{margin:0}
 html body.contact-page .contact-image img{width:100%;height:auto!important;aspect-ratio:3/2;object-fit:cover;max-height:none!important;border-radius:16px;display:block}
 html body.contact-page .c-heading{align-self:start}
+
+/* ---------- Round 8 · global ---------- */
+/* Selected option: underline + accent tint behind it (lots index, photo tabs, destinations bar,
+   investment filters, Utah | Bell, viewer tabs) */
+:root{--c-sel:color-mix(in srgb,var(--c-accent) 24%,transparent)}
+html body :is(.lx-index button[aria-pressed=true],.lx-tabs [role=tab][aria-selected=true],.rt-list button[aria-pressed=true],.imap-filter button[aria-pressed=true],.hm-houses button[aria-pressed=true],.hm-tabs button[aria-selected=true]){background:var(--c-sel)!important;border-radius:6px 6px 0 0!important}
+/* Language selector: system style, one clean focus ring */
+html body .rpc-language-control{position:relative;display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 34px 0 14px!important;border:1px solid var(--c-line-mid)!important;border-radius:999px!important;background:transparent!important;color:inherit!important;font:var(--t-label)!important;letter-spacing:var(--t-label-track)!important;text-transform:uppercase;box-shadow:none!important;outline:0}
+html body .rpc-language-control>span{display:none}
+html body .rpc-language-control::after{content:"";position:absolute;right:14px;top:50%;width:7px;height:7px;margin-top:-6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg);pointer-events:none}
+html body .rpc-language-control select{appearance:none;-webkit-appearance:none;width:auto!important;min-width:0!important;min-height:38px!important;margin:0!important;padding:0!important;border:0!important;outline:0!important;box-shadow:none!important;background:transparent!important;color:inherit!important;font:inherit!important;letter-spacing:inherit!important;text-transform:inherit;cursor:pointer}
+html body .rpc-language-control select:focus,html body .rpc-language-control select:focus-visible{outline:0!important;box-shadow:none!important}
+html body .rpc-language-control,html body .rpc-language-control:focus-within{outline:0!important}
+html body .rpc-language-control:focus-within{border-color:var(--c-accent)!important;box-shadow:none!important}
+html body .rpc-language-control option{color:var(--c-ink);background:var(--c-paper);text-transform:none}
