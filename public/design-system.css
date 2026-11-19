@@ -218,3 +218,8 @@ em,i{font-synthesis:none}
 .chapter-title{font-family:var(--font-display);font-weight:300;font-size:var(--step-4);line-height:var(--lh-heading);letter-spacing:var(--track-display);margin:0}
 .chapter-title em{font-style:italic;font-weight:300}
 .chapter-kicker{display:block;margin-top:14px;font:500 var(--step--1)/1.4 var(--font-sans);letter-spacing:var(--track-label);text-transform:uppercase}
+
+/* Maps never paint over the header: each Leaflet map is its own stacking context
+   (panes 400, controls 1000 stay inside it) and the header sits above all page content. */
+.leaflet-container{isolation:isolate;z-index:0}
+.final-nav,.site-drawer{z-index:3000!important}
