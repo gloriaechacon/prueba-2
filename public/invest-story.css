@@ -172,7 +172,7 @@
 .idos-grid dt{font:700 var(--step--2)/1.2 var(--font-sans);letter-spacing:.2em;text-transform:uppercase}
 .idos-grid dd{margin:4px 0 0;font:400 var(--step-0)/1.35 var(--font-display);font-size:1.15rem}
 .idos-grid a{color:inherit;text-underline-offset:3px}
-.idos-foot{grid-column:1/-1;margin:clamp(32px,6vh,64px) calc(-1 * clamp(16px,5vw,88px)) 0;padding:22px clamp(16px,5vw,88px);background:var(--inv-night);color:var(--inv-ivory);text-align:center;font:400 1.1rem/1.4 var(--font-display)}
+.idos-foot{grid-column:2;max-width:none!important;width:100%;box-sizing:border-box;margin:clamp(24px,4vh,44px) 0 0;padding:16px 0 clamp(36px,7vh,72px);background:none!important;border-top:1px solid var(--s-line,var(--c-line));color:var(--s-muted,var(--c-muted))!important;text-align:left;font:500 11px/1.6 var(--font-sans);letter-spacing:.18em;text-transform:uppercase}
 @media(max-width:860px){
   .idos{grid-template-columns:1fr}
   .idos-side{border-right:0;padding:0 0 18px}
@@ -181,6 +181,7 @@
   .idos-list summary i{grid-column:3;grid-row:1}
   .idos-body{padding-left:0}
   .idos-grid{grid-template-columns:1fr}
+  .idos-foot{grid-column:1}
 }
 
 /* Page intro extras for Investment */

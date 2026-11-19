@@ -101,7 +101,6 @@ html body .c-button:hover{background:var(--c-btn-hover)!important}
 .idos[data-surface] :is(.idos-title,.idos-row-title,.idos-kicker,.idos-grid dt,.idos-grid dd,.idos-grid a){color:var(--s-fg)}
 .idos[data-surface] .idos-list li,.idos[data-surface] .idos-side{border-color:var(--s-line)}
 .idos[data-surface] :is(.idos-n,.idos-meta){border-color:var(--s-line)}
-.idos-foot{background:var(--c-deep)!important;color:var(--c-on-deep)!important}
 .imap[data-surface] .imap-head{background:transparent!important}
 
 /* ---------- Floating palette selector (test hosts only, see palettes.js) ---------- */
