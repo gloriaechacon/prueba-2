@@ -254,3 +254,4 @@
 }
 @media(prefers-reduced-motion:reduce){.rp-arrow,.rp-arrow-ico,.rp-progress i{transition:none!important}.rp-arrow.is-nudging{animation:none}}
 html body .rp-arrow.rp-arrow.rp-arrow.rp-arrow{border-radius:50%!important;width:58px!important;height:58px!important;min-width:58px!important;min-height:58px!important;background:var(--c-accent)!important;color:var(--c-arrow)!important;border:0!important;padding:0!important}
+.rp-arrow-ico svg{display:block;width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}

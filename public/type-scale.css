@@ -1,0 +1,46 @@
+/* Type scale enforcement — the six styles of design-system.css and nothing else.
+   Loaded last on every page. Each rule maps a role to one style; inline text inherits from its
+   block. The Leaflet map (and the test-only palette tool) are left untouched.
+     display  Cormorant 300 · hero/section titles, big figures
+     title    Cormorant 400 · card titles, lot and destination names, leads
+     label    Manrope 500 11–12 px uppercase .18em · nav, categories, FROM/TO, states
+     body     Manrope 400 16 px / 1.6
+     small    Manrope 400 13 px · sources, notes, credits, legal
+     button   Manrope 500 13 px uppercase .14em · buttons and action links */
+
+/* body: every block of text */
+html[lang] body:not(#rp-type) :where(p,li,dd,td,th,blockquote,input,select,textarea,summary,address,legend,caption,div,article,aside,section,form,fieldset,figure,ol,ul,dl,main,header,footer,nav,table):not(:where(.leaflet-container *,.rp-palette,.rp-palette *)){font:var(--t-body)!important;letter-spacing:0!important;text-transform:none!important;font-variant-numeric:normal}
+
+/* inline text inherits the style of its block (italic stays italic) */
+html[lang] body:not(#rp-type) :where(span,a,strong,b,em,i,small,time,abbr,mark,cite,q,sup,sub,label,dt,output,u,s):not(:where(.leaflet-container *,.rp-palette,.rp-palette *)){font-family:inherit!important;font-size:inherit!important;font-weight:inherit!important;line-height:inherit!important;letter-spacing:inherit!important;text-transform:inherit!important}
+
+/* small */
+html[lang] body:not(#rp-type) :where(small,figcaption,caption,.t-small,[class*=note],[class*=credit],[class*=source],[class*=caption],[class*=disclaimer],[class*=hint],.c-note,.ifig-status,.imap-foot,.page-intro-credit,.media-note,.route-pass-note,.zone-truth,.fine,.idos-meta,.imap-source,.imap-note):not(:where(.leaflet-container *,.rp-palette,.rp-palette *)){font:var(--t-small)!important;letter-spacing:0!important;text-transform:none!important}
+
+/* label */
+html[lang] body:not(#rp-type) :where(.t-label,.eyebrow,[class*=kicker],[class*=-cat],[class*=status],[class*=pill],[class*=-meta],[class*=-label],[class*=count],[class*=badge],
+  #final-links a,.final-menu,label,dt,legend,th,.final-brand small,.ifig-src b,.imap-unit,.imap-facts dd,.rt-n,.arrival-meta,.portal-meta,.arrival-utility,.portal-utility,
+  .route-pass-stats small,.route-pass-trip dt,.zone-top strong,.lot-sheet-legend,.idos-grid dt,.arrival-intro-label,.rp-arrow-label):not(:where(.leaflet-container *,.rp-palette,.rp-palette *)){font:var(--t-label)!important;letter-spacing:var(--t-label-track)!important;text-transform:uppercase!important}
+
+/* title */
+html[lang] body:not(#rp-type) :where(h3,h4,h5,h6,.t-title,[class*=-name],[class*=-title]:not(h1,h2,[class*=page-intro-title],[class*=chapter-title],[class*=ifig-title],[class*=imap-title],[class*=idos-title],[class*=teaser-title]),
+  .ifig-label,.ifig-period,.idos-n,.route-pass-trip dd,.route-pass-stats strong,.page-intro-lead,.final-brand span:not(small),.footer-brand,.lot-sheet-figure,.lot-sheet-sub,.lot-sheet-tbc,.imap-name,.rt-name):not(:where(.leaflet-container *,.rp-palette,.rp-palette *)){font:var(--t-title)!important;letter-spacing:0!important;text-transform:none!important}
+
+/* display: hero and section titles, big figures (tabular numbers) */
+html[lang] body:not(#rp-type) :where(h1,h2,.t-display,.chapter-title,.ifig-title,.imap-title,.idos-title,.page-intro-title,.teaser-title,.arrival-heading,.portal-title,.arrival-intro-line>span,.ifig-num,.imap-metric):not(:where(.leaflet-container *,.rp-palette,.rp-palette *)){font:var(--t-display)!important;letter-spacing:var(--t-display-track)!important;text-transform:none!important;font-variant-numeric:tabular-nums lining-nums}
+html[lang] body:not(#rp-type) :where(h1,h2,.t-display,.chapter-title,.ifig-title,.imap-title,.idos-title,.page-intro-title,.teaser-title,.arrival-heading,.portal-title) em{font-style:italic!important}
+
+/* button: buttons and action links (controls included) */
+html[lang] body:not(#rp-type) :where(button,.btn,.link-line,[role=tab],.c-button,.skip,.c-skip):not(:where(.leaflet-container *,.rp-palette,.rp-palette *)){font:var(--t-button)!important;letter-spacing:var(--t-button-track)!important;text-transform:uppercase!important}
+/* names inside list buttons keep the title style */
+html[lang] body:not(#rp-type) :where(button,[role=tab]) :where(.rt-name,[class*=-name]):not(:where(.leaflet-container *)){font:var(--t-title)!important;letter-spacing:0!important;text-transform:none!important}
+html[lang] body:not(#rp-type) :where(button,[role=tab]) :where(.rt-meta,.rt-n,[class*=-meta]):not(:where(.leaflet-container *)){font:var(--t-label)!important;letter-spacing:var(--t-label-track)!important;text-transform:uppercase!important}
+
+/* explicit style classes always win (they come last) */
+html[lang] body:not(#rp-type) :where(.t-display):not(:where(.leaflet-container *)){font:var(--t-display)!important;letter-spacing:var(--t-display-track)!important;text-transform:none!important}
+html[lang] body:not(#rp-type) :where(.t-title):not(:where(.leaflet-container *)){font:var(--t-title)!important;letter-spacing:0!important;text-transform:none!important}
+html[lang] body:not(#rp-type) :where(.t-label):not(:where(.leaflet-container *)){font:var(--t-label)!important;letter-spacing:var(--t-label-track)!important;text-transform:uppercase!important}
+html[lang] body:not(#rp-type) :where(.t-body):not(:where(.leaflet-container *)){font:var(--t-body)!important;letter-spacing:0!important;text-transform:none!important}
+html[lang] body:not(#rp-type) :where(.t-small):not(:where(.leaflet-container *)){font:var(--t-small)!important;letter-spacing:0!important;text-transform:none!important}
+html[lang] body:not(#rp-type) :where(.t-button):not(:where(.leaflet-container *)){font:var(--t-button)!important;letter-spacing:var(--t-button-track)!important;text-transform:uppercase!important}
+html[lang] body:not(#rp-type) :where(.ifig-status,.lot-sheet-source,.route-pass-note):not(:where(.leaflet-container *)){font:var(--t-small)!important;letter-spacing:0!important;text-transform:none!important}

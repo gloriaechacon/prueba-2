@@ -141,6 +141,23 @@ Sections declare `data-surface="deep|paper|support"`; text inside reads `--s-fg`
 
 ## Typography
 
+### Six styles only (redesign, round 5)
+
+`public/design-system.css` defines six styles (tokens `--t-*` and classes `.t-*`); `public/type-scale.css`, loaded last on every page, maps every text role to one of them, so no other font, weight or size combination exists outside the Leaflet map:
+
+| Style | Font | Use |
+|---|---|---|
+| display | Cormorant Garamond 300, clamp 44–104 px, tabular figures | hero and section titles, big figures (italic only for the highlighted word) |
+| title | Cormorant Garamond 400, clamp 24–36 px | card titles, lot and destination names, leads |
+| label | Manrope 500, 11–12 px, uppercase, 0.18em | nav, categories, FROM / TO, states |
+| body | Manrope 400, 16 px / 1.6 | running text |
+| small | Manrope 400, 13 px | sources, notes, credits, legal |
+| button | Manrope 500, 13 px, uppercase, 0.14em | buttons and action links |
+
+Audit (visible text, six main pages, Leaflet excluded): 70 combinations at 1440 px and 60 at 375 px before; 6 after at both widths.
+
+Buttons: one system — `.btn.btn--primary` (accent fill), `.btn.btn--secondary` (hairline border) and `.link-line`.
+
 The locally bundled Barlow Condensed medium file is registered under the CSS family name `Barlow`. It is used for scene headings, house names, dates, and large statistical values. Manrope remains the local reading and control family, with regular, semibold, and bold weights.
 
 The opening title uses the display token; general headings use the headline token, with deliberate scene-specific sizes. House names reach 90px on desktop. Dossier project headings are 46px after the final refinement; project and market body paragraphs are 14px with a 1.9 line height, and their small subheadings are 15px. At 550px and below these become 41px, 13px, and 14px respectively. Sources use 14px link text and 12px metadata, reduced to 13px and 11px on phones. Do not reintroduce the earlier, superseded 12px dossier body styles.

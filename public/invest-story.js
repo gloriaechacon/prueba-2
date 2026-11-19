@@ -140,8 +140,8 @@
           <h2 class="ifig-title">El valor del <em>tiempo</em></h2></header>
         <div class="ifig-stagewrap">
           <div class="ifig-viewport"><div class="ifig-track" aria-live="polite">${items.map(card).join('')}</div></div>
-          <button type="button" class="ifig-side ifig-side--prev rp-arrow" data-dir="-1" aria-label="Anterior"><span class="rp-arrow-ico" aria-hidden="true">←</span></button>
-          <button type="button" class="ifig-side ifig-side--next rp-arrow" data-dir="1" aria-label="Siguiente"><span class="rp-arrow-ico" aria-hidden="true">→</span><span class="rp-arrow-label" aria-hidden="true"></span></button>
+          <button type="button" class="ifig-side ifig-side--prev rp-arrow" data-dir="-1" aria-label="Anterior"><span class="rp-arrow-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M11 6l-6 6 6 6"/></svg></span></button>
+          <button type="button" class="ifig-side ifig-side--next rp-arrow" data-dir="1" aria-label="Siguiente"><span class="rp-arrow-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span><span class="rp-arrow-label" aria-hidden="true"></span></button>
         </div>
         <nav class="ifig-nav" aria-label="Indicadores">
           <div class="rp-progress-wrap"><span class="ifig-count" data-no-translate>01 / ${pad(n)}</span><span class="rp-progress" aria-hidden="true"><i></i></span></div>
@@ -231,7 +231,7 @@
           <div class="imap-mapwrap"><div class="imap-map" aria-label="Mapa de proyectos"></div>
             <p class="imap-foot"><span class="imap-precision"></span><span class="imap-asof"></span></p></div>
           <aside class="imap-card"><div class="imap-stack" aria-live="polite"></div>
-            <nav class="imap-nav" aria-label="Proyectos"><button type="button" class="imap-arrow imap-arrow--prev rp-arrow" data-dir="-1" aria-label="Anterior"><span class="rp-arrow-ico" aria-hidden="true">←</span></button><div class="rp-progress-wrap"><span class="imap-count" data-no-translate></span><span class="rp-progress" aria-hidden="true"><i></i></span></div><button type="button" class="imap-arrow imap-arrow--next rp-arrow" data-dir="1" aria-label="Siguiente"><span class="rp-arrow-ico" aria-hidden="true">→</span><span class="rp-arrow-label" aria-hidden="true"></span></button></nav></aside>
+            <nav class="imap-nav" aria-label="Proyectos"><button type="button" class="imap-arrow imap-arrow--prev rp-arrow" data-dir="-1" aria-label="Anterior"><span class="rp-arrow-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M11 6l-6 6 6 6"/></svg></span></button><div class="rp-progress-wrap"><span class="imap-count" data-no-translate></span><span class="rp-progress" aria-hidden="true"><i></i></span></div><button type="button" class="imap-arrow imap-arrow--next rp-arrow" data-dir="1" aria-label="Siguiente"><span class="rp-arrow-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span><span class="rp-arrow-label" aria-hidden="true"></span></button></nav></aside>
         </div>
       </div>`;
     const el = root.querySelector('.imap-map');
