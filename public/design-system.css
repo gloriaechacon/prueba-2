@@ -180,7 +180,7 @@ em,i{font-synthesis:none}
    lot-sheet action.
    .btn.btn--primary    dark gold, cream label
    .btn.btn--secondary  outlined, inherits the surrounding colour
-   .btn--light          variant for buttons over images / video
+   (no other variants: over media the primary keeps its accent fill)
    .link-line           text link with the nav's sliding underline
    Optional trailing <b aria-hidden="true">→</b> slides on hover.
    =================================================================== */
@@ -190,9 +190,10 @@ em,i{font-synthesis:none}
   --ink:var(--c-ink);--paper-warm:var(--c-paper);--cream:var(--c-paper-2);
   --radius-btn:10px;--hairline:var(--c-line)
 }
+/* One button system (reference: the pass "Explore destination"): primary, secondary, link-line. Nothing else. */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:16px;min-height:52px;padding:0 28px;
   border-radius:var(--radius-btn);border:1px solid transparent;cursor:pointer;text-decoration:none;
-  font:600 var(--step--1)/1.1 var(--font-sans);letter-spacing:var(--track-label-tight);text-transform:uppercase;
+  font:var(--t-button);letter-spacing:var(--t-button-track);text-transform:uppercase;
   transition:background .35s var(--ease-out-expo),color .35s var(--ease-out-expo),border-color .35s var(--ease-out-expo)}
 .btn b{font-weight:400;font-size:1.15em;letter-spacing:0;transition:transform .5s var(--ease-out-expo)}
 .btn:hover b{transform:translateX(5px)}
@@ -201,13 +202,9 @@ em,i{font-synthesis:none}
 .btn--primary:hover{background:var(--c-btn-hover);color:var(--c-on-accent)}
 .btn--secondary{background:transparent;color:inherit;border-color:currentColor}
 .btn--secondary:hover{background:var(--s-fg,var(--c-ink));color:var(--s-bg,var(--c-paper));border-color:var(--s-fg,var(--c-ink))}
-.btn--light.btn--primary{background:var(--c-on-deep);color:var(--c-deep)}
-.btn--light.btn--primary:hover{background:var(--c-btn);color:var(--c-on-accent)}
-.btn--light.btn--secondary{color:var(--c-on-deep);border-color:color-mix(in srgb,var(--c-on-deep) 75%,transparent)}
-.btn--light.btn--secondary:hover{background:var(--c-on-deep);color:var(--c-deep);border-color:var(--c-on-deep)}
 .btn--block{width:100%;justify-content:space-between}
 .link-line{position:relative;display:inline-flex;align-items:center;gap:10px;color:inherit;text-decoration:none;padding:8px 0;
-  font:600 var(--step--2)/1.3 var(--font-sans);letter-spacing:var(--track-label-tight);text-transform:uppercase}
+  font:var(--t-button);letter-spacing:var(--t-button-track);text-transform:uppercase}
 .link-line::after{content:"";position:absolute;left:0;right:0;bottom:2px;height:1px;background:currentColor;transform:scaleX(1);transform-origin:left;transition:transform .5s var(--ease-out-expo)}
 .link-line:hover::after{animation:link-line-sweep .7s var(--ease-out-expo)}
 @keyframes link-line-sweep{0%{transform:scaleX(1);transform-origin:right}45%{transform:scaleX(0);transform-origin:right}46%{transform:scaleX(0);transform-origin:left}100%{transform:scaleX(1);transform-origin:left}}

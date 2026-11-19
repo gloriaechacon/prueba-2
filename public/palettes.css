@@ -129,3 +129,17 @@ html body .c-button:hover{background:var(--c-btn-hover)!important}
 /* Phone: the selector collapses to a 44px swatch button (label stays for assistive tech) */
 @media(max-width:760px){.rp-palette-toggle{width:44px;padding:0;justify-content:center}.rp-palette-toggle>span:not(.rp-palette-dot){position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}.rp-palette-dot{width:20px;height:20px}}
 #lot-gallery .media-thumbs button[aria-pressed=true]{--s-fg:var(--c-on-deep)}
+
+/* Button system wins over older stylesheets (same size, type, radius and colours everywhere) */
+html body .btn{min-height:52px!important;height:auto!important;padding:0 28px!important;border-radius:var(--radius-btn)!important;box-shadow:none!important;
+  font:var(--t-button)!important;letter-spacing:var(--t-button-track)!important;text-transform:uppercase!important;text-decoration:none!important;width:auto}
+html body .btn.btn--block{width:100%}
+html body .btn--primary{background:var(--c-btn)!important;color:var(--c-on-accent)!important;border:1px solid var(--c-btn)!important}
+html body .btn--primary:hover{background:var(--c-btn-hover)!important;border-color:var(--c-btn-hover)!important}
+html body .btn--secondary{background:transparent!important;color:inherit!important;border:1px solid currentColor!important}
+html body .btn--secondary:hover{background:var(--s-fg,var(--c-ink))!important;color:var(--s-bg,var(--c-paper))!important;border-color:var(--s-fg,var(--c-ink))!important}
+html body .btn *{color:inherit!important;font:inherit!important;letter-spacing:inherit!important}
+html body .link-line{font:var(--t-button)!important;letter-spacing:var(--t-button-track)!important;text-transform:uppercase!important;background:none!important;border:0!important;border-radius:0!important;padding:8px 0!important;box-shadow:none!important}
+html body .btn.btn.btn{border-radius:10px!important}
+html body .btn:not(:has(b))::after{content:"→";font-weight:400;font-size:1.15em;letter-spacing:0;transition:transform .5s var(--ease-out-expo)}
+html body .btn:not(:has(b)):hover::after{transform:translateX(5px)}
