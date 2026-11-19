@@ -315,3 +315,6 @@ html body .rp-arrow.rp-arrow.rp-arrow.rp-arrow{border-radius:50%!important;width
 /* AA (esmeralda): its deep is a mid tone, so secondary text on deep uses 90% of on-deep (4.48 → ≥4.6) */
 html[data-palette=esmeralda] [data-surface=deep],html[data-palette=esmeralda] footer{--s-muted:color-mix(in srgb,var(--c-on-deep) 92%,var(--c-deep))}
 html[data-palette=esmeralda]{--inv-muted-deep:color-mix(in srgb,var(--c-on-deep) 92%,var(--c-deep))}
+
+/* One vertical rhythm between sections on every page */
+:root{--section-y:clamp(64px,11vh,128px);--section-x:clamp(16px,5vw,88px)}

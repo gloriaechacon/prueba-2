@@ -125,3 +125,4 @@ html body main.lx{padding:0!important;margin:0!important;max-width:none!importan
 @media(max-width:860px){html body .lx-grid{padding:0!important;width:100%}html body .lx-map{border-radius:0}}
 @media(prefers-reduced-motion:reduce){.lx-panel{animation:none}}
 @media(max-width:860px){html body .lx-map{height:46svh}}
+html body.c-page main.lx#contenido{padding:0!important}

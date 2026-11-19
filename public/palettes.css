@@ -143,3 +143,14 @@ html body .link-line{font:var(--t-button)!important;letter-spacing:var(--t-butto
 html body .btn.btn.btn{border-radius:10px!important}
 html body .btn:not(:has(b))::after{content:"→";font-weight:400;font-size:1.15em;letter-spacing:0;transition:transform .5s var(--ease-out-expo)}
 html body .btn:not(:has(b)):hover::after{transform:translateX(5px)}
+
+/* Same vertical spacing between sections on every page (--section-y, design-system.css) */
+html body.final-home .teaser:not(.teaser--invest),html body .hm>section,html body .project-introduction{padding-block:var(--section-y)!important}
+html body.final-home .teaser.teaser--contact:not(.teaser--invest){padding-bottom:0!important}
+html body .idos{padding-top:var(--section-y)!important}
+html body .ifig-inner,html body .imap-head{padding-top:var(--section-y)!important}
+html body.contact-page main#contenido,html body.c-page:not(:has(.lx)) main#contenido{padding-top:var(--section-y)!important;padding-bottom:var(--section-y)!important}
+html body.contact-page .c-heading{display:grid;gap:18px;align-content:start}
+html body.contact-page .contact-title{margin:0}
+html body.contact-page .contact-image img{width:100%;height:auto!important;aspect-ratio:3/2;object-fit:cover;max-height:none!important;border-radius:16px;display:block}
+html body.contact-page .c-heading{align-self:start}

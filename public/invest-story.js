@@ -137,7 +137,7 @@
     };
     root.innerHTML = `<div class="ifig-inner" role="region" data-role-desc="carousel" aria-label="Indicadores" tabindex="0">
         <header class="ifig-head"><span class="ifig-kicker">Rainbow Park / Inversión</span>
-          <h2 class="ifig-title">El valor del <em>tiempo</em></h2></header>
+          <h2 class="ifig-title" data-reveal="lines">El valor del <em>tiempo</em></h2></header>
         <div class="ifig-stagewrap">
           <div class="ifig-viewport"><div class="ifig-track" aria-live="polite">${items.map(card).join('')}</div></div>
           <button type="button" class="ifig-side ifig-side--prev rp-arrow" data-dir="-1" aria-label="Anterior"><span class="rp-arrow-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M11 6l-6 6 6 6"/></svg></span></button>
@@ -225,7 +225,7 @@
     let steps = all, filter = 'all';
     root.classList.add('imap');
     root.innerHTML = `<div class="imap-inner" role="region" data-role-desc="carousel" aria-label="Mapa de proyectos" tabindex="0">
-        <header class="imap-head"><h2 class="imap-title">El mapa de la <em>inversión</em></h2><p>${esc(data.mapNote)}</p>
+        <header class="imap-head"><h2 class="imap-title" data-reveal="lines">El mapa de la <em>inversión</em></h2><p>${esc(data.mapNote)}</p>
           <div class="imap-filter" role="group" aria-label="Filtrar por categoría"><button type="button" data-cat="all" aria-pressed="true">Todos</button>${cats.map(c => `<button type="button" data-cat="${esc(c)}" aria-pressed="false" data-no-translate>${esc(CATEGORY[c]?.[lang()] || c)}</button>`).join('')}</div></header>
         <div class="imap-body">
           <div class="imap-mapwrap"><div class="imap-map" aria-label="Mapa de proyectos"></div>
@@ -321,7 +321,7 @@
     const latest = dates.at(-1) || '';
     const archive = data.asOf.split('-').reverse().join('/');
     const field = (k, v, cls = '') => v ? `<div class="${cls}"><dt>${k}</dt><dd>${v}</dd></div>` : '';
-    const linkHtml = s => `<a href="${esc(s.url)}" target="_blank" rel="noopener" data-no-translate>${esc(host(s))} <span aria-hidden="true">↗</span></a>`;
+    const linkHtml = s => `<a class="link-line" href="${esc(s.url)}" target="_blank" rel="noopener" data-no-translate>${esc(host(s))} <span aria-hidden="true">↗</span></a>`;
     const rows = [];
     indicators.forEach(ind => {
       const s = sources.get(ind.source);
@@ -338,7 +338,7 @@
     }));
     root.classList.add('idos');
     root.innerHTML = `
-      <div class="idos-side"><h2 class="idos-title">Detrás de cada <em>cifra</em></h2><span class="idos-kicker">Dossier de fuentes</span></div>
+      <div class="idos-side"><h2 class="idos-title" data-reveal="lines">Detrás de cada <em>cifra</em></h2><span class="idos-kicker">Dossier de fuentes</span></div>
       <ol class="idos-list">${rows.map((r, i) => `<li><details ${i === 0 ? 'open' : ''}><summary><span class="idos-n" data-no-translate>${pad(i + 1)}</span><span class="idos-row-title">${r.html ? r.title : esc(r.title)}</span><span class="idos-meta"><span data-no-translate>${esc(r.meta[0])}</span> · <span>${esc(r.meta[1])}</span></span><i aria-hidden="true"></i></summary><div class="idos-body">${r.body}</div></details></li>`).join('')}</ol>
       <p class="idos-foot"><span>Indicadores: revisión</span> ${esc(latest)} · <span>Archivo de proyectos:</span> ${esc(archive)}</p>`;
   }
@@ -352,6 +352,7 @@
     document.querySelectorAll('[data-invest-map]').forEach(r => renderMap(r, data, origin));
     document.querySelectorAll('[data-invest-dossier]').forEach(r => renderDossier(r, indicators, data));
     roleDesc();
+    window.rpMotion?.bind?.();
     window.rpMotion?.refresh?.();
   }).catch(error => {
     console.warn('Investment story unavailable', error);
