@@ -70,7 +70,7 @@
 .ifig-dotbtn::before{content:"";position:absolute;left:50%;top:50%;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;border:1px solid var(--if-accent);transition:transform .3s,background .3s}
 .ifig-dotbtn[aria-current=true]::before{background:var(--if-accent);transform:scale(1.25)}
 .ifig .ifig-dotbtn:focus-visible{outline:2px solid var(--if-accent);outline-offset:2px}
-.ifig-more{justify-self:center;color:var(--if-fg)}
+.ifig-more{justify-self:center}
 @media(max-width:860px){
   .ifig-viewport{--peek:54px;--gap:10px}
   .ifig-track{min-height:clamp(520px,68svh,640px)}

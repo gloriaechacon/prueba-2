@@ -223,3 +223,23 @@ em,i{font-synthesis:none}
    (panes 400, controls 1000 stay inside it) and the header sits above all page content. */
 .leaflet-container{isolation:isolate;z-index:0}
 .final-nav,.site-drawer{z-index:3000!important}
+
+/* ===================================================================
+   Type scale — six styles, nothing else (see DESIGN.md).
+   =================================================================== */
+:root{
+  --t-display:300 clamp(2.75rem,1.5rem + 5vw,6.5rem)/.98 var(--font-display);
+  --t-title:400 clamp(1.5rem,1.2rem + 1.2vw,2.25rem)/1.12 var(--font-display);
+  --t-label:500 clamp(.6875rem,.66rem + .12vw,.75rem)/1.3 var(--font-sans);
+  --t-body:400 1rem/1.6 var(--font-sans);
+  --t-small:400 .8125rem/1.5 var(--font-sans);
+  --t-button:500 .8125rem/1.2 var(--font-sans);
+  --t-label-track:.18em;--t-button-track:.14em;--t-display-track:-.015em
+}
+.t-display{font:var(--t-display);letter-spacing:var(--t-display-track);font-variant-numeric:tabular-nums lining-nums}
+.t-display em{font-style:italic;font-weight:300}
+.t-title{font:var(--t-title);letter-spacing:0}
+.t-label{font:var(--t-label);letter-spacing:var(--t-label-track);text-transform:uppercase}
+.t-body{font:var(--t-body);letter-spacing:0}
+.t-small{font:var(--t-small);letter-spacing:0}
+.t-button{font:var(--t-button);letter-spacing:var(--t-button-track);text-transform:uppercase}

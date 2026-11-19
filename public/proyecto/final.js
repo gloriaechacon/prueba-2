@@ -55,7 +55,7 @@
    window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'instant':'smooth'});
   });
   for(const [id,label] of [['lotes','Ver los lotes y sus detalles'],['entorno','Conocer el entorno de Ocala'],['viviendas','Ver fichas y recorridos de Utah y Bell']]){
-   const section=document.getElementById(id);if(!section)continue;
+   const section=document.getElementById(id);if(!section||section.classList.contains('teaser'))continue; // previews carry their own button
    const a=document.createElement('a');a.href=linkPage(id);a.className='final-section-link';a.textContent=label;
    section.append(a);
   }
@@ -94,7 +94,7 @@
   const note=explorer.querySelector('#zone-initial-note');if(note){note.innerHTML='<p>Selecciona un número en el mapa o en la lista para ver la ubicación y los detalles del lote.</p>';}
   const eyebrow=explorer.querySelector('.zone-panel>.eyebrow');if(eyebrow)eyebrow.textContent='Elige un lote';
  }}
- if(home){
+ if(home&&document.querySelector('#lot-explorer')){
   const explorer=document.querySelector('#lot-explorer');
   const picker=explorer.querySelector('.integrated-lot-picker');
   const compact=document.createElement('div');
@@ -125,15 +125,8 @@
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
  function updateHeader(){if(!home||!nav)return;const hero=document.getElementById('inicio');const vh=innerHeight;const pinned=Math.max(0,(hero?.offsetHeight||vh)-vh);const progress=Math.min(1,Math.max(0,(scrollY-pinned)/Math.max(200,vh*.45)));nav.style.setProperty('--header-progress',String(progress));nav.style.setProperty('--header-blur',(progress*18)+'px');nav.classList.toggle('is-solid',progress>.55);}
  addEventListener('scroll',updateHeader,{passive:true});updateHeader();
- // Scroll-spy: on the home only the link of the visible section carries aria-current.
- if(home&&links){
-  const map=[['inicio','/'],['lotes','/proyecto/lotes/'],['entorno','/proyecto/entorno/'],['inversion','/proyecto/inversion/'],['viviendas','/proyecto/viviendas/'],['contacto','/proyecto/contacto/']];
-  const anchors=map.map(([id,href])=>[document.querySelector('[data-chapter="'+id+'"]')||document.getElementById(id),links.querySelector('a[href="'+href+'"]')]).filter(([s,a])=>s&&a);
-  let current=null;
-  const spy=()=>{const line=(nav.getBoundingClientRect().height||80)+innerHeight*.3;let hit=anchors[0];for(const pair of anchors)if(pair[0].getBoundingClientRect().top<=line)hit=pair;
-   if(hit===current)return;current=hit;anchors.forEach(([,a])=>a.removeAttribute('aria-current'));hit[1].setAttribute('aria-current',hit[0].id==='inicio'?'page':'location');};
-  addEventListener('scroll',()=>requestAnimationFrame(spy),{passive:true});spy();
- }
+ // The home is a cover with previews: its nav always marks "Home" (inner pages mark themselves).
+ if(home&&links){links.querySelectorAll('a[aria-current]').forEach(a=>a.removeAttribute('aria-current'));links.querySelector('a[href="/"]')?.setAttribute('aria-current','page');}
  // Repeated reveals at viewport boundaries; never gate the 3D/map controls on animation.
  let observer;function motion(){observer?.disconnect();const targets=[...document.querySelectorAll('.final-home .zone-intro,.final-home .chapter-heading,.final-home .territory-opening,.final-home .destination-tabs,.final-home .investment-intro,.final-home .home-heading,.final-home .home-selector,.final-home .home-specs,.final-home .contact-layout>*,.final-home .final-section-link')];
   if(reduced.matches){targets.forEach(el=>el.classList.remove('scroll-reveal','reveal-out','reveal-in'));return;}

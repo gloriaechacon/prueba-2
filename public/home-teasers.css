@@ -1,0 +1,48 @@
+/* Home = cover with previews. Each section after the hero is a short teaser that leads to its page. */
+.final-home .teaser{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(28px,5vw,96px);align-items:center;
+  padding:clamp(72px,12vh,140px) clamp(16px,5vw,88px);margin:0;border:0}
+.final-home .teaser--flip .teaser-copy{order:2}
+.teaser-copy{display:grid;gap:clamp(14px,2.2vh,24px);justify-items:start;max-width:34rem}
+.teaser-copy .t-body{margin:0;color:var(--s-muted)}
+.teaser-kicker{color:var(--s-accent)}
+.teaser-title{margin:0;color:inherit}
+.teaser-title em{color:var(--s-accent)}
+.teaser-media{position:relative;margin:0;overflow:hidden;border-radius:18px;background:color-mix(in srgb,var(--s-fg) 8%,transparent)}
+.teaser-media img,.teaser-media video{display:block;width:100%;height:100%;object-fit:cover}
+.teaser-map{aspect-ratio:16/10}
+.teaser-map figcaption,.teaser-video figcaption{position:absolute;left:12px;right:12px;bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding:8px 12px;border-radius:10px;background:rgb(var(--c-shade) / .62);color:#fff}
+.home-lots-pins{position:absolute;inset:0;width:100%;height:100%}
+.home-lot polygon{fill:color-mix(in srgb,var(--c-map-lot-fill) 45%,transparent);stroke:var(--c-map-lot);stroke-width:2}
+.home-lot line{stroke:var(--c-map-lot);stroke-width:2}
+.home-lot circle{fill:var(--c-accent);stroke:var(--c-paper);stroke-width:3}
+.home-lot text{fill:var(--c-arrow);font:500 17px/1 var(--font-sans);letter-spacing:.06em;text-anchor:middle}
+.teaser-video{aspect-ratio:16/10}
+.teaser-video-toggle{color:inherit;background:none;border:0;cursor:pointer;padding:6px 0;min-height:32px}
+.teaser--invest{padding:0!important;display:block!important}
+.final-home .teaser--homes{grid-template-columns:minmax(0,4fr) minmax(0,8fr)}
+.teaser-homes{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,2vw,28px)}
+.teaser-home{display:grid;gap:8px;color:inherit;text-decoration:none}
+.teaser-home .teaser-media{aspect-ratio:3/2}
+.teaser-home .teaser-media img{transition:transform .9s var(--ease-out-expo)}
+.teaser-home:hover .teaser-media img{transform:scale(1.04)}
+.teaser-home h3{margin:6px 0 0}
+.teaser-home .t-label{color:var(--s-muted)}
+.teaser-home:focus-visible{outline:2px solid var(--c-focus);outline-offset:6px;border-radius:18px}
+.teaser-note{grid-column:2;margin:0;color:var(--s-muted)}
+.final-home .teaser--contact{grid-template-columns:1fr;justify-items:start;padding-bottom:0!important}
+.teaser--contact .teaser-copy{max-width:44rem;padding-bottom:clamp(56px,10vh,120px)}
+.teaser--contact footer{justify-self:stretch;margin:0 calc(-1 * clamp(16px,5vw,88px))}
+@media(max-width:860px){
+  .final-home .teaser,.teaser--homes{grid-template-columns:1fr;gap:28px}
+  .final-home .teaser--flip .teaser-copy{order:0}
+  .teaser-note{grid-column:1}
+  .teaser-homes{grid-template-columns:1fr 1fr;gap:12px}
+}
+@media(max-width:480px){.teaser-homes{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.teaser-home .teaser-media img{transition:none}}
+.teaser--contact footer :is(.footer-brand,.footer-brand em,span,a){color:var(--s-fg)!important}
+@media(max-width:600px){
+  .teaser-map figcaption,.teaser-video figcaption{position:static;margin-top:0;border-radius:0;background:rgb(var(--c-shade) / .82)}
+  .teaser-map{aspect-ratio:auto}.teaser-map picture img{aspect-ratio:16/10}
+}

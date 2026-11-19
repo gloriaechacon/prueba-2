@@ -147,7 +147,7 @@
           <div class="rp-progress-wrap"><span class="ifig-count" data-no-translate>01 / ${pad(n)}</span><span class="rp-progress" aria-hidden="true"><i></i></span></div>
           <div class="ifig-dots">${items.map((it, i) => `<button type="button" class="ifig-dotbtn" data-go="${i}"><span class="ifig-sr" data-no-translate>${pad(i + 1)} / ${pad(n)}</span></button>`).join('')}</div>
         </nav>
-        ${short ? `<a class="link-line ifig-more" href="/proyecto/inversion/">Ver la evidencia completa <span aria-hidden="true">↗</span></a>` : ''}
+        ${short ? `<a class="btn btn--primary ifig-more" href="/proyecto/inversion/"><span>Ver la inversión</span><b aria-hidden="true">→</b></a>` : ''}
       </div>`;
     const cards = [...root.querySelectorAll('.ifig-card')];
     const count = root.querySelector('.ifig-count');
