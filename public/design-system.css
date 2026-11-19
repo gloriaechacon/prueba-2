@@ -318,3 +318,6 @@ html[data-palette=esmeralda]{--inv-muted-deep:color-mix(in srgb,var(--c-on-deep)
 
 /* One vertical rhythm between sections on every page */
 :root{--section-y:clamp(64px,11vh,128px);--section-x:clamp(16px,5vw,88px)}
+/* Skip links: hidden until focused (every page) */
+a.skip:not(:focus),a.c-skip:not(:focus){position:absolute!important;left:-9999px!important;top:auto!important}
+a.skip:focus,a.c-skip:focus{position:fixed!important;left:12px!important;top:12px!important;z-index:4000;padding:10px 16px;background:var(--c-paper);color:var(--c-ink);border-radius:8px}

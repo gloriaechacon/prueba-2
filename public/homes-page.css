@@ -112,3 +112,26 @@
 @media(prefers-reduced-motion:reduce){.hm-card,.hm-card-media img,.hm-card-go,.hm-bar i,.hm-plan img{transition:none!important}}
 .hm .btn--block{box-sizing:border-box;width:100%!important}
 .hm-select-title{min-height:1em}
+
+/* ---------- Review round 7 ---------- */
+.hm>.hm-select{padding-top:clamp(28px,5vh,56px)!important}
+/* subtle expansion: ~55 / 45 */
+.hm-card[data-active=true]{flex-grow:1.22}
+.hm-card[data-active=true] .hm-card-media img{transform:scale(1.025)}
+/* finish swatches open the gallery */
+.hm-swatch{padding:0;border:1px solid var(--c-line);border-radius:6px;overflow:hidden;aspect-ratio:1;cursor:zoom-in;background:var(--c-paper-tint);transition:transform .35s var(--ease-out-expo)}
+.hm-swatch img{display:block;width:100%;height:100%;object-fit:cover}
+.hm-swatch:hover{transform:translateY(-2px)}
+.hm-swatch:focus-visible{outline:2px solid var(--c-focus);outline-offset:2px}
+.hm-fin-pic{display:block;width:100%;height:100%}
+.hm-fin-pic img{display:block;width:100%;height:100%;object-fit:contain}
+::view-transition-group(hm-fin){animation-duration:.5s;animation-timing-function:cubic-bezier(.2,.8,.2,1)}
+/* comparison: big images, clean numbers, difference in small */
+.hm-cmp-head{grid-template-columns:minmax(150px,1fr) minmax(0,2fr) minmax(0,2fr);align-items:end;border-bottom:1px solid var(--c-line-strong)}
+.hm-cmp-head figure{flex-direction:column;align-items:stretch;gap:14px}
+.hm-cmp-img img{width:100%!important;aspect-ratio:3/2;border-radius:14px}
+.hm-cmp-name{margin:0}
+.hm-cmp-cell{gap:2px}
+.hm-cmp-diff{color:var(--c-accent-text)}
+.hm-bar{display:none}
+@media(max-width:860px){.hm-cmp-head{grid-template-columns:1fr 1fr}}

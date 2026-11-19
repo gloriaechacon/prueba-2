@@ -10,6 +10,7 @@ const S = {
     drag: 'Drag to rotate', loading: 'Loading the 3D model…', fail: '3D view unavailable on this device.', pdf: 'Open original PDF', zin: 'Zoom in', zout: 'Zoom out', fit: 'Fit',
     note: 'Presentation model · finishes proposed, not official specifications.',
     cmpTitle: ['Side by ', 'side'], rows: ['Living area', 'Entry', 'Garage', 'Total covered area', 'Bedrooms', 'Bathrooms', 'Garage spaces'],
+    diff: { living: 'living', entry: 'entry', garageArea: 'garage', total: 'total', bedrooms: 'bedroom', bathrooms: 'bathroom', garage: 'garage space' }, gallery: 'Finishes', close: 'Close', prev: 'Previous', next: 'Next', note2: 'Proposed finishes, not official specifications',
     src: 'Official area schedules from the architectural plans (Kimsa Construction LLC). Utah: job 2025-713 · Bell: job 2024-140.', studio: '+ studio', plan: n => `Floor plan of the ${n} home` },
   es: { bed: n => `${n} dormitorios`, bedStudio: n => `${n} dormitorios + anexo estudio`, bath: n => `${n} baños`, gar: n => `${n} plaza${n > 1 ? 's' : ''} de garaje`, livingL: 'habitables', explore: n => `Explorar ${n}`,
     title: ['Dos casas, ', 'un lugar'], choose: ['Elige tu ', 'casa'], change: 'Cambiar de casa', tabs: ['Vista de la casa', 'Modelo 3D', 'Planta 3D', 'Plano'],
@@ -17,6 +18,7 @@ const S = {
     drag: 'Arrastra para girar', loading: 'Cargando el modelo 3D…', fail: 'Vista 3D no disponible en este dispositivo.', pdf: 'Abrir el PDF original', zin: 'Acercar', zout: 'Alejar', fit: 'Ajustar',
     note: 'Modelo de presentación · acabados propuestos, no especificaciones oficiales.',
     cmpTitle: ['Lado a ', 'lado'], rows: ['Superficie habitable', 'Entrada', 'Garaje', 'Superficie cubierta total', 'Dormitorios', 'Baños', 'Plazas de garaje'],
+    diff: { living: 'habitables', entry: 'de entrada', garageArea: 'de garaje', total: 'en total', bedrooms: 'dormitorio', bathrooms: 'baño', garage: 'plaza de garaje' }, gallery: 'Acabados', close: 'Cerrar', prev: 'Anterior', next: 'Siguiente', note2: 'Acabados propuestos, no especificaciones oficiales',
     src: 'Cuadros de superficies oficiales de los planos arquitectónicos (Kimsa Construction LLC). Utah: expediente 2025-713 · Bell: expediente 2024-140.', studio: '+ estudio', plan: n => `Plano de la casa ${n}` },
   pt: { bed: n => `${n} quartos`, bedStudio: n => `${n} quartos + anexo estúdio`, bath: n => `${n} banheiros`, gar: n => `${n} vaga${n > 1 ? 's' : ''} de garagem`, livingL: 'habitáveis', explore: n => `Explorar ${n}`,
     title: ['Duas casas, ', 'um lugar'], choose: ['Escolha sua ', 'casa'], change: 'Trocar de casa', tabs: ['Vista da casa', 'Modelo 3D', 'Planta 3D', 'Planta'],
@@ -24,6 +26,7 @@ const S = {
     drag: 'Arraste para girar', loading: 'Carregando o modelo 3D…', fail: 'Vista 3D indisponível neste dispositivo.', pdf: 'Abrir o PDF original', zin: 'Aproximar', zout: 'Afastar', fit: 'Ajustar',
     note: 'Modelo de apresentação · acabamentos propostos, não especificações oficiais.',
     cmpTitle: ['Lado a ', 'lado'], rows: ['Área habitável', 'Entrada', 'Garagem', 'Área coberta total', 'Quartos', 'Banheiros', 'Vagas de garagem'],
+    diff: { living: 'habitáveis', entry: 'de entrada', garageArea: 'de garagem', total: 'no total', bedrooms: 'quarto', bathrooms: 'banheiro', garage: 'vaga de garagem' }, gallery: 'Acabamentos', close: 'Fechar', prev: 'Anterior', next: 'Próximo', note2: 'Acabamentos propostos, não especificações oficiais',
     src: 'Quadros de áreas oficiais das plantas arquitetônicas (Kimsa Construction LLC). Utah: processo 2025-713 · Bell: processo 2024-140.', studio: '+ estúdio', plan: n => `Planta da casa ${n}` }
 };
 const lang = () => (window.rpcI18n?.language || new URLSearchParams(location.search).get('lang') || 'en').slice(0, 2);
@@ -60,7 +63,7 @@ function renderCards() {
   const s = t();
   const ct = document.querySelector("#hm-select-title"); ct.dataset.noTranslate = ""; ct.innerHTML = s.choose[0] + "<em>" + s.choose[1] + "</em>";
   cardsEl.innerHTML = ids.map(id => `<article class="hm-card" data-id="${id}" data-active="${id === house}">
-      ${pic(HOMES[id].image, '', 'hm-card-media')}
+      ${pic(HOMES[id].photo || HOMES[id].image, '', 'hm-card-media')}
       <div class="hm-card-info" data-no-translate><h3 class="t-display hm-card-name">${HOMES[id].name}</h3><span class="t-label">${specLine(id)}</span>
         <a class="btn btn--primary hm-card-go" href="#visor" data-go="${id}"><span>${s.explore(HOMES[id].name)}</span><b aria-hidden="true">→</b></a></div>
     </article>`).join('');
@@ -97,7 +100,8 @@ function enter(id, card) {
 /* ---------- Viewer ---------- */
 function sheetHTML(id) {
   const s = t(), f = facts(id, META[id]), h = HOMES[id];
-  const sw = h.finishes ? `<div class="hm-finishes"><span class="t-label">${s.finishes}</span><div class="hm-swatches">${[0, 1, 2, 3].map(i => `<i style="background-image:url(${h.finishes});--sx:${[12, 38, 64, 88][i]}%"></i>`).join('')}</div><button type="button" class="link-line finish-trigger">${s.finish}</button></div>` : '';
+  const fin = h.finishes || [];
+  const sw = fin.length ? `<div class="hm-finishes"><span class="t-label">${s.finishes}</span><div class="hm-swatches">${fin.map((x, i) => x.swatch ? `<button type="button" class="hm-swatch" data-fin="${i}" aria-label="${x.label}"><img src="${x.src}.webp" alt="" loading="lazy" decoding="async"></button>` : '').join('')}</div><button type="button" class="link-line hm-finish-open" data-fin="${fin.findIndex(x => x.concept)}">${s.finish}</button></div>` : '';
   return `<h3 class="t-display hm-sheet-name">${h.name}</h3>
     <ul class="hm-rooms"><li class="t-label">${f.studio ? s.bedStudio(f.bedrooms) : s.bed(f.bedrooms)}</li><li class="t-label">${s.bath(f.bathrooms)}</li><li class="t-label">${s.gar(f.garage)}</li></ul>
     <dl class="hm-areas">${[[s.living, f.living], [s.entry, f.entry], [s.garage, f.garageArea]].map(([k, v]) => `<div><dt class="t-label">${k}</dt><dd class="t-label">${nf(v)} ft²</dd></div>`).join('')}
@@ -191,22 +195,62 @@ async function mountTab() {
   } catch (e) { pane.querySelector('.hm-3d').innerHTML = `<p class="hm-loading t-small">${s.fail}</p>`; }
 }
 
+/* ---------- Finishes gallery (same style as the Lots gallery) ---------- */
+const finDlg = document.createElement('dialog');
+finDlg.className = 'lx-gallery hm-fin-gallery'; finDlg.dataset.noTranslate = '';
+document.body.append(finDlg);
+let finIndex = 0;
+const ARR = d => '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="' + (d > 0 ? 'M4 12h15M13 6l6 6-6 6' : 'M20 12H5M11 6l-6 6 6 6') + '"/></svg>';
+function finShow(dir = 0) {
+  const list = HOMES[house].finishes || [], it = list[finIndex]; if (!it) return;
+  const frame = finDlg.querySelector('.lxg-frame');
+  const build = () => { frame.innerHTML = '<picture class="hm-fin-pic"><source srcset="' + it.src + '.webp" type="image/webp"><img src="' + it.src + '.jpg" alt="' + it.label + '" decoding="async"></picture>'; };
+  if (dir && !reduce.matches && frame.firstChild) {
+    const out = dir > 0 ? -60 : 60;
+    frame.animate([{ transform: 'none', opacity: 1 }, { transform: 'translateX(' + out + 'px)', opacity: 0 }], { duration: 240 }).onfinish = () => { build(); frame.animate([{ transform: 'translateX(' + (-out) + 'px)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 440, easing: 'cubic-bezier(.2,.8,.2,1)' }); };
+  } else build();
+  finDlg.querySelector('.lxg-count').textContent = it.label + ' · ' + (finIndex + 1) + ' / ' + list.length;
+  finDlg.querySelectorAll('[data-gi]').forEach((b, i) => b.setAttribute('aria-pressed', String(i === finIndex)));
+}
+function openFinishes(i, from) {
+  const s = t(), list = HOMES[house].finishes || []; finIndex = Math.max(0, i);
+  finDlg.innerHTML = '<header class="lxg-head"><h2 class="t-title">' + HOMES[house].name + ' · ' + s.gallery + '</h2><button type="button" class="lxg-close t-button">' + s.close + ' <span aria-hidden="true">✕</span></button></header>'
+    + '<div class="lxg-stage"><div class="lxg-frame"></div><button type="button" class="rp-arrow lxg-prev" data-gdir="-1" aria-label="' + s.prev + '"><span class="rp-arrow-ico">' + ARR(-1) + '</span></button><button type="button" class="rp-arrow lxg-next" data-gdir="1" aria-label="' + s.next + '"><span class="rp-arrow-ico">' + ARR(1) + '</span></button></div>'
+    + '<footer class="lxg-foot"><span class="lxg-count t-label"></span><div class="lxg-thumbs">' + list.map((x, k) => '<button type="button" class="lx-thumb" data-gi="' + k + '" aria-label="' + x.label + '"><img src="' + x.src + '.webp" alt="" loading="lazy"></button>').join('') + '</div><p class="t-small lxg-note">' + s.note2 + '</p></footer>';
+  const img = from && from.querySelector('img');
+  if (img) img.style.viewTransitionName = 'hm-fin';
+  const tr = vt(() => { if (img) img.style.viewTransitionName = ''; finDlg.showModal(); finShow(0); finDlg.querySelector('.lxg-frame').style.viewTransitionName = 'hm-fin'; });
+  const clear = () => { const f = finDlg.querySelector('.lxg-frame'); if (f) f.style.viewTransitionName = ''; };
+  tr ? tr.finished.finally(clear) : clear();
+}
+function closeFinishes() { vt(() => finDlg.close()); }
+finDlg.addEventListener('cancel', e => { e.preventDefault(); closeFinishes(); });
+finDlg.addEventListener('click', e => {
+  if (e.target.closest('.lxg-close')) return closeFinishes();
+  const n = (HOMES[house].finishes || []).length;
+  const d = e.target.closest('[data-gdir]'); if (d) { finIndex = (finIndex + Number(d.dataset.gdir) + n) % n; finShow(Number(d.dataset.gdir)); return; }
+  const g = e.target.closest('[data-gi]'); if (g) { const i = Number(g.dataset.gi), dir = Math.sign(i - finIndex); finIndex = i; finShow(dir); }
+});
+finDlg.addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); finDlg.querySelector(e.key === 'ArrowRight' ? '.lxg-next' : '.lxg-prev')?.click(); } });
+viewerEl.addEventListener('click', e => { const b = e.target.closest('[data-fin]'); if (b) openFinishes(Number(b.dataset.fin), b); });
+
 /* ---------- Comparison ---------- */
 function renderCompare() {
   const s = t(), F = Object.fromEntries(ids.map(id => [id, facts(id, META[id])]));
   const rows = [['living', 'ft2'], ['entry', 'ft2'], ['garageArea', 'ft2'], ['total', 'ft2'], ['bedrooms', 'n'], ['bathrooms', 'n'], ['garage', 'n']];
   compareEl.innerHTML = `<h2 class="t-display" id="hm-compare-title" data-no-translate>${s.cmpTitle[0]}<em>${s.cmpTitle[1]}</em></h2>
-    <div class="hm-cmp" data-no-translate><div class="hm-cmp-head"><span></span>${ids.map(id => `<figure>${pic(HOMES[id].thumb, '', 'hm-cmp-img')}<figcaption class="t-title">${HOMES[id].name}</figcaption></figure>`).join('')}</div>
+    <div class="hm-cmp" data-no-translate><div class="hm-cmp-head"><span></span>${ids.map(id => `<figure>${pic(HOMES[id].photo || HOMES[id].thumb, HOMES[id].name, 'hm-cmp-img')}<figcaption class="t-display hm-cmp-name">${HOMES[id].name}</figcaption></figure>`).join('')}</div>
     ${rows.map(([k, u], r) => {
       const vals = ids.map(id => F[id][k]), max = Math.max(...vals);
       return `<div class="hm-cmp-row"><span class="t-label">${s.rows[r]}</span>${ids.map((id, i) => {
-        const v = vals[i], top = v === max && vals.some(x => x !== max);
+        const v = vals[i], other = vals[1 - i], top = v === max && vals.some(x => x !== max);
+        const diff = v - other;
+        const note = diff > 0 ? `<small class="t-small hm-cmp-diff">+${nf(diff)}${u === 'ft2' ? ' ft²' : ''} ${s.diff[k]}</small>` : '';
         const label = u === 'ft2' ? `${nf(v)} ft²` : `${v}${k === 'bedrooms' && F[id].studio ? ' ' + s.studio : ''}`;
-        return `<div class="hm-cmp-cell${top ? ' is-max' : ''}">${u === 'ft2' ? `<span class="hm-bar" style="--w:${(v / Math.max(...rows.filter(x => x[1] === 'ft2').map(x => Math.max(...ids.map(j => F[j][x[0]])))) * 100).toFixed(1)}%"><i></i></span>` : ''}<strong class="t-title">${label}</strong></div>`;
+        return `<div class="hm-cmp-cell${top ? ' is-max' : ''}"><strong class="t-title">${label}</strong>${note}</div>`;
       }).join('')}</div>`;
     }).join('')}</div>
     <p class="t-small hm-cmp-src">${s.src}</p>`;
-  new IntersectionObserver(([e], io) => { if (e.isIntersecting) { compareEl.classList.add('is-drawn'); io.disconnect(); } }, { threshold: .25 }).observe(compareEl.querySelector('.hm-cmp'));
   window.rpMotion?.bind?.();
 }
 
