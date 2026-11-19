@@ -169,3 +169,6 @@ html body .rpc-language-control select:focus,html body .rpc-language-control sel
 html body .rpc-language-control,html body .rpc-language-control:focus-within{outline:0!important}
 html body .rpc-language-control:focus-within{border-color:var(--c-accent)!important;box-shadow:none!important}
 html body .rpc-language-control option{color:var(--c-ink);background:var(--c-paper);text-transform:none}
+/* Text on the tinted selection is always ink (AA) */
+html body :is(.lx-index button[aria-pressed=true],.lx-tabs [role=tab][aria-selected=true],.rt-list button[aria-pressed=true],.imap-filter button[aria-pressed=true],.hm-houses button[aria-pressed=true],.hm-tabs button[aria-selected=true]),
+html body :is(.lx-index button[aria-pressed=true],.lx-tabs [role=tab][aria-selected=true],.rt-list button[aria-pressed=true],.imap-filter button[aria-pressed=true],.hm-houses button[aria-pressed=true],.hm-tabs button[aria-selected=true]) *{color:var(--c-ink)!important;border-color:transparent}
