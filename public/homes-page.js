@@ -2,6 +2,8 @@
    spec sheet, and an illustrative home comparison. Real figures from the metadata files;
    asset paths in /homes-config.js. ?house=utah|bell picks the initial home. */
 import { HOMES, facts } from '/homes-config.js?v=review2';
+import { mountPlanSheet } from '/floor-plan-sheet.js?v=editorial1';
+let disposePlan = () => {};
 
 const S = {
   en: { bed: n => `${n} bedrooms`, bedStudio: n => `${n} bedrooms + studio annex`, bath: n => `${n} bathrooms`, gar: n => `${n} garage space${n > 1 ? 's' : ''}`, livingL: 'living', explore: n => `Explore ${n}`,
@@ -113,7 +115,7 @@ function sheetHTML(id) {
     <a class="btn btn--primary btn--block" href="/proyecto/contacto/?house=${id}#c-consultation"><span>${s.inquiry}</span></a>
     `;
 }
-function renderViewer(dir = 0) {
+function renderViewer(dir = 0, fromPlan = false) {
   const s = t();
   if (!viewerEl.querySelector('.hm-v-head')) {
     viewerEl.innerHTML = `<header class="hm-v-head"><h2 class="t-display" id="hm-viewer-title" data-no-translate>${s.title[0]}<em>${s.title[1]}</em></h2>
@@ -125,17 +127,34 @@ function renderViewer(dir = 0) {
   viewerEl.querySelector('.hm-houses').innerHTML = ids.map(id => `<button type="button" data-house="${id}" aria-pressed="${id === house}">${HOMES[id].name}</button>`).join('');
   viewerEl.querySelector('.hm-tabs').innerHTML = s.tabs.map((n, i) => ({n, i})).filter(({i}) => i === 1 || i === 2).map(({n, i}) => `<button type="button" role="tab" aria-selected="${i === tab}" data-tab="${i}">${n}</button>`).join('');
   const sheet = viewerEl.querySelector('.hm-sheet'), stage = viewerEl.querySelector('.hm-stage');
-  slide(sheet, dir, () => { sheet.innerHTML = sheetHTML(house); });
-  if (dir) slide(stage, dir, () => mountTab());
+  if (fromPlan) { sheet.innerHTML = sheetHTML(house); mountTab(); }
+  else { slide(sheet, dir, () => { sheet.innerHTML = sheetHTML(house); });
+    if (dir) slide(stage, dir, () => mountTab()); }
   let plan = viewerEl.querySelector('.hm-plan-section');
   if (!plan) { plan = document.createElement('section'); plan.className = 'hm-plan-section'; plan.dataset.noTranslate = ''; viewerEl.append(plan); }
-  plan.innerHTML = `<header><h3 class="t-title">${s.plan(HOMES[house].name)}</h3><a class="btn btn--secondary" href="${HOMES[house].planPdf}" target="_blank" rel="noopener">${s.pdf}</a></header><figure class="hm-plan-paper"><img src="${HOMES[house].plan}" alt="${s.plan(HOMES[house].name)}" loading="lazy" decoding="async"></figure>`;
+  disposePlan();
+  disposePlan = mountPlanSheet(plan, HOMES[house], house, lang(), t());
   closeCta.href = '/proyecto/contacto/?house=' + house;
   const u = new URL(location.href); u.searchParams.set('house', house); history.replaceState(null, '', u);
 }
 viewerEl.addEventListener('click', e => {
   const hb = e.target.closest('[data-house]');
-  if (hb && hb.dataset.house !== house) { const dir = ids.indexOf(hb.dataset.house) > ids.indexOf(house) ? 1 : -1; house = hb.dataset.house; renderViewer(dir); return; }
+  if (hb && hb.dataset.house !== house) {
+    const inPlan = hb.closest('.hm-plan-section');
+    const before = inPlan?.getBoundingClientRect().top;
+    const dir = ids.indexOf(hb.dataset.house) > ids.indexOf(house) ? 1 : -1;
+    house = hb.dataset.house; renderViewer(dir, Boolean(inPlan));
+    if (inPlan) {
+      window.scrollBy({ top: inPlan.getBoundingClientRect().top - before, behavior: 'instant' });
+      inPlan.querySelector(`[data-house="${house}"]`).focus({ preventScroll: true });
+      // The renderer replaces its canvas on the next frame. Keep the reading anchor
+      // after that layout as well, without scrolling back to the 3D viewer.
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        window.scrollBy({ top: inPlan.getBoundingClientRect().top - before, behavior: 'instant' });
+      }));
+    }
+    return;
+  }
   const tb = e.target.closest('[data-tab]');
   if (tb && Number(tb.dataset.tab) !== tab) { tab = Number(tb.dataset.tab); viewerEl.querySelectorAll('[data-tab]').forEach(b => b.setAttribute('aria-selected', String(b === tb))); crossfade(); return; }
   if (e.target.closest('.hm-change')) { e.preventDefault(); document.querySelector('.hm-select').scrollIntoView({ behavior: reduce.matches ? 'auto' : 'smooth' }); }
@@ -214,7 +233,7 @@ function renderCompare() {
   const s = t(), F = Object.fromEntries(ids.map(id => [id, facts(id, META[id])]));
   const rows = [['living', 'ft2'], ['entry', 'ft2'], ['garageArea', 'ft2'], ['total', 'ft2'], ['bedrooms', 'n'], ['bathrooms', 'n'], ['garage', 'n']];
   compareEl.innerHTML = `<h2 class="t-display" id="hm-compare-title" data-no-translate>${s.cmpTitle[0]}<em>${s.cmpTitle[1]}</em></h2>
-    <div class="hm-cmp" data-no-translate><div class="hm-cmp-head"><span></span>${ids.map(id => `<figure>${pic(HOMES[id].photo || HOMES[id].thumb, HOMES[id].name, 'hm-cmp-img', '(max-width:760px) 50vw, 40vw')}<figcaption class="t-display hm-cmp-name">${HOMES[id].name}</figcaption></figure>`).join('')}</div>
+    <div class="hm-cmp" data-no-translate><div class="hm-cmp-head"><span></span>${ids.map(id => `<h3 class="t-title hm-cmp-name">${HOMES[id].name}</h3>`).join('')}</div>
     ${rows.map(([k, u], r) => {
       const vals = ids.map(id => F[id][k]), max = Math.max(...vals);
       return `<div class="hm-cmp-row"><span class="t-label">${s.rows[r]}</span>${ids.map((id, i) => {

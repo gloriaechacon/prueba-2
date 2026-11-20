@@ -1,0 +1,36 @@
+/* The original architectural sheet is the content; controls stay outside its paper. */
+html body #visor .hm-plan-section{display:block;margin:64px 0 0;padding:32px 0 0;border-top:1px solid var(--c-line)}
+html body #visor .plan-heading{position:static;display:flex;align-items:center;justify-content:space-between;gap:24px;margin:0}
+html[lang] body #visor .plan-heading h3{font:400 clamp(36px,4.4vw,72px)/1.08 var(--font-display);margin:0}
+.plan-houses{display:flex;gap:8px;flex-shrink:0}
+html body #visor .plan-houses button{padding:12px 20px;background:transparent;border:0;border-bottom:2px solid transparent;color:var(--c-ink);font:inherit;cursor:pointer}
+html body #visor .plan-houses [aria-pressed=true]{border-color:var(--c-accent);color:var(--c-accent-text)}
+html[lang] body #visor .plan-intro{font:400 16px/1.6 var(--font-sans);margin:16px 0 28px;color:var(--c-muted)}
+.plan-tools{display:flex;align-items:center;gap:24px;flex-wrap:wrap;padding:14px 0;border-block:1px solid var(--c-line);margin-bottom:28px}
+html[lang] body #visor .plan-tools{font:400 14px/1.4 var(--font-sans);color:var(--c-ink)}
+.plan-tools output{min-width:95px}
+.plan-zoom{display:flex;align-items:center;gap:4px}
+html body #visor .plan-tools button{min-height:44px;min-width:44px;padding:8px 12px;font:inherit;border:1px solid transparent;border-radius:4px;background:transparent;color:inherit;cursor:pointer}
+html body #visor .plan-tools button:hover,.plan-houses button:hover{background:var(--c-line)}
+html body #visor .plan-tools button:disabled{opacity:.35;cursor:default}
+.plan-tools a{margin-left:auto;text-underline-offset:5px;color:inherit}
+.plan-viewport{width:min(100%,1600px);margin:0 auto;overflow:auto;background:#fff;scrollbar-color:var(--c-accent) var(--c-paper);scrollbar-width:thin;position:relative;overscroll-behavior-x:contain}
+.plan-viewport.is-zoomed{cursor:grab}.plan-viewport.is-zoomed:active{cursor:grabbing}
+html body #visor .plan-viewport img{display:block;max-width:none;max-height:none;object-fit:contain;margin:0;padding:0;user-select:none}
+.plan-viewport img[hidden]{display:none!important}
+.plan-error{padding:40px}
+.plan-caption{display:flex;justify-content:space-between;gap:16px;margin:18px auto 0;max-width:1600px}
+html[lang] body #visor .plan-caption,html[lang] body #visor .plan-hint{font:400 12px/1.5 var(--font-sans);color:var(--c-muted)}
+.plan-hint{margin:8px 0 0;text-align:center}
+html body .hm>.hm-compare{padding-top:32px!important;padding-bottom:48px}
+html body .hm-cmp-name{margin:0;font-size:clamp(28px,3vw,48px)!important}
+@media(min-width:1200px){.plan-viewport{width:82%}}
+@media(max-width:640px){
+ html body #visor .plan-heading{align-items:flex-start;flex-direction:column;gap:18px}
+ html body #visor .hm-plan-section{margin-top:40px;padding-top:24px}
+ .plan-tools{gap:8px 12px;margin-bottom:18px}.plan-tools output{min-width:78px}
+ .plan-tools a{margin-left:0;flex-basis:100%;padding:8px 0}
+ .plan-caption{flex-direction:column;gap:4px}
+ html[lang] body #visor .plan-intro{margin:12px 0 18px}
+}
+html body.homes-page{overflow-anchor:none}
