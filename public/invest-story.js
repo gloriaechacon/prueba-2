@@ -330,7 +330,7 @@
         <span class="imap-cat-fig"><strong class="t-title" data-no-translate>${esc(p.metric)}</strong><span class="t-small">${esc(p.unit)}</span></span>
         <span class="imap-cat-src t-small"><span>${esc(p.date)}</span>${src ? ` · <span data-no-translate>${esc(src.publisher)}</span>` : ''}</span></button></li>`;
     }).join('');
-    cat.innerHTML = `<button type="button" class="btn btn--secondary imap-cat-toggle" aria-expanded="false" aria-controls="imap-cat-list"><svg class="imap-cat-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg><span>Ver los 13 proyectos</span><b aria-hidden="true" class="imap-cat-chev">⌄</b></button><small class="t-small imap-cat-sub">Listado completo con cifras y fechas</small>
+    cat.innerHTML = `<button type="button" class="imap-cat-toggle" aria-expanded="false" aria-controls="imap-cat-list"><span class="imap-cat-title">Ver los 13 proyectos</span><small class="t-small imap-cat-sub">Listado completo con cifras y fechas</small><svg class="catalog-plus" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18M12 3v18"/></svg></button>
       <div class="imap-cat-panel" id="imap-cat-list" hidden><ol class="imap-cat-list">${catRows()}</ol></div>`;
     root.append(cat);
     const toggle = cat.querySelector('.imap-cat-toggle'), panel = cat.querySelector('.imap-cat-panel');

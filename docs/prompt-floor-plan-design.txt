@@ -1,0 +1,10 @@
+Actúa como diseñador senior de interfaces inmobiliarias. Revisa la pestaña House Models de Rainbow Park Collection:
+https://rainbow-park-git-rediseno-gloriaechacons-projects.vercel.app/proyecto/viviendas/
+
+Objetivo: proponer una presentación clara y elegante del plano 2D de Utah y Bell. La presentación actual parece una imagen aislada dentro de un contenedor; no convence visualmente. El plano es obligatorio y debe verse completo, sin recortes, con detalles legibles y acceso al PDF original. Debe cambiar con la casa seleccionada. Evita grandes vacíos antes de Side by side.
+
+Conserva la identidad existente: Cormorant para títulos, Manrope para interfaz, crema/champaña y carbón, fotografía ilustrativa. Conserva el visor 3D y sus dos modos, selector Utah/Bell, ficha de superficies, Finish concept y comparación. No rediseñes todo el sitio ni alteres planos, medidas o información arquitectónica.
+
+Estudia la jerarquía entre visor, ficha, plano y comparación. Propón 2 alternativas concretas para escritorio amplio y móvil, explica brevemente cuál recomiendas y muestra una maqueta con dimensiones, espaciado, comportamiento al seleccionar casa y modo de leer detalles. Evita convertir el plano en otra pestaña del visor o en un modal obligatorio. Si propones ampliar, la vista inicial debe seguir mostrando el plano completo y la ampliación debe permitir recorrerlo sin cortar contenido.
+
+Primero entrega propuesta visual para revisión; no publiques cambios. Código actual: public/homes-page.js, public/homes-page.css, public/review-refinement.css y public/homes-config.js, en el repositorio prueba-2-publicacion, rama rediseno. Usa los planos reales existentes como contenido, no dibujos inventados.
