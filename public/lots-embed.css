@@ -115,3 +115,6 @@ body.embedded-lotes2.lots-close #lot-explorer #zone-pins button.zone-pin.zone-pi
 html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin::after{transform:none!important}
 /* Far view (Surroundings or zoomed out): lot pins hidden, only the red "Rainbow Park lots" pin */
 html[lang] body.embedded-lotes2.lots-far #lot-explorer #zone-pins button.zone-pin.zone-pin.zone-pin{display:none!important}
+
+/* Engine visibility must win over the marker display overrides above. */
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin.zone-pin[hidden]{display:none!important}

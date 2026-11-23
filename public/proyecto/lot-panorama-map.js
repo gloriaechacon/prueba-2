@@ -52,7 +52,7 @@ export function mountPanoramaMap(frame, lot, item, language, publicNumber) {
     if (disposed || host.classList.contains('is-collapsed') || !canvas.clientWidth || !canvas.clientHeight) return;
     const nextSize = `${canvas.clientWidth}x${canvas.clientHeight}`;
     map.invalidateSize({ pan: false });
-    if (size !== nextSize) { map.fitBounds(bounds, { padding: [36, 28], maxZoom: 18, animate: false }); size = nextSize; }
+    if (size !== nextSize) { map.fitBounds(bounds, { padding: [36, 28], maxZoom: 14, animate: false }); size = nextSize; }
   };
   const observer = new ResizeObserver(resize); observer.observe(canvas); resize();
   host.querySelector('.pano-map-toggle').addEventListener('click', () => {

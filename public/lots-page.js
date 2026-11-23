@@ -4,7 +4,7 @@
    tapped thumbnail (shared-element view transition). State goes through the hidden #c-lot select,
    so detail.js keeps ?lot= in the URL and tour-refinement.js keeps the map in step. */
 import { panorama } from '/proyecto/lot-panorama.js?v=locator1';
-import { mountPanoramaMap } from '/proyecto/lot-panorama-map.js';
+import { mountPanoramaMap } from '/proyecto/lot-panorama-map.js?v=wide2';
 
 const S = {
   en: { lot: 'Lot', area: 'Area', street: 'Street', status: 'Status', available: 'Available', sold: 'Sold', photos: 'Photos', p360: '360°', mls: 'MLS · supplied by the client', tbc: 'Area to be confirmed', ask: 'Ask about this lot', photo: 'Photo', outline: 'Show outline', note: 'Indicative outline, pending confirmation', close: 'Close', prev: 'Previous', next: 'Next', open: 'Open the gallery', expand: 'Lot details', drag: 'Drag to look around', gmaps: 'Open in Google Maps', all: 'View all Rainbow Park', avail: n => `${n} available lots`, total: 'Total area · MLS', plus: n => `+ lot ${n} to be confirmed`, statusSum: (a, s) => `${a} available · ${s} sold`, pick: 'Choose a lot to fly to it.', coll: 'Rainbow Park collection' },

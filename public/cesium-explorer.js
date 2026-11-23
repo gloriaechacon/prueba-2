@@ -131,9 +131,24 @@ function renderPins(){
  }
  const used=new Set(),singles=new Set();
  const V2=document.body.classList.contains('embedded-lotes2');
- // v2: never stack markers; raise the ones that would overlap and draw a fine leader to their lot.
- if(V2){const dA=activeLot?C.Cartesian3.distance(camera.positionWC,point(activeLot.x,activeLot.z)):Infinity;document.body.classList.toggle('lots-close',dA<1400);document.body.classList.toggle('lots-far',regionalDistance>4500);for(const l of lots)l.pin?.classList.toggle('is-current',l===activeLot);
- const placed=[];for(const v of [...visible].sort((a,b)=>a.lot.id-b.lot.id)){let y=v.y;for(let k=0;k<12;k++){const hit=placed.find(p=>Math.abs(p.x-v.x)<30&&Math.abs(p.y-y)<30);if(!hit)break;y=hit.y-32}v.lead=v.y-y;v.y=y;placed.push({x:v.x,y})}for(const v of visible)v.lot.pin.style.setProperty('--lead',(v.lead||0)+'px')}
+ // Keep geographic anchors fixed. Hide competing labels instead of stacking them.
+ if(V2){
+  const dA=activeLot?C.Cartesian3.distance(camera.positionWC,point(activeLot.x,activeLot.z)):Infinity;
+  const close=dA<1400;
+  document.body.classList.toggle('lots-close',close);document.body.classList.toggle('lots-far',regionalDistance>4500);
+  for(const l of lots){l.pin?.classList.toggle('is-current',l===activeLot);l.pin?.style.setProperty('--lead','0px')}
+  const placed=[],accepted=new Set();
+  const rank=v=>v.lot===activeLot?0:window.rpcLots.available(v.lot.id)?1:2;
+  for(const v of [...visible].sort((a,b)=>rank(a)-rank(b)||window.rpcLots.rank(a.lot.id)-window.rpcLots.rank(b.lot.id))){
+   const dot=close&&v.lot!==activeLot;
+   // Reserve room for the status text beside the circular number.
+   const box={left:v.x-18,right:v.x+(dot?12:155),top:v.y-(dot?14:36),bottom:v.y+16};
+   if(box.left<0||box.right>scene.canvas.clientWidth||box.top<0||box.bottom>scene.canvas.clientHeight)continue;
+   if(placed.some(b=>box.left<b.right&&box.right>b.left&&box.top<b.bottom&&box.bottom>b.top))continue;
+   placed.push(box);accepted.add(v);
+  }
+  for(let i=visible.length-1;i>=0;i--)if(!accepted.has(visible[i]))visible.splice(i,1);
+ }
  for(const group of (V2?visible.map(v=>({x:v.x,y:v.y,points:[v]})):clusterPins(visible))){
   if(group.points.length===1){const {lot}=group.points[0];singles.add(lot);lot.pin.style.left=group.x+'px';lot.pin.style.top=group.y+'px';continue;}
   const key=group.points.map(p=>p.lot.id).sort((a,b)=>a-b).join('-');used.add(key);
