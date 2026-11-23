@@ -3,7 +3,8 @@
    thumbnails, a single "Ask about this lot" button and a full-screen gallery that opens from the
    tapped thumbnail (shared-element view transition). State goes through the hidden #c-lot select,
    so detail.js keeps ?lot= in the URL and tour-refinement.js keeps the map in step. */
-import { panorama } from '/proyecto/lot-panorama.js';
+import { panorama } from '/proyecto/lot-panorama.js?v=locator1';
+import { mountPanoramaMap } from '/proyecto/lot-panorama-map.js';
 
 const S = {
   en: { lot: 'Lot', area: 'Area', street: 'Street', status: 'Status', available: 'Available', sold: 'Sold', photos: 'Photos', p360: '360°', mls: 'MLS · supplied by the client', tbc: 'Area to be confirmed', ask: 'Ask about this lot', photo: 'Photo', outline: 'Show outline', note: 'Indicative outline, pending confirmation', close: 'Close', prev: 'Previous', next: 'Next', open: 'Open the gallery', expand: 'Lot details', drag: 'Drag to look around', gmaps: 'Open in Google Maps', all: 'View all Rainbow Park', avail: n => `${n} available lots`, total: 'Total area · MLS', plus: n => `+ lot ${n} to be confirmed`, statusSum: (a, s) => `${a} available · ${s} sold`, pick: 'Choose a lot to fly to it.', coll: 'Rainbow Park collection' },
@@ -178,7 +179,7 @@ if (select && panel) {
   dlg.setAttribute('aria-label', 'Galería');
   dlg.dataset.noTranslate = '';
   document.body.append(dlg);
-  let dispose = null, gType = 'photo', gIndex = 0;
+  let dispose = null, gType = 'photo', gIndex = 0, galleryVersion = 0;
   const vt = fn => (document.startViewTransition && !reduce.matches) ? document.startViewTransition(fn) : (fn(), null);
   function galleryHTML() {
     const s = t(), lot = lots.find(l => l.id === current), n = RP.number(current);
@@ -192,6 +193,8 @@ if (select && panel) {
       <footer class="lxg-foot"><span class="lxg-count t-label"></span><div class="lxg-thumbs">${list.map((it, i) => `<button type="button" class="lx-thumb" data-gi="${i}" aria-pressed="${i === gIndex}"><img src="${thumbOf(it.file)}" alt="" loading="lazy" onerror="this.onerror=null;this.src='${base + it.file}'"></button>`).join('')}</div><p class="t-small lxg-note">${s.note}</p></footer>`;
   }
   function gShow(dir = 0) {
+    const version = ++galleryVersion;
+    dlg.querySelector('.lxg-frame')?.getAnimations().forEach(a => a.cancel());
     dispose?.(); dispose = null;
     const s = t(), list = items(current).filter(x => x.type === gType), it = list[gIndex]; if (!it) return;
     const frame = dlg.querySelector('.lxg-frame');
@@ -199,6 +202,7 @@ if (select && panel) {
     dlg.querySelectorAll('[data-gi]').forEach((b, i) => b.setAttribute('aria-pressed', String(i === gIndex)));
     dlg.querySelector('.lxg-note').hidden = !it.outline;
     const build = () => {
+      if (version !== galleryVersion || !dlg.open) return;
       frame.innerHTML = '';
       if (gType === 'photo') {
         const box = document.createElement('div'); box.className = 'lxg-photo';
@@ -221,7 +225,9 @@ if (select && panel) {
         const stage = document.createElement('div'); stage.className = 'lxg-pano'; stage.tabIndex = 0; stage.setAttribute('aria-label', s.drag);
         frame.append(stage);
         const hint = document.createElement('span'); hint.className = 'lxg-hint t-label'; hint.textContent = s.drag; frame.append(hint);
-        dispose = panorama(stage, base + it.file, { ...it, hd: it.hd ? base + it.hd : null, showOutline: true });
+        const locator = mountPanoramaMap(frame, lots.find(l => l.id === current), it, lang(), RP.number(current));
+        const disposePano = panorama(stage, base + it.file, { ...it, hd: it.hd ? base + it.hd : null, showOutline: true, onViewChange: locator.update });
+        dispose = () => { disposePano(); locator.dispose(); };
       }
     };
     if (dir && !reduce.matches && frame.animate && frame.firstChild) {
@@ -243,6 +249,8 @@ if (select && panel) {
   }
   function closeGallery() {
     if (!dlg.open) return;
+    ++galleryVersion;
+    dlg.querySelector('.lxg-frame')?.getAnimations().forEach(a => a.cancel());
     const thumb = media.querySelectorAll('.lx-thumb img')[gIndex] && gType === type ? media.querySelectorAll('.lx-thumb img')[gIndex] : media.querySelector('.lx-main-frame');
     const frame = dlg.querySelector('.lxg-frame'); if (frame) frame.style.viewTransitionName = 'lx-shared';
     const tr = vt(() => { if (frame) frame.style.viewTransitionName = ''; dispose?.(); dispose = null; dlg.close(); if (thumb) thumb.style.viewTransitionName = 'lx-shared'; });

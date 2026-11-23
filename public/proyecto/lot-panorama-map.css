@@ -1,0 +1,27 @@
+/* Same quiet street tiles as Surroundings; the map stays north-up. */
+.pano-locator{--pano-direction:#245c46;position:absolute;z-index:4;right:16px;bottom:16px;width:300px;max-width:calc(100% - 24px);border:1px solid var(--c-line);border-radius:10px;background:var(--c-paper);color:var(--c-ink);overflow:hidden}
+.pano-map-toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:44px;padding:10px 12px;border:0;background:var(--c-paper);color:var(--c-ink);font:500 11px/1.4 var(--font-sans);letter-spacing:.08em;text-transform:uppercase;cursor:pointer;text-align:left}
+.pano-map-toggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;flex-shrink:0}
+.pano-locator.is-collapsed .pano-map-toggle svg{transform:rotate(180deg)}
+#pano-map-panel{position:relative}.pano-map-canvas{height:200px;background:var(--c-paper-2,var(--c-paper))}
+.pano-map-canvas .leaflet-tile-pane{filter:grayscale(.8) sepia(.15) saturate(.65)}
+.pano-map-canvas .leaflet-control-attribution{font:10px/1.4 var(--font-sans);background:var(--c-paper);color:var(--c-ink)}
+.pano-map-canvas .leaflet-control-attribution a{color:inherit}
+.pano-map-canvas .leaflet-control-zoom a{color:var(--c-ink);background:var(--c-paper);width:34px;height:34px;line-height:34px;font-size:20px}
+.pano-map-parcel{stroke:var(--c-ink);fill:var(--c-accent);stroke-width:2}
+.pano-map-camera svg{display:block;width:140px;height:140px;overflow:visible}
+.pano-map-cone{fill:var(--pano-direction);fill-opacity:.28;stroke:var(--pano-direction);stroke-width:1.5}
+.pano-map-cone .pano-map-axis{fill:none;stroke-width:1;stroke-dasharray:3 3}
+.pano-map-camera circle{fill:var(--pano-direction);stroke:var(--c-paper);stroke-width:2}
+.pano-map-north{position:absolute;top:8px;right:8px;z-index:450;padding:3px 6px;background:var(--c-paper);color:var(--c-ink);font:600 11px/1.5 var(--font-sans);pointer-events:none}
+.pano-map-note{margin:0;padding:7px 10px;font:400 11px/1.4 var(--font-sans);color:var(--c-ink)}
+.pano-map-error{position:absolute;left:8px;right:8px;bottom:40px;z-index:450;margin:0;padding:8px;background:var(--c-paper);color:var(--c-ink);font:400 12px/1.4 var(--font-sans)}
+.pano-locator :focus-visible{outline:2px solid var(--pano-direction);outline-offset:-3px}
+.lxg-frame:has(.pano-locator) .lxg-hint{left:14px;transform:none;max-width:calc(100% - 340px)}
+@media(max-width:640px){
+ .pano-locator{right:8px;bottom:8px;width:182px}.pano-map-canvas{height:136px}
+ .pano-map-toggle{font-size:10px;padding:8px}.pano-map-note{font-size:10px;padding:5px 8px}
+ .pano-map-canvas .leaflet-control-zoom{display:none}
+ .lxg-frame:has(.pano-locator) .lxg-hint{top:8px;bottom:auto;left:8px;max-width:calc(100% - 16px)}
+}
+@media(max-height:500px){.pano-map-canvas{height:100px}.pano-map-note{display:none}.pano-locator{width:190px}}

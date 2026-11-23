@@ -11,6 +11,7 @@ export function panorama(stage,src,item={}){
   raf=0;
   stage.style.backgroundPosition=((.5-yaw/360)*stage.clientHeight*2+stage.clientWidth/2-stage.clientHeight*2)+'px '+(50+pitch/2)+'%';
   renderScene?.();
+  if(stage.clientWidth && stage.clientHeight) item.onViewChange?.({yaw,pitch,fov,aspect:stage.clientWidth/stage.clientHeight});
  }
  function schedule(){if(!raf && !disposed)raf=requestAnimationFrame(paint)}
  function turn(horizontal,vertical){
