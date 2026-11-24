@@ -161,3 +161,9 @@ html body .hm>#visor{padding-bottom:24px!important}
 html body .hm>.hm-compare{padding-top:24px!important}
 .hm-plan-section{padding-bottom:0;margin-bottom:0}
 @media(max-width:760px){.area-map-preview{max-width:360px;justify-self:center}.teaser--flip .teaser-video{order:1}.teaser--flip .teaser-copy{order:2}html[lang] body #collection-footer{grid-template-columns:1fr auto;gap:20px;padding:24px 20px!important}html[lang] body #collection-footer>img{justify-self:end;width:110px}html[lang] body #collection-footer>.footer-contact{grid-column:1/-1;justify-self:start}html[lang] body #collection-footer .footer-name{font-size:27px!important}}
+
+/* Shared inquiry closing: same typography, spacing and reveal as House Models. */
+html body .collection-close{display:grid;justify-items:start;gap:24px;box-sizing:border-box;width:100%;margin:0;padding:var(--section-y) clamp(16px,5vw,88px)}
+html body .collection-close h2{margin:0;max-width:16ch}
+html body .collection-close h2 em{color:var(--s-accent)}
+html body .collection-close .btn{opacity:1!important;visibility:visible!important;transform:none!important}
