@@ -1,7 +1,7 @@
 /* proyecto/viviendas — House models: selector (two tall cards), viewer with two 3D tabs, a full floor plan and a
    spec sheet, and an illustrative home comparison. Real figures from the metadata files;
    asset paths in /homes-config.js. ?house=utah|bell picks the initial home. */
-import { HOMES, facts } from '/homes-config.js?v=review2';
+import { HOMES, facts } from '/homes-config.js?v=plan4';
 import { mountPlanSheet } from '/floor-plan-sheet.js?v=layout4';
 let disposePlan = () => {};
 
@@ -176,7 +176,7 @@ async function mountTab() {
   pane.innerHTML = ''; pane.dataset.tab = tab;
   pane.innerHTML = `<div class="hm-3d" aria-busy="true"><p class="hm-loading t-small">${s.loading}</p></div>`;
   try {
-    const { createViewer } = await import('/proyecto/viewer.js?v=review3');
+    const { createViewer } = await import('/proyecto/viewer.js?v=plan4');
     if (token !== viewerToken) return;
     const host = pane.querySelector('.hm-3d');
     const v = await createViewer(host, id, { model: tab === 2 ? HOMES[id].floor3d : HOMES[id].model3d });

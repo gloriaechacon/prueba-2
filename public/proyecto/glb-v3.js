@@ -14,12 +14,14 @@ const getLoader = () => loader ||= new GLTFLoader().setDRACOLoader(new DRACOLoad
    the lightmap goes in at the file's intensity × LM. */
 export const TUNE = { LIGHTS: 0.35, ENV: 0.85, LM: 1.3 };
 
-export const isV3 = url => /-v3\.glb(\?|$)/.test(url);
+export const isV3 = url => /-v[34]\.glb(\?|$)/.test(url);
 
 export async function loadV3(url) {
   const gltf = await getLoader().loadAsync(url);
   const model = gltf.scene;
-  const info = gltf.parser.json.asset?.extras?.rainbowPark?.lightMap;
+  const metadata = gltf.parser.json.asset?.extras?.rainbowPark;
+  const info = metadata?.lightMap;
+  const nativePlan = Boolean(metadata?.camera);
   let lit = false;
   if (info?.file) {
     try {
@@ -27,7 +29,7 @@ export async function loadV3(url) {
       lm.flipY = false; lm.channel = 1; lm.colorSpace = THREE.SRGBColorSpace;
       model.traverse(o => {
         if (!o.isMesh || !o.geometry.attributes.uv1) return;
-        for (const m of [].concat(o.material)) { m.lightMap = lm; m.lightMapIntensity = info.intensity * TUNE.LM; m.needsUpdate = true; }
+        for (const m of [].concat(o.material)) { m.lightMap = lm; m.lightMapIntensity = info.intensity * (nativePlan ? 1 : TUNE.LM); m.needsUpdate = true; }
       });
       lit = true;
     } catch (e) { console.info('Lightmap unavailable, real-time light only.', e?.message || ''); }
@@ -37,7 +39,7 @@ export async function loadV3(url) {
     for (const m of [].concat(o.material)) {
       // Baked color already contains illumination: do not filmically dim it a second time.
       if (m.isMeshBasicMaterial) m.toneMapped = false;
-      if (m.aoMap) m.aoMapIntensity = .65;
+      if (m.aoMap) m.aoMapIntensity = nativePlan ? 1 : .65;
       if (/teja|roof/i.test(m.name)) m.color.multiplyScalar(1.2);
       if (/puerta.*caoba/i.test(m.name)) m.color.setRGB(1.35, 1.18, .95);
       if (/garaje.*oscuro/i.test(m.name)) m.color.set('#8e877a');
@@ -46,7 +48,7 @@ export async function loadV3(url) {
     o.castShadow = !transparent; o.receiveShadow = true;
   });
   // GLTFLoader keeps node extras in userData, so extras.roof drives the cut exactly as before.
-  return { model, lit };
+  return { model, lit, metadata };
 }
 
 /* With the bake on, dim the real-time lights and the IBL so light is not counted twice. */

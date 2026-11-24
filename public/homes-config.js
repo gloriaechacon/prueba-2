@@ -9,7 +9,7 @@ export const HOMES = {
   utah: {
     name: 'Utah',
     model3d: '/utah/utah-exterior-v3.glb',
-    floor3d: '/utah/utah-plan-v3.glb',            // furnished interior, baked without roof/ceilings
+    floor3d: '/utah/utah-plan-v4.glb',            // furnished interior, baked without roof/ceilings
     plan: '/utah/floorplan-v3.png',
     planPdf: '/utah/utah-floor-plan.pdf',
     metadata: '/utah/metadata-plan-v3.json',

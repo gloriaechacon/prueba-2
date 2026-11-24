@@ -4,7 +4,7 @@ import {loadHouse, daylight} from '/utah/model-loader.js';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {createSceneRenderer, addHouseStage} from '/exterior-atmosphere.js';
 import {compileInSlices} from '/three-compile.js';
-import {isV3, loadV3, balanceLights} from '/proyecto/glb-v3.js?v=review3';
+import {isV3, loadV3, balanceLights} from '/proyecto/glb-v3.js?v=plan4';
 
 export async function createViewer(host, id, opts = {}) {
   const scene = new THREE.Scene();
@@ -26,12 +26,12 @@ export async function createViewer(host, id, opts = {}) {
   lawnMap.wrapS=lawnMap.wrapT=THREE.RepeatWrapping; lawnMap.repeat.set(32,32); lawnMap.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());
   ground.material.map=lawnMap; ground.material.needsUpdate=true;
   scene.background = new THREE.Color('#d8e8ed');
-  let model, lit = false;
+  let model, metadata, lit = false;
   try {
     const house = Object.values(houses).find(entry => entry.slug === id);
     if (!house) throw new Error('Modelo desconocido: '+id);
     const url = opts.model || ('/'+house.model);
-    if (isV3(url)) ({model, lit} = await loadV3(url));
+    if (isV3(url)) ({model, lit, metadata} = await loadV3(url));
     else model = await loadHouse(url);
   } catch(error) {
     controls.dispose();
@@ -39,15 +39,35 @@ export async function createViewer(host, id, opts = {}) {
     throw error;
   }
   scene.add(model);
+  const planCamera = metadata?.camera;
+  if (planCamera) {
+    ground.visible = false;
+    controls.minPolarAngle = THREE.MathUtils.degToRad(planCamera.polarAngleDeg[0]);
+    controls.maxPolarAngle = THREE.MathUtils.degToRad(planCamera.polarAngleDeg[1]);
+    controls.maxDistance = planCamera.distance[1];
+    controls.enablePan = true;
+    controls.screenSpacePanning = true;
+    controls.addEventListener('change', () => {
+      const before = controls.target.clone(), lim = planCamera.panLimit;
+      controls.target.x = THREE.MathUtils.clamp(controls.target.x, ...lim.x);
+      controls.target.z = THREE.MathUtils.clamp(controls.target.z, ...lim.z);
+      controls.target.y = THREE.MathUtils.clamp(controls.target.y, 0, 1);
+      camera.position.add(controls.target.clone().sub(before));
+    });
+  }
   const box = new THREE.Box3().setFromObject(model);
   const size = box.getSize(new THREE.Vector3());
   controls.minDistance = new THREE.Vector3(Math.max(Math.abs(box.min.x),Math.abs(box.max.x)),Math.max(Math.abs(box.min.y),Math.abs(box.max.y)),Math.max(Math.abs(box.min.z),Math.abs(box.max.z))).length() + 2.5;
+  if (planCamera) controls.minDistance = planCamera.distance[0];
   host.replaceChildren(renderer.domElement);
   renderer.domElement.setAttribute('aria-label', 'Modelo 3D de '+id+'. Arrastra para girar o usa los controles de cámara.');
   renderer.domElement.setAttribute('role', 'img');
   const disposeDaylight = daylight(scene, renderer);
-  balanceLights(scene, lit);
-  renderer.toneMappingExposure = 1.08;
+  if (planCamera && lit) {
+    scene.traverse(o => { if (o.isLight) o.intensity *= .15; });
+    scene.environmentIntensity = .15;
+  } else balanceLights(scene, lit);
+  renderer.toneMappingExposure = planCamera ? 1 : 1.08;
   const roofNodes = [];
   model.traverse(node => {if(node.userData.roof === true) roofNodes.push(node)});
   let compiled = false;
@@ -57,7 +77,7 @@ export async function createViewer(host, id, opts = {}) {
     if(!width || !height) return;
     renderer.setSize(width, height, false);
     camera.aspect=width/height;
-    camera.zoom=Math.min(1,camera.aspect/1.2);
+    camera.zoom=Math.min(1,camera.aspect/(planCamera ? 1 : 1.2));
     camera.updateProjectionMatrix();
     render();
   };
@@ -70,8 +90,15 @@ export async function createViewer(host, id, opts = {}) {
     back:[-size.x*.9, size.y*1.7, -size.z*1.7]
   };
   const setCamera = name => {
-    camera.position.set(...views[name]);
-    controls.target.set(0, name==='above'?0:1.6, 0);
+    if (planCamera) {
+      camera.fov = planCamera.initial.fov;
+      camera.position.fromArray(planCamera.initial.position);
+      controls.target.fromArray(planCamera.initial.target);
+      camera.updateProjectionMatrix();
+    } else {
+      camera.position.set(...views[name]);
+      controls.target.set(0, name==='above'?0:1.6, 0);
+    }
     controls.update();
     render();
   };
