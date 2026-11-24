@@ -2,7 +2,7 @@
    spec sheet, and an illustrative home comparison. Real figures from the metadata files;
    asset paths in /homes-config.js. ?house=utah|bell picks the initial home. */
 import { HOMES, facts } from '/homes-config.js?v=review2';
-import { mountPlanSheet } from '/floor-plan-sheet.js?v=compact2';
+import { mountPlanSheet } from '/floor-plan-sheet.js?v=layout4';
 let disposePlan = () => {};
 
 const S = {
