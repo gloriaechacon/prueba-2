@@ -333,3 +333,9 @@ html[lang] body:not(#rp-type) .rp-arrow-name{font:var(--t-small)!important;lette
 html[lang] body:not(#rp-type) .rp-arrow-word{font:var(--t-label)!important;letter-spacing:var(--t-label-track)!important;text-transform:uppercase!important}
 .imap-nav{padding-bottom:44px!important}
 html body main .idos.idos{padding-top:clamp(20px,3vh,36px)!important;padding-bottom:clamp(20px,3vh,36px)!important}
+
+.imap-cat-references{display:flex;flex-direction:column;align-items:flex-start;gap:4px;margin:0 0 18px calc(4.2rem + 16px)}
+.imap-cat-references a{color:inherit;text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere;padding:5px 0;max-width:100%}
+.imap-cat-references a:focus-visible{outline:2px solid var(--c-focus);outline-offset:3px}
+.idos-grid a{overflow-wrap:anywhere}
+@media(max-width:860px){.imap-cat-references{margin-left:calc(3rem + 16px)}.imap-cat-references a{padding:10px 0}}

@@ -24,7 +24,7 @@
   };
   const getJSON = url => fetch(url).then(r => { if (!r.ok) throw Error(url); return r.json(); });
   const indicatorsP = getJSON('/proyecto/investment-indicators.json');
-  const mapP = getJSON('/inversion/project-map.json');
+  const mapP = getJSON('/inversion/project-map.json?v=references2');
   const lotsP = getJSON('/assets/geography/collection-lots.json');
 
   /* "+48,14%" → { pre:'+', n:48.14, dec:2, suf:'%' }  (values are written in Spanish format) */
@@ -323,12 +323,14 @@
     const cat = document.createElement('div');
     cat.className = 'imap-catalog';
     const catRows = () => all.map(({ loc, p }, i) => {
-      const src = p.sources.map(id => sources.get(id)).filter(Boolean)[0];
+      const refs = p.sources.map(id => sources.get(id)).filter(Boolean);
+      const src = refs[0];
+      const referenceLabel = ({en:'References',es:'Referencias',pt:'Referências'})[lang()] || 'References';
       return `<li><button type="button" class="imap-cat-row" data-i="${i}" data-key="${esc(p.id + '|' + loc.id)}">
         <span class="idos-n" data-no-translate>${pad(i + 1)}</span>
         <span class="imap-cat-main"><span class="idos-row-title">${esc(loc.name)}</span><span class="t-label imap-cat-catg"><span data-no-translate>${esc(CATEGORY[p.category]?.[lang()] || p.category)}</span> · <span>${esc(p.status)}</span></span></span>
         <span class="imap-cat-fig"><strong class="t-title" data-no-translate>${esc(p.metric)}</strong><span class="t-small">${esc(p.unit)}</span></span>
-        <span class="imap-cat-src t-small"><span>${esc(p.date)}</span>${src ? ` · <span data-no-translate>${esc(src.publisher)}</span>` : ''}</span></button></li>`;
+        <span class="imap-cat-src t-small"><span>${esc(p.date)}</span>${src ? ` · <span data-no-translate>${esc(src.publisher)}</span>` : ''}</span></button><div class="imap-cat-references"><span class="t-label" data-no-translate>${referenceLabel}</span>${refs.map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener" class="t-small"><span data-no-translate>${esc(s.publisher)}</span> · <span>${esc(s.title)}</span></a>`).join('')}</div></li>`;
     }).join('');
     cat.innerHTML = `<button type="button" class="imap-cat-toggle" aria-expanded="false" aria-controls="imap-cat-list"><span class="imap-cat-title">Ver los 13 proyectos</span><small class="t-small imap-cat-sub">Listado completo con cifras y fechas</small><svg class="catalog-plus" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18M12 3v18"/></svg></button>
       <div class="imap-cat-panel" id="imap-cat-list" hidden><ol class="imap-cat-list">${catRows()}</ol></div>`;
@@ -362,13 +364,12 @@
   /* ---------------- Act 3 · dossier ---------------- */
   function renderDossier(root, indicators, data) {
     const sources = new Map(data.sources.map(s => [s.id, s]));
-    const host = s => { try { const u = new URL(s.url); return (u.hostname.replace(/^www\./, '') + u.pathname).replace(/\/$/, '').slice(0, 48); } catch { return s.url; } };
     const dates = indicators.map(i => (/(\d{2}\/\d{2}\/\d{4})/.exec(i.status) || [])[1]).filter(Boolean)
       .sort((a, b) => a.split('/').reverse().join('').localeCompare(b.split('/').reverse().join('')));
     const latest = dates.at(-1) || '';
     const archive = data.asOf.split('-').reverse().join('/');
     const field = (k, v, cls = '') => v ? `<div class="${cls}"><dt>${k}</dt><dd>${v}</dd></div>` : '';
-    const linkHtml = s => `<a class="link-line" href="${esc(s.url)}" target="_blank" rel="noopener" data-no-translate>${esc(host(s))} <span aria-hidden="true">↗</span></a>`;
+    const linkHtml = s => `<a class="link-line" href="${esc(s.url)}" target="_blank" rel="noopener"><span>${esc(s.title)}</span> <span aria-hidden="true">↗</span></a>`;
     const rows = [];
     let firstProject = -1;
     indicators.forEach(ind => {
@@ -385,8 +386,9 @@
         body: list.map(s => `<dl class="idos-grid">${field('Publicador', `<span data-no-translate>${esc(s.publisher)}</span>`)}${field('Tipo', esc(s.type))}${field('Fecha', esc(s.date))}${field('Enlace', linkHtml(s))}${field('Revisión', '<span>Archivo:</span> ' + archive)}</dl>`).join('')
       });
     }));
+    const sourceCount = new Set([...indicators.map(i => i.source), ...data.locations.flatMap(l => l.projects.flatMap(p => p.sources))].filter(id => sources.has(id))).size;
     root.classList.add('idos');
-    root.innerHTML = `<details class="idos-fold"><summary class="idos-fold-sum"><span class="t-title">Fuentes y metodología</span><span class="t-small">${rows.length} <span>fuentes</span> · <span>Indicadores: revisión</span> ${esc(latest)}</span><i aria-hidden="true"></i></summary><div class="idos-fold-body">
+    root.innerHTML = `<details class="idos-fold"><summary class="idos-fold-sum"><span class="t-title">Fuentes y metodología</span><span class="t-small">${sourceCount} <span>fuentes</span> · <span>Indicadores: revisión</span> ${esc(latest)}</span><i aria-hidden="true"></i></summary><div class="idos-fold-body">
       <div class="idos-side"><span class="idos-kicker">Dossier de fuentes</span></div>
       <ol class="idos-list">${rows.map((r, i) => `${i === 0 ? `<li class="idos-group t-label" aria-hidden="true"><span>Fuentes de las cifras</span> · <span data-no-translate>${firstProject}</span></li>` : ''}${i === firstProject ? `<li class="idos-group t-label" aria-hidden="true"><span>Fuentes de los proyectos del mapa</span> · <span data-no-translate>${rows.length - firstProject}</span></li>` : ''}<li><details><summary><span class="idos-n" data-no-translate>${pad(i + 1)}</span><span class="idos-row-title">${r.html ? r.title : esc(r.title)}</span><span class="idos-meta"><span data-no-translate>${esc(r.meta[0])}</span> · <span>${esc(r.meta[1])}</span></span><i aria-hidden="true"></i></summary><div class="idos-body">${r.body}</div></details></li>`).join('')}</ol>
       <p class="idos-foot"><span>Indicadores: revisión</span> ${esc(latest)} · <span>Archivo de proyectos:</span> ${esc(archive)}</p></div></details>`;
