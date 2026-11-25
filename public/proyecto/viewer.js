@@ -4,7 +4,7 @@ import {loadHouse, daylight} from '/utah/model-loader.js';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {createSceneRenderer, addHouseStage} from '/exterior-atmosphere.js';
 import {compileInSlices} from '/three-compile.js';
-import {isV3, loadV3, balanceLights} from '/proyecto/glb-v3.js?v=plan4';
+import {isV3, loadV3, balanceLights} from '/proyecto/glb-v3.js?v=plan6';
 
 export async function createViewer(host, id, opts = {}) {
   const scene = new THREE.Scene();
@@ -33,13 +33,40 @@ export async function createViewer(host, id, opts = {}) {
     const url = opts.model || ('/'+house.model);
     if (isV3(url)) ({model, lit, metadata} = await loadV3(url));
     else model = await loadHouse(url);
+    if (id === 'utah' && metadata?.camera) {
+      const { model: kitchen } = await loadV3('/utah/utah-kitchen-repair-v4.glb?v=1');
+      // Replace only the damaged kitchen group. Keep all architecture and furniture.
+      model.traverse(node => {
+        if (node.userData.source === 'R/19_Sin+título (44)') node.visible = false;
+      });
+      kitchen.traverse(node => { if (node.isMesh) node.layers.enable(1); });
+      model.add(kitchen);
+      // New solids have no old irradiance atlas; give them their own soft fill.
+      const kitchenFill = new THREE.HemisphereLight(0xffffff, 0xb9ac99, .85);
+      kitchenFill.layers.set(1);
+      kitchenFill.userData.unbakedFill = true;
+      scene.add(kitchenFill);
+      camera.layers.enable(1);
+    }
   } catch(error) {
     controls.dispose();
     renderer.dispose();
     throw error;
   }
   scene.add(model);
-  const planCamera = metadata?.camera;
+  const planCamera = metadata?.camera ? structuredClone(metadata.camera) : null;
+  let lot = null;
+  if (planCamera) {
+    // Keep the delivered geometry intact; this tab displays the house alone.
+    model.traverse(node => { if (node.userData.category === 'lote') node.visible = false; });
+    planCamera.initial = { position: [0, 30, 11], target: [0, 0, 0], fov: 40 };
+    planCamera.distance = [8, 45];
+    planCamera.panLimit = { x: [-8, 8], z: [-8, 8] };
+  } else if (id === 'utah') {
+    ({ model: lot } = await loadV3('/utah/utah-lot-v4.glb'));
+    scene.add(lot);
+    ground.visible = false;
+  }
   if (planCamera) {
     ground.visible = false;
     controls.minPolarAngle = THREE.MathUtils.degToRad(planCamera.polarAngleDeg[0]);
@@ -55,7 +82,11 @@ export async function createViewer(host, id, opts = {}) {
       camera.position.add(controls.target.clone().sub(before));
     });
   }
-  const box = new THREE.Box3().setFromObject(model);
+  const box = new THREE.Box3();
+  model.updateMatrixWorld(true);
+  model.traverseVisible(node => {
+    if (node.isMesh) box.union(new THREE.Box3().setFromObject(node));
+  });
   const size = box.getSize(new THREE.Vector3());
   controls.minDistance = new THREE.Vector3(Math.max(Math.abs(box.min.x),Math.abs(box.max.x)),Math.max(Math.abs(box.min.y),Math.abs(box.max.y)),Math.max(Math.abs(box.min.z),Math.abs(box.max.z))).length() + 2.5;
   if (planCamera) controls.minDistance = planCamera.distance[0];
@@ -64,8 +95,8 @@ export async function createViewer(host, id, opts = {}) {
   renderer.domElement.setAttribute('role', 'img');
   const disposeDaylight = daylight(scene, renderer);
   if (planCamera && lit) {
-    scene.traverse(o => { if (o.isLight) o.intensity *= .15; });
-    scene.environmentIntensity = .15;
+    scene.traverse(o => { if (o.isLight && !o.userData.unbakedFill) o.intensity *= .15; });
+    scene.environmentIntensity = .65;
   } else balanceLights(scene, lit);
   renderer.toneMappingExposure = planCamera ? 1 : 1.08;
   const roofNodes = [];
@@ -85,7 +116,7 @@ export async function createViewer(host, id, opts = {}) {
   observer.observe(host);
   controls.addEventListener('change', render);
   const views={
-    front:[Math.sin(.20)*26, 6, Math.cos(.20)*26],
+    front:lot ? [12, 28, 44] : [Math.sin(.20)*26, 6, Math.cos(.20)*26],
     above:[0, Math.max(size.x,size.z)*2, .001],
     back:[-size.x*.9, size.y*1.7, -size.z*1.7]
   };

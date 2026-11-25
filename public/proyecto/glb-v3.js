@@ -3,6 +3,7 @@
    three.js GLTFLoader + DRACOLoader (report.md, "Integración"). Used only by proyecto/viewer.js
    for files named *-v3.glb; the hero and the v2 files keep the old reader. */
 import * as THREE from '/vendor/three.module.js';
+import { repairUtahPlanMaterials } from '/proyecto/utah-plan-materials.js?v=white1';
 import { GLTFLoader } from '/d/vendor/three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from '/d/vendor/three/examples/jsm/loaders/DRACOLoader.js';
 
@@ -39,14 +40,18 @@ export async function loadV3(url) {
     for (const m of [].concat(o.material)) {
       // Baked color already contains illumination: do not filmically dim it a second time.
       if (m.isMeshBasicMaterial) m.toneMapped = false;
-      if (m.aoMap) m.aoMapIntensity = nativePlan ? 1 : .65;
+      if (m.aoMap) m.aoMapIntensity = nativePlan ? .45 : .65;
       if (/teja|roof/i.test(m.name)) m.color.multiplyScalar(1.2);
       if (/puerta.*caoba/i.test(m.name)) m.color.setRGB(1.35, 1.18, .95);
       if (/garaje.*oscuro/i.test(m.name)) m.color.set('#8e877a');
     }
     const transparent = [].concat(o.material).some(m => m.transparent || m.transmission > 0);
-    o.castShadow = !transparent; o.receiveShadow = true;
+    // The cutaway already contains baked direct shadows. A second shadow pass
+    // creates dark self-shadow patches on doors, fabric and the detailed car.
+    o.castShadow = !nativePlan && !transparent;
+    o.receiveShadow = !nativePlan;
   });
+  if (nativePlan && /utah-plan-v4\.glb/.test(url)) repairUtahPlanMaterials(model);
   // GLTFLoader keeps node extras in userData, so extras.roof drives the cut exactly as before.
   return { model, lit, metadata };
 }
