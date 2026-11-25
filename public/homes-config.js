@@ -30,7 +30,7 @@ export const HOMES = {
   bell: {
     name: 'Bell',
     model3d: '/bell/bell-exterior-v3.glb',
-    floor3d: '/bell/bell-plan-v3.glb',
+    floor3d: '/bell/bell-plan-v5.glb?v=ref3',
     plan: '/bell/floorplan.png',
     planPdf: '/bell/bell-model.pdf',
     metadata: '/bell/metadata.json',

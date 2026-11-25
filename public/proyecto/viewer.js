@@ -4,7 +4,7 @@ import {loadHouse, daylight} from '/utah/model-loader.js';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {createSceneRenderer, addHouseStage} from '/exterior-atmosphere.js';
 import {compileInSlices} from '/three-compile.js';
-import {isV3, loadV3, balanceLights} from '/proyecto/glb-v3.js?v=plan6';
+import {isV3, loadV3, balanceLights} from '/proyecto/glb-v3.js?v=bellref1';
 
 export async function createViewer(host, id, opts = {}) {
   const scene = new THREE.Scene();
@@ -26,11 +26,12 @@ export async function createViewer(host, id, opts = {}) {
   lawnMap.wrapS=lawnMap.wrapT=THREE.RepeatWrapping; lawnMap.repeat.set(32,32); lawnMap.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());
   ground.material.map=lawnMap; ground.material.needsUpdate=true;
   scene.background = new THREE.Color('#d8e8ed');
-  let model, metadata, lit = false;
+  let model, metadata, lit = false, bellPlan = false;
   try {
     const house = Object.values(houses).find(entry => entry.slug === id);
     if (!house) throw new Error('Modelo desconocido: '+id);
     const url = opts.model || ('/'+house.model);
+    bellPlan = id === 'bell' && /bell-plan-v[345]\.glb/.test(url);
     if (isV3(url)) ({model, lit, metadata} = await loadV3(url));
     else model = await loadHouse(url);
     if (id === 'utah' && metadata?.camera) {
@@ -53,6 +54,29 @@ export async function createViewer(host, id, opts = {}) {
     renderer.dispose();
     throw error;
   }
+  if (bellPlan) {
+    model.traverse(node => {
+      if (!node.isMesh) return;
+      for (const material of [].concat(node.material)) {
+        // The embedded atlas is exported as AO only to retain its UV channel.
+        // loadV3 applies it as actual baked illumination instead.
+        material.aoMap = null;
+        if (/Bell white satin doors|Utah white interior doors/.test(material.name)) {
+          material.color.set('#ffffff'); material.map=null; material.lightMap=null;
+          material.emissive.set('#ffffff'); material.emissiveIntensity=.35;
+          material.metalness=0; material.roughness=.48; material.side=THREE.DoubleSide;
+        }
+        if (material.name === '70006203') node.visible = false;
+        material.needsUpdate = true;
+      }
+      node.castShadow = false;
+      node.receiveShadow = false;
+    });
+  }
+  if (bellPlan && !opts.model?.includes('bell-plan-v5')) {
+    const {model: sofa} = await loadV3('/bell/bell-sofa-baked-v4.glb');
+    model.add(sofa);
+  }
   scene.add(model);
   const planCamera = metadata?.camera ? structuredClone(metadata.camera) : null;
   let lot = null;
@@ -62,11 +86,12 @@ export async function createViewer(host, id, opts = {}) {
     planCamera.initial = { position: [0, 30, 11], target: [0, 0, 0], fov: 40 };
     planCamera.distance = [8, 45];
     planCamera.panLimit = { x: [-8, 8], z: [-8, 8] };
-  } else if (id === 'utah') {
-    ({ model: lot } = await loadV3('/utah/utah-lot-v4.glb'));
+  } else if (id === 'utah' || (id === 'bell' && !bellPlan)) {
+    ({ model: lot } = await loadV3('/'+id+'/'+id+'-lot-v4.glb?v=5'));
     scene.add(lot);
     ground.visible = false;
   }
+  if (bellPlan) ground.visible = false;
   if (planCamera) {
     ground.visible = false;
     controls.minPolarAngle = THREE.MathUtils.degToRad(planCamera.polarAngleDeg[0]);
@@ -94,7 +119,10 @@ export async function createViewer(host, id, opts = {}) {
   renderer.domElement.setAttribute('aria-label', 'Modelo 3D de '+id+'. Arrastra para girar o usa los controles de cámara.');
   renderer.domElement.setAttribute('role', 'img');
   const disposeDaylight = daylight(scene, renderer);
-  if (planCamera && lit) {
+  if (bellPlan) {
+    scene.environmentIntensity = .45;
+    scene.traverse(light => { if (light.isLight) light.intensity *= .12; });
+  } else if (planCamera && lit) {
     scene.traverse(o => { if (o.isLight && !o.userData.unbakedFill) o.intensity *= .15; });
     scene.environmentIntensity = .65;
   } else balanceLights(scene, lit);

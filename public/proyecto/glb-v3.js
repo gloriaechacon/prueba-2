@@ -15,7 +15,7 @@ const getLoader = () => loader ||= new GLTFLoader().setDRACOLoader(new DRACOLoad
    the lightmap goes in at the file's intensity × LM. */
 export const TUNE = { LIGHTS: 0.35, ENV: 0.85, LM: 1.3 };
 
-export const isV3 = url => /-v[34]\.glb(\?|$)/.test(url);
+export const isV3 = url => /-v[345]\.glb(\?|$)/.test(url);
 
 export async function loadV3(url) {
   const gltf = await getLoader().loadAsync(url);
@@ -30,7 +30,7 @@ export async function loadV3(url) {
       lm.flipY = false; lm.channel = 1; lm.colorSpace = THREE.SRGBColorSpace;
       model.traverse(o => {
         if (!o.isMesh || !o.geometry.attributes.uv1) return;
-        for (const m of [].concat(o.material)) { m.lightMap = lm; m.lightMapIntensity = info.intensity * (nativePlan ? 1 : TUNE.LM); m.needsUpdate = true; }
+        for (const m of [].concat(o.material)) { m.lightMap = lm; m.lightMapIntensity = info.intensity * (nativePlan || metadata?.currentBellBake ? 1 : TUNE.LM); m.needsUpdate = true; }
       });
       lit = true;
     } catch (e) { console.info('Lightmap unavailable, real-time light only.', e?.message || ''); }
