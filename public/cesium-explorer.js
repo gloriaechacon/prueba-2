@@ -30,7 +30,8 @@ const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
 // Only sourced geographic boundaries are shaded; never infer a boundary from a radius.
 let regionalAreas=[];
 // v2 (lots page): regional outlines follow the palette instead of the fixed source colours
-const areaColor=area=>document.body.classList.contains('embedded-lotes2')?(getComputedStyle(document.documentElement).getPropertyValue('--c-accent').trim()||area.color):area.color;
+// Share regional area colors with Surroundings, independent of the UI palette.
+const areaColor=area=>area.color;
 const regionalOverlay=document.createElement('div');regionalOverlay.className='zone-regional-labels';regionalOverlay.setAttribute('aria-label','Lugares del entorno');container.append(regionalOverlay);
 const regionalNote=document.createElement('p');regionalNote.className='zone-regional-note';regionalNote.hidden=true;
 regionalNote.textContent='Áreas: comunidades Rainbow Park y Rainbow Springs (US Census), aeropuerto (EPA). Selecciona un pin para saber más.';
@@ -61,7 +62,7 @@ fetch(new URL('./assets/geography/regional-context.json',import.meta.url)).then(
   const shapes=area.geometry?.type==='MultiPolygon'?area.geometry.coordinates:area.geometry?.type==='Polygon'?[area.geometry.coordinates]:[];
   for(const rings of shapes){
    const positions=ring=>ring.map(([lon,lat])=>C.Cartesian3.fromDegrees(lon,lat));
-   entities.push(viewer.entities.add({show:false,polygon:{hierarchy:new C.PolygonHierarchy(positions(rings[0]),rings.slice(1).map(r=>new C.PolygonHierarchy(positions(r)))),material:C.Color.fromCssColorString(areaColor(area)).withAlpha(.18),classificationType:C.ClassificationType.BOTH}}));
+   entities.push(viewer.entities.add({show:false,polygon:{hierarchy:new C.PolygonHierarchy(positions(rings[0]),rings.slice(1).map(r=>new C.PolygonHierarchy(positions(r)))),material:C.Color.fromCssColorString(areaColor(area)).withAlpha(.22),classificationType:C.ClassificationType.BOTH}}));
    for(const ring of rings)entities.push(viewer.entities.add({show:false,polyline:{positions:positions(ring),clampToGround:true,width:3,material:new C.PolylineDashMaterialProperty({color:C.Color.fromCssColorString(areaColor(area)),dashLength:14})}}));
   }
   const label=document.createElement('button');label.type='button';label.className='zone-regional-label zone-poi';label.dataset.place=area.id;label.setAttribute('aria-label',area.name);label.setAttribute('aria-pressed','false');
