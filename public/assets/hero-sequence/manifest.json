@@ -12,8 +12,8 @@
    "height": 1080,
    "path": "desktop/frame_0001.webp ... desktop/frame_0150.webp",
    "quality": 58,
-   "total_bytes": 15312010,
-   "total_mb": 14.6,
+   "total_bytes": 15240916,
+   "total_mb": 14.53,
    "budget_mb": 15,
    "within_budget": true,
    "quality_notes": [],
@@ -51,15 +51,11 @@
    "height": 1920,
    "path": "mobile/frame_0001.webp ... mobile/frame_0100.webp",
    "quality": 65,
-   "total_bytes": 10252400,
-   "total_mb": 9.78,
+   "total_bytes": 10038574,
+   "total_mb": 9.57,
    "budget_mb": 10,
    "within_budget": true,
-   "quality_notes": [
-    "q80: 15.23 MB > budget",
-    "q75: 11.62 MB > budget",
-    "q70: 10.67 MB > budget"
-   ],
+   "quality_notes": [],
    "keyframes": [
     {
      "label": "Wide, high view of the lot and the house",

@@ -202,7 +202,7 @@
     // Blender image sequence (hero-sequence.js); the three.js hero stays in the repo unloaded.
     const portrait = innerHeight > innerWidth * 1.1;
     const variant = mobile || portrait ? 'mobile' : 'desktop';
-    import('/hero-sequence.js').then(m => m.mountSequence(sceneEl, { variant })).then(c => {
+    import('/hero-sequence.js?v=losa20261126').then(m => m.mountSequence(sceneEl, { variant })).then(c => {
       ctrl = c; ctrl.setProgress(progress);
       return ctrl.ready;
     }).then(() => { sceneEl.classList.add('is-live'); window.__arrivalReady = true; })

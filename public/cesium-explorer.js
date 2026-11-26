@@ -29,7 +29,7 @@ const collectionSphere=C.BoundingSphere.fromPoints(lots.map(l=>point(l.x,l.z)));
 const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
 // Only sourced geographic boundaries are shaded; never infer a boundary from a radius.
 let regionalAreas=[];
-// v2 (lots page): regional outlines follow the palette instead of the fixed source colours
+// Regional outlines share their source colors with Surroundings.
 // Share regional area colors with Surroundings, independent of the UI palette.
 const areaColor=area=>area.color;
 const regionalOverlay=document.createElement('div');regionalOverlay.className='zone-regional-labels';regionalOverlay.setAttribute('aria-label','Lugares del entorno');container.append(regionalOverlay);
@@ -110,6 +110,15 @@ function toggleCluster(button){
 }
 document.addEventListener('pointerdown',e=>{if(openCluster&&!picker.contains(e.target)&&!openCluster.contains(e.target))closeCluster()});
 picker.addEventListener('keydown',e=>{if(e.key==='Escape'){const trigger=openCluster;closeCluster();trigger?.focus()}});
+const pinTextContext=document.createElement('canvas').getContext('2d');
+function pinBounds(v,left=false){
+ const sold=v.lot.pin.classList.contains('is-sold'),span=v.lot.pin.querySelector('span');
+ const style=getComputedStyle(span,'::after'),text=sold?span.dataset.sold:span.dataset.state;
+ pinTextContext.font=style.font||'500 10px sans-serif';
+ const width=pinTextContext.measureText((text||'').toUpperCase()).width+(parseFloat(style.letterSpacing)||0)*(text||'').length;
+ const radius=sold?5:14,gap=sold?9:6;
+ return {left:v.x-radius-(left?gap+width:0)-3,right:v.x+radius+(left?0:gap+width)+3,top:v.y-radius*2-3,bottom:v.y+3};
+}
 function renderPins(){
  renderRegionalAreas();
  const visible=[];
@@ -128,25 +137,31 @@ function renderPins(){
   // Always keep individual leaders short; never stack numbers up the screen.
   lot.pin.style.setProperty('--pin-stem','14px');
   if(regionalScale||(currentState==='house'&&activeLot===lot)||!p||!front||p.x<38||p.x>scene.canvas.clientWidth-38||p.y<52||p.y>scene.canvas.clientHeight-14)continue;
-  visible.push({x:p.x,y:p.y-14,lot,pos});
+  const toCamera=C.Cartesian3.subtract(camera.positionWC,pos,new C.Cartesian3());
+  const distance=C.Cartesian3.magnitude(toCamera);
+  const up=C.Ellipsoid.WGS84.geodeticSurfaceNormal(pos,new C.Cartesian3());
+  // Only label parcels on the visible ground plane, not behind terrain or near the horizon.
+  if(distance>7000||C.Cartesian3.dot(toCamera,up)/distance<.08)continue;
+  const ray=new C.Ray(camera.positionWC,C.Cartesian3.normalize(C.Cartesian3.negate(toCamera,new C.Cartesian3()),new C.Cartesian3()));
+  const ground=scene.globe.pick(ray,scene);
+  if(ground&&C.Cartesian3.distance(camera.positionWC,ground)+8<distance)continue;
+  visible.push({x:p.x,y:p.y-(lot.pin.classList.contains('is-sold')?6:12),lot,pos});
  }
  const used=new Set(),singles=new Set();
  const V2=document.body.classList.contains('embedded-lotes2');
  // Keep geographic anchors fixed. Hide competing labels instead of stacking them.
  if(V2){
-  const dA=activeLot?C.Cartesian3.distance(camera.positionWC,point(activeLot.x,activeLot.z)):Infinity;
-  const close=dA<1400;
-  document.body.classList.toggle('lots-close',close);document.body.classList.toggle('lots-far',regionalDistance>4500);
+  document.body.classList.remove('lots-close');document.body.classList.toggle('lots-far',regionalDistance>4500);
   for(const l of lots){l.pin?.classList.toggle('is-current',l===activeLot);l.pin?.style.setProperty('--lead','0px')}
   const placed=[],accepted=new Set();
   const rank=v=>v.lot===activeLot?0:window.rpcLots.available(v.lot.id)?1:2;
   for(const v of [...visible].sort((a,b)=>rank(a)-rank(b)||window.rpcLots.rank(a.lot.id)-window.rpcLots.rank(b.lot.id))){
-   const dot=close&&v.lot!==activeLot;
-   // Reserve room for the status text beside the circular number.
-   const box={left:v.x-18,right:v.x+(dot?12:155),top:v.y-(dot?14:36),bottom:v.y+16};
-   if(box.left<0||box.right>scene.canvas.clientWidth||box.top<0||box.bottom>scene.canvas.clientHeight)continue;
-   if(placed.some(b=>box.left<b.right&&box.right>b.left&&box.top<b.bottom&&box.bottom>b.top))continue;
-   placed.push(box);accepted.add(v);
+   for(const left of [false,true]){
+    const box=pinBounds(v,left);
+    if(box.left<0||box.right>scene.canvas.clientWidth||box.top<0||box.bottom>scene.canvas.clientHeight)continue;
+    if(placed.some(b=>box.left<b.right&&box.right>b.left&&box.top<b.bottom&&box.bottom>b.top))continue;
+    v.lot.pin.classList.toggle('label-left',left);placed.push(box);accepted.add(v);break;
+   }
   }
   for(let i=visible.length-1;i>=0;i--)if(!accepted.has(visible[i]))visible.splice(i,1);
  }

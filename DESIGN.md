@@ -231,3 +231,8 @@ The first house view displays the actual GLB, loaded automatically for Utah or B
 
 ## Exploration refinements
 Arrival destinations use a dark bottom-to-top fading hover and keyboard-focus surface, with soft side edges and no text displacement. The place visit centers its image and text, with destination tabs in a shared row below. Its final action leads to the collection overview. Parcels begin with the supplied aerial georeferenced to all 13 locations, separated labels for clustered pins, a regional map link and explicit lot selection. Dossier projects are introduced as third-party regional context. Typography remains unchanged pending the user reference.
+
+
+### Home and Lots typography pilot — 2026-11-26
+
+`public/type-scale-four.css` overrides the legacy six styles only on Home, Lots and its `embedded-lotes2` map. Cormorant Garamond and Manrope are retained. Desktop: opening titles/key figures 72px; section/card titles 36px; reading/forms/actions 16px; navigation/labels/notes 14px. At 760px and below the two title levels become 44px and 28px; reading and support stay 16px and 14px. All other pages retain their existing typography pending review.

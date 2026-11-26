@@ -118,3 +118,6 @@ html[lang] body.embedded-lotes2.lots-far #lot-explorer #zone-pins button.zone-pi
 
 /* Engine visibility must win over the marker display overrides above. */
 html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin.zone-pin[hidden]{display:none!important}
+
+/* Keep the geographic pin fixed; use the free side for its status text. */
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin.label-left>span::after{left:auto!important;right:calc(100% + 6px)!important}

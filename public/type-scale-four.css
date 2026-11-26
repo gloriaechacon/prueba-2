@@ -1,0 +1,62 @@
+/* Four-role pilot: Home and Lots only. Shared typography elsewhere is unchanged. */
+body[data-type-scale="four"],body.embedded-lotes2 {
+  --type-large:72px;
+  --type-medium:36px;
+  --t-display:300 var(--type-large)/1.05 var(--font-display);
+  --t-title:400 var(--type-medium)/1.15 var(--font-display);
+  --t-body:400 16px/1.6 var(--font-sans);
+  --t-small:400 14px/1.5 var(--font-sans);
+  --t-label:500 14px/1.4 var(--font-sans);
+  --t-button:500 16px/1.3 var(--font-sans);
+  --t-label-track:.08em;
+  --t-button-track:0;
+  --t-display-track:-.025em;
+}
+/* Section headings share the card-title level; only openings and key figures are large. */
+html[lang] body[data-type-scale="four"]:not(#rp-type) :is(h2,h3,h4,h5,h6,.teaser-title,.ifig-title,.collection-close h2) {
+  font:var(--t-title)!important;letter-spacing:0!important;text-wrap:balance;
+}
+html[lang] body[data-type-scale="four"]:not(#rp-type) :is(h1,.arrival-heading,.arrival-line,.arrival-intro-line>span,.ifig-num) {
+  font:var(--t-display)!important;letter-spacing:var(--t-display-track)!important;
+}
+html[lang] body[data-type-scale="four"]:not(#rp-type) :is(#inicio .arrival-footer p,.route-pass-desc,.intro-secondary) {
+  font:var(--t-body)!important;letter-spacing:0!important;
+}
+html[lang] body[data-type-scale="four"]:not(#rp-type) :is(button,.btn,.link-line,input,select,textarea) {
+  font:var(--t-button)!important;letter-spacing:0!important;text-transform:none!important;
+}
+html[lang] body[data-type-scale="four"]:not(#rp-type) :is(#final-links a,.final-menu,.home-card-caption .t-label,#collection-footer .footer-collection) {
+  font:var(--t-label)!important;letter-spacing:var(--t-label-track)!important;
+}
+html[lang] body[data-type-scale="four"]:not(#rp-type) #collection-footer .footer-name {
+  font:var(--t-title)!important;
+}
+/* Map text keeps the same support/controls sizes, including generated status labels. */
+html[lang] body.embedded-lotes2:not(#rp-type) :is(.lx-seg button,.zone-place-info button) {
+  font:var(--t-button)!important;letter-spacing:0!important;text-transform:none!important;
+}
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin>span,
+html[lang] body.embedded-lotes2 #lot-explorer #zone-pins button.zone-pin.zone-pin>span::after,
+html[lang] body.embedded-lotes2:not(#rp-type) .zone-collection-pin span {
+  font:var(--t-label)!important;letter-spacing:.02em!important;
+}
+body.embedded-lotes2 .lx-seg {max-width:calc(100% - 24px);flex-wrap:wrap}
+body.embedded-lotes2 .lx-seg-group {flex-wrap:wrap}
+@media(max-width:760px) {
+  body[data-type-scale="four"],body.embedded-lotes2 {--type-large:44px;--type-medium:28px}
+}
+
+html[lang] body[data-type-scale="four"]:not(#rp-type) .ifig-kicker {font:var(--t-label)!important;letter-spacing:var(--t-label-track)!important}
+body[data-type-scale="four"] .final-nav {column-gap:16px}
+@media(min-width:1101px) and (max-width:1400px) {
+  body[data-type-scale="four"] .final-nav {padding-left:24px;padding-right:24px}
+  body[data-type-scale="four"] #final-links {gap:16px}
+}
+@media(max-width:520px) {
+  body[data-type-scale="four"] .final-nav {grid-template-columns:minmax(0,1fr) auto;gap:8px 12px}
+  body[data-type-scale="four"] .final-nav .final-brand {grid-column:1;grid-row:1}
+  body[data-type-scale="four"] .final-nav .final-fraga {grid-column:2;grid-row:1;justify-self:end;width:64px}
+  body[data-type-scale="four"] .final-nav .final-menu {grid-column:1;grid-row:2;justify-self:start}
+  body[data-type-scale="four"] .final-nav .rpc-language-control {grid-column:2;grid-row:2;justify-self:end}
+  body[data-type-scale="four"] .final-nav #final-links {grid-column:1/-1;grid-row:3}
+}

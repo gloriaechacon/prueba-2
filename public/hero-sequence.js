@@ -2,13 +2,15 @@
    /assets/hero-sequence/manifest.json + desktop|mobile/frame_NNNN.webp (frame i = progress (i-1)/(n-1)).
    Loading: frame 1 first (it is also the poster), then every 10th frame, then the rest; while a frame
    is missing the nearest loaded one is drawn, so fast scrolling never flashes empty.
-   The three.js hero (arrival-3d.js, hero-path.js) stays in the repo as a fallback and is not loaded. */
+   The three.js hero (arrival-3d.js, hero-path.js) stays in the repo as a fallback and is not loaded.
+   SEQUENCE_VERSION busts the cache of the manifest and frames; keep it in sync with index.html. */
+const SEQUENCE_VERSION = 'losa20261126';
 export async function mountSequence(host, { variant } = {}) {
-  const manifest = await fetch('/assets/hero-sequence/manifest.json').then(r => r.json());
+  const manifest = await fetch('/assets/hero-sequence/manifest.json?v=' + SEQUENCE_VERSION).then(r => r.json());
   const v = manifest.variants[variant] || manifest.variants.desktop;
   const n = v.frames;
   const dir = '/assets/hero-sequence/' + (manifest.variants[variant] ? variant : 'desktop') + '/';
-  const url = i => dir + 'frame_' + String(i + 1).padStart(4, '0') + '.webp';
+  const url = i => dir + 'frame_' + String(i + 1).padStart(4, '0') + '.webp?v=' + SEQUENCE_VERSION;
   const canvas = document.createElement('canvas');
   canvas.className = 'arrival-canvas';
   canvas.setAttribute('aria-hidden', 'true');
