@@ -106,7 +106,7 @@ html body .lx-map .parcel-frame{position:absolute;inset:0;display:block;width:10
   .lx-handle span{display:block;width:44px;height:5px;margin:0 auto;border-radius:999px;background:var(--c-line-mid)}
   .lx-index{overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
   .lx-index button{scroll-snap-align:center;flex:0 0 auto}
-  .lx-panel:not(.is-expanded) :is(.lx-media,.lx-note,.lx-facts>div:not(.lx-fact-area):not(:last-child),.lx-fact-area small){display:none}
+  .lx-panel:not(.is-expanded) :is(.lx-note,.lx-facts>div:not(.lx-fact-area):not(:last-child),.lx-fact-area small){display:none}
   .lx-panel:not(.is-expanded) .lx-facts{grid-template-areas:"area status";grid-template-columns:1fr auto}
   .lx-thumbs{grid-template-columns:repeat(4,minmax(0,1fr))}
   .lxg-head{flex-wrap:wrap;gap:10px 16px}

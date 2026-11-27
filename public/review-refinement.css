@@ -95,7 +95,7 @@ html body .hm-finish-card img{display:block;width:100%;height:100%;object-fit:co
 .hm-finish-txt{position:absolute;inset:auto 0 0;padding:36px 16px 16px;background:linear-gradient(transparent,rgba(20,24,19,.8));color:white}
 html body .hm-finish-txt .t-label{color:white!important}
 html body dialog.hm-fin-gallery{width:min(1320px,94vw)!important;height:min(940px,90dvh)!important;background:transparent!important;border:0!important;box-shadow:none!important;color:var(--c-ink)!important}
-dialog.hm-fin-gallery::backdrop{background:rgba(30,31,27,.28)!important;backdrop-filter:blur(3px)}
+dialog.hm-fin-gallery::backdrop{background:rgba(40,40,40,.52)!important;backdrop-filter:blur(3px)}
 html body .hm-fin-gallery :is(.lxg-head,.lxg-foot){background:transparent!important;color:var(--c-ink)!important;border:0!important;padding:12px!important}
 html body .hm-fin-gallery .lxg-close{color:var(--c-ink)!important;background:var(--c-paper)!important;padding:10px 16px!important}
 html body .hm-fin-gallery .lxg-foot{display:flex;justify-content:center;gap:20px;align-items:center;flex-wrap:wrap}
@@ -167,3 +167,6 @@ html body .collection-close{display:grid;justify-items:start;gap:24px;box-sizing
 html body .collection-close h2{margin:0;max-width:16ch}
 html body .collection-close h2 em{color:var(--s-accent)}
 html body .collection-close .btn{opacity:1!important;visibility:visible!important;transform:none!important}
+
+/* Keep gallery captions readable over the dimmed backdrop. */
+html body .hm-fin-gallery :is(.lxg-head,.lxg-foot){color:#fff!important}

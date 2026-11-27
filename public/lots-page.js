@@ -113,10 +113,14 @@ if (select && panel) {
   function showMain(animate) {
     const list = items(current).filter(x => x.type === type), it = list[mediaIndex];
     const frame = media.querySelector('.lx-main-frame'); if (!frame || !it) return;
-    const img = new Image(); img.alt = ''; img.className = 'lx-main-img'; img.src = base + it.file;
-    const old = [...frame.querySelectorAll('img')];
-    const done = () => { frame.append(img); requestAnimationFrame(() => img.classList.add('is-in', animate && !reduce.matches ? 'is-kb' : 'is-still')); setTimeout(() => old.forEach(o => o.remove()), 800); };
-    if (img.complete) done(); else { img.onload = done; img.onerror = done; }
+    const img = new Image(); img.alt = `${t().photo} ${mediaIndex + 1}`; img.className = 'lx-main-img';
+    // Attach before loading. Old selection cleanup must not remove the current photo.
+    const done = () => { if (img.parentNode === frame) img.classList.add('is-in', animate && !reduce.matches ? 'is-kb' : 'is-still'); };
+    img.onload = done;
+    img.onerror = () => { img.onerror = null; img.src = thumbOf(it.file); };
+    frame.replaceChildren(img);
+    img.src = base + it.file;
+    if (img.complete && img.naturalWidth) done();
     media.querySelectorAll('.lx-thumb').forEach((b, i) => b.setAttribute('aria-pressed', String(i === mediaIndex)));
   }
   /* Initial / 'View all' state: nothing selected, collection summary. */

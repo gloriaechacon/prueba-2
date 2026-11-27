@@ -90,7 +90,7 @@ observer=new MutationObserver(records=>{
 });
 const controls=[];const names={es:'Español',pt:'Português',en:'English'};
 function control(host,before=null){
- if(!host)return;const label=document.createElement('label');label.className='rpc-language-control';label.dataset.noTranslate='';label.innerHTML='<span aria-hidden="true">◎</span><select aria-label="Idioma / Language / Idioma"><option value="en">English</option><option value="pt">Português</option><option value="es">Español</option></select>';
+ if(!host)return;const label=document.createElement('label');label.className='rpc-language-control';label.dataset.noTranslate='';label.innerHTML='<span aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18M5 6.5h14M5 17.5h14"/></svg></span><select aria-label="Idioma / Language / Idioma"><option value="en">English</option><option value="pt">Português</option><option value="es">Español</option></select>';
  const select=label.querySelector('select');select.value=lang;select.addEventListener('change',()=>setLanguage(select.value));controls.push(select);host.insertBefore(label,before);
 }
 function setLanguage(next){
